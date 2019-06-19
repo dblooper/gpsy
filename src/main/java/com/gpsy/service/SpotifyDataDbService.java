@@ -2,11 +2,15 @@ package com.gpsy.service;
 
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
+import com.gpsy.domain.DbUserPlaylist;
+import com.gpsy.mapper.PlaylistMapper;
 import com.gpsy.mapper.TrackMapper;
 import com.gpsy.repository.SpotifyPopularTrackRepository;
 import com.gpsy.repository.SpotifyRecentPlayedTrackRepository;
+import com.gpsy.repository.SpotifyUserPlaylistsRepository;
 import com.gpsy.spotify.client.SpotifyClient;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
+import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -24,9 +28,13 @@ public class SpotifyDataDbService {
     private SpotifyPopularTrackRepository spotifyPopularTrackRepository;
     @Autowired
     private SpotifyRecentPlayedTrackRepository spotifyRecentPlayedTrackRepository;
+    @Autowired
+    private SpotifyUserPlaylistsRepository spotifyUserPlaylistsRepository;
 
     @Autowired
     private TrackMapper trackMapper;
+    @Autowired
+    private PlaylistMapper playlistMapper;
 
     @Autowired
     private SpotifyClient spotifyClient;
@@ -86,5 +94,19 @@ public class SpotifyDataDbService {
 //        }
         Collections.sort(savedTracks, Collections.reverseOrder());
         return savedTracks;
+    }
+
+    public List<DbUserPlaylist> saveUserPlaylists() {
+        List<DbUserPlaylist> savedPlaylists = new ArrayList<>();
+        List<DbUserPlaylist> dbUserPlaylists = spotifyUserPlaylistsRepository.findAll();
+        List<PlaylistSimplified> spotifyUserPlaylists = spotifyClient.getUserPlaylists();
+
+        for(PlaylistSimplified playlistSimplified: spotifyUserPlaylists) {
+            if(!dbUserPlaylists.contains(playlistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified))) {
+                savedPlaylists.add(spotifyUserPlaylistsRepository.save(playlistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
+            }
+        }
+
+        return savedPlaylists;
     }
 }

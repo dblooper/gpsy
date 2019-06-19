@@ -2,6 +2,7 @@ package com.gpsy.controller;
 
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
+import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.domain.RecentPlayedTrackDto;
 import com.gpsy.mapper.TrackMapper;
 import com.gpsy.service.SpotifyDataDbService;
@@ -31,5 +32,10 @@ public class GpsyController {
     @GetMapping(value = "/tracks/recent")
     public List<RecentPlayedTrackDto> getRecentTracks() {
         return trackMapper.mapDbRecentPlayedTrackToDto(spotifyDataDbService.saveRecentPlayedTracks());
+    }
+
+    @GetMapping(value = "/playlists/current")
+    public List<DbUserPlaylist> getCurrentUserPlaylists() {
+        return spotifyDataDbService.saveUserPlaylists();
     }
 }

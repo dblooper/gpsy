@@ -17,14 +17,14 @@ public class TrackMapper {
 
     public DbPopularTrack mapSpotifyTrackToDbPopularTrack(Track spotifyDbTrack) {
         ArtistSimplified[] artists = spotifyDbTrack.getArtists();
-        return new DbPopularTrack(spotifyDbTrack.getId(), spotifyDbTrack.getName(), simplifyArtist(artists).toString(), spotifyDbTrack.getPopularity());
+        return new DbPopularTrack(spotifyDbTrack.getId(), spotifyDbTrack.getName(), UniversalMethods.simplifyArtist(artists).toString(), spotifyDbTrack.getPopularity());
     }
 
     public DbRecentPlayedTrack mapSpotifyTrackToDbRecentPlayedTrack(PlayHistory playHistory) {
         TrackSimplified recentTrack = playHistory.getTrack();
         ArtistSimplified[] artistSimplifieds = recentTrack.getArtists();
 
-        return new DbRecentPlayedTrack(recentTrack.getId(), recentTrack.getName(), simplifyArtist(artistSimplifieds).toString() , playHistory.getPlayedAt());
+        return new DbRecentPlayedTrack(recentTrack.getId(), recentTrack.getName(), UniversalMethods.simplifyArtist(artistSimplifieds).toString() , playHistory.getPlayedAt());
     }
 
     public List<RecentPlayedTrackDto> mapDbRecentPlayedTrackToDto(List<DbRecentPlayedTrack> dbRecentPlayedTrack) {
@@ -34,16 +34,5 @@ public class TrackMapper {
     }
 
 
-    private StringBuilder simplifyArtist(ArtistSimplified[] artistSimplifieds) {
-        StringBuilder authors = new StringBuilder();
-        for(int i = 0; i < artistSimplifieds.length; i++) {
-            if(artistSimplifieds.length == 1 || i == artistSimplifieds.length - 1) {
-                authors.append(artistSimplifieds[i].getName());
-            }else {
-                authors.append(artistSimplifieds[i].getName());
-                authors.append(", ");
-            }
-        }
-        return authors;
-    }
+
 }

@@ -4,6 +4,8 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
+import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
+import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -52,8 +55,7 @@ public class SpotifyClient {
 //final GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = SpofyAuthorizator.spotifyApi.getCurrentUsersProfile().build();
 //    User user = getCurrentUsersProfileRequest.execute();
 //
-//    final GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = SpofyAuthorizator.spotifyApi.getListOfCurrentUsersPlaylists().build();
-//    final Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfCurrentUsersPlaylistsRequest.execute();
+
 //
 //    final GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = SpofyAuthorizator.spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
 //
@@ -96,6 +98,40 @@ public class SpotifyClient {
 
         return recentTracks;
     }
+
+    public List<PlaylistSimplified> getUserPlaylists() {
+        List<PlaylistSimplified> playlistsSimplified = new ArrayList<>();
+
+        try {
+            final GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = SpofyAuthorizator.spotifyApi.getListOfCurrentUsersPlaylists().build();
+            final Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfCurrentUsersPlaylistsRequest.execute();
+
+            playlistsSimplified.addAll(Arrays.asList(playlistSimplifiedPaging.getItems()));
+
+        } catch (IOException | SpotifyWebApiException e) {
+            System.out.println("Spotify Client exception: " + e.getMessage());
+        }
+
+        return playlistsSimplified;
+    }
+
+    public List<PlaylistTrack> getPlaylistTracks(String playlistId) {
+        List<PlaylistTrack> playlistTracks = new ArrayList<>();
+
+        try {
+            final GetPlaylistsTracksRequest playlistsTracksRequest = SpofyAuthorizator.spotifyApi.getPlaylistsTracks(playlistId)
+                    .limit(50)
+                    .build();
+            final Paging<PlaylistTrack> playlistTracksPaging = playlistsTracksRequest.execute();
+            PlaylistTrack[] playlistTracksSpotify = playlistTracksPaging.getItems();
+            playlistTracks.addAll(Arrays.asList(playlistTracksSpotify));
+
+        } catch (IOException | SpotifyWebApiException e) {
+            System.out.println("Spotify Client exception: " + e.getMessage());
+        }
+        return playlistTracks;
+    }
+
 //            GetUsersTopArtistsAndTracksRequest getUsersTopArtistsAndTracksRequest = spotifyApi.getUsersTopArtistsAndTracks(ModelObjectType.ARTIST).build();
 //            final Paging<Artist> artistPaging = getUsersTopArtistsAndTracksRequest.execute();
 //            Artist[] artistArray = artistPaging.getItems();
