@@ -1,6 +1,10 @@
 package com.gpsy.controller;
 
-import com.gpsy.repository.SpotifyRepository;
+import com.gpsy.domain.DbPopularTrack;
+import com.gpsy.domain.DbRecentPlayedTrack;
+import com.gpsy.domain.RecentPlayedTrackDto;
+import com.gpsy.mapper.TrackMapper;
+import com.gpsy.service.SpotifyDataDbService;
 import com.gpsy.spotify.client.SpotifyClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +18,18 @@ import java.util.List;
 public class GpsyController {
 
     @Autowired
-    private SpotifyRepository spotifyRepository;
+    private SpotifyDataDbService spotifyDataDbService;
 
     @Autowired
-    private SpotifyClient spotifyClient;
+    private TrackMapper trackMapper;
 
     @GetMapping(value = "/tracks")
-    public List<String> getTracks() {
-        return spotifyClient.getSpotifyTracks();
+    public List<DbPopularTrack> getTracks() {
+        return spotifyDataDbService.savePopularTracks();
+    }
+
+    @GetMapping(value = "/tracks/recent")
+    public List<RecentPlayedTrackDto> getRecentTracks() {
+        return trackMapper.mapDbRecentPlayedTrackToDto(spotifyDataDbService.saveRecentPlayedTracks());
     }
 }

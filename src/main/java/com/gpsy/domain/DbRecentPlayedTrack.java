@@ -1,19 +1,17 @@
 package com.gpsy.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name="tracks")
+@Table(name = "recent_tracks")
 @NoArgsConstructor
 @Getter
-public class DbTrack {
+public class DbRecentPlayedTrack implements Comparable<DbRecentPlayedTrack> {
 
     @Id
     @NotNull
@@ -31,16 +29,18 @@ public class DbTrack {
     @Column(name = "authors")
     private String authors;
 
-    @Column(name = "popularity")
-    private int popularity;
-
     @Column(name = "play_date")
     private Date playDate;
 
-    public DbTrack(String trackId, String title, String authors, int popularity) {
+    public DbRecentPlayedTrack(String trackId, String title, String authors, Date playDate) {
         this.trackId = trackId;
         this.title = title;
         this.authors = authors;
-        this.popularity = popularity;
+        this.playDate = playDate;
+    }
+
+    @Override
+    public int compareTo(DbRecentPlayedTrack dbRecentPlayedTrack) {
+        return this.playDate.compareTo(dbRecentPlayedTrack.getPlayDate());
     }
 }
