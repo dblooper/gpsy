@@ -1,7 +1,5 @@
 package com.gpsy.controller;
 
-import com.gpsy.domain.Track;
-import com.gpsy.domain.TrackDto;
 import com.gpsy.repository.SpotifyRepository;
 import com.gpsy.spotify.client.SpotifyClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

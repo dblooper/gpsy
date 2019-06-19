@@ -57,14 +57,6 @@ public class SpotifyClient {
 
 //    -------------------------------------------------------------------
 
-    private AuthorizationCodeCredentials authorizationCodeCredentials;
-
-    private SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId("cabce243b2e7482cbaf0dc2c6f88a78b")
-            .setClientSecret("e92ce3f2921f46f0ae3d3c4cb894b2b5")
-            .setRefreshToken("AQBIWEuQaX-4RtqBorRwDkkpGfC7M6d5T4SC4yYHQqbiqOifICQ8FixJGhii5BqNtURVF1uTmtMak3FdjbP-O90vCNZ3DtmAWsY_Xli_tH-cnQ7nJ8xvgKus-kyb7iCG9sNFog")
-            .build();
-
     private boolean isExecuted = false;
 
 //    public URI retrieveUri() {
@@ -84,39 +76,31 @@ public class SpotifyClient {
     public List<String> getSpotifyTracks() {
         final List<String> tracks = new ArrayList<>();
 
-        final AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
+
 
 
 
         try {
             if(!isExecuted) {
-                authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-                spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-                spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
                 isExecuted = true;
             }
 
-//            if(endOfTime > 100) {
-//                authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-//                System.out.println(authorizationCodeCredentials.getAccessToken() + "<- access token");
-//                spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-//                System.out.println(authorizationCodeCredentials.getRefreshToken());
-//            }
 
 
-            final GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = spotifyApi.getCurrentUsersProfile().build();
+            final GetCurrentUsersProfileRequest getCurrentUsersProfileRequest = SpofyAuthorizator.spotifyApi.getCurrentUsersProfile().build();
             User user = getCurrentUsersProfileRequest.execute();
 
-            final GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = spotifyApi.getListOfCurrentUsersPlaylists().build();
+            final GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = SpofyAuthorizator.spotifyApi.getListOfCurrentUsersPlaylists().build();
             final Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfCurrentUsersPlaylistsRequest.execute();
 
-            final GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
+            final GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = SpofyAuthorizator.spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
 
-            final GetListOfCategoriesRequest getListOfCategoriesRequest = spotifyApi.getListOfCategories()
+            final GetListOfCategoriesRequest getListOfCategoriesRequest = SpofyAuthorizator.spotifyApi.getListOfCategories()
                     .limit(50)
                     .build();
 
-            GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyApi.getUsersTopTracks()
+            GetUsersTopTracksRequest getUsersTopTracksRequest = SpofyAuthorizator.spotifyApi.getUsersTopTracks()
                     .build();
             final Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
             Track[] tracksArray = trackPaging.getItems();
@@ -128,7 +112,7 @@ public class SpotifyClient {
                     for(ArtistSimplified artist: track.getArtists()) {
                         artists += artist.getName();
                     }
-                tracks.add("TITLE: [" + track.getName() + "], ARTISTS: [" + artists + "], POPULARITY: [" + track.getPopularity() + "] ****************************************************************************************************************************");
+                tracks.add("TITLE: [" + track.getName() + track.getId() + "], ARTISTS: [" + artists + "], POPULARITY: [" + track.getPopularity() + "] ****************************************************************************************************************************");
             }
                 tracks.add("Username: " + user.getDisplayName() + "User ID: " + user.getId());
 
@@ -150,9 +134,6 @@ public class SpotifyClient {
             } catch(IOException | SpotifyWebApiException e){
                 System.out.println("error: " + e.getMessage());
             }
-
-        System.out.println(authorizationCodeCredentials.getExpiresIn());
-        System.out.println(authorizationCodeCredentials.getAccessToken());
 
 
             return tracks;
@@ -214,10 +195,10 @@ public class SpotifyClient {
 //            spotifyApi.setAccessToken("BQC27M6SdVkg4d69YKi2Tp0qXFsVQWUEsPRj9hXQcXTDeTjNBBrVUSiQ_vuNbgznLjme2atm7zX-b91VAb7vRtZoJbzQIbKSfXPT7wWj5oN8yKNVwCqJTs0nUVs-jHbbrLx92Rv3V7zbGod7L3eMmAeacJM1TYAkjQdtObUcZZMAR7oupU9vlwOoK1rGMpILwB2ey0br_bJGMaGI7J0_k1EiP5DUISUUQ15Om8AoF_hJaguVDndmMSa6QUki6aTEZ4xUVHukYbknEeYB");
 //            GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyApi.getUsersTopTracks()
 //                    .build();
-//            final Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
-//            Track[] tracksArray = trackPaging.getItems();
+//            final Paging<DbTrack> trackPaging = getUsersTopTracksRequest.execute();
+//            DbTrack[] tracksArray = trackPaging.getItems();
 //
-//            for(Track track: tracksArray) {
+//            for(DbTrack track: tracksArray) {
 //                tracks.add(track.getName() + ", " + track.getPopularity() + ", " + track.getTrackNumber());
 //            }
 //        } catch(IOException | SpotifyWebApiException e) {
