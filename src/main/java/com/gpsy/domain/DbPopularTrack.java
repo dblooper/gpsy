@@ -58,4 +58,8 @@ public class DbPopularTrack implements Comparable<DbPopularTrack> {
     public int compareTo(DbPopularTrack dbPopularTrack) {
         return this.getPopularity().compareTo(dbPopularTrack.getPopularity());
     }
+
+    public void setPopularity(Integer popularity) {
+        this.popularity = popularity;
+    }
 }

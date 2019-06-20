@@ -44,10 +44,6 @@ public class DbMostFrequentTrack {
         this.popularity = popularity;
     }
 
-    public void setTrack_ids(String track_ids) {
-        this.track_ids = track_ids;
-    }
-
     public void setPopularity(int popularity) {
         this.popularity = popularity;
     }
