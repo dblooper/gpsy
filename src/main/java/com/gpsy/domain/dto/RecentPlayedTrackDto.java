@@ -1,4 +1,4 @@
-package com.gpsy.domain;
+package com.gpsy.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +24,21 @@ public class RecentPlayedTrackDto {
         this.title = title;
         this.authors = authors;
         this.playDate = playDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RecentPlayedTrackDto that = (RecentPlayedTrackDto) o;
+
+        return trackId.equals(that.trackId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return trackId.hashCode();
     }
 }

@@ -2,11 +2,9 @@ package com.gpsy.mapper;
 
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
-import com.gpsy.domain.RecentPlayedTrackDto;
-import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
-import com.wrapper.spotify.model_objects.specification.PlayHistory;
-import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.model_objects.specification.TrackSimplified;
+import com.gpsy.domain.DbRecommendedTrack;
+import com.gpsy.domain.dto.RecentPlayedTrackDto;
+import com.wrapper.spotify.model_objects.specification.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,6 +31,9 @@ public class TrackMapper {
         .collect(Collectors.toList());
     }
 
+//    public DbRecommendedTrack mapSpotifyRecommendedTrackToDbRecommendedTrack() {
+//
+//    }
 
 
 }
