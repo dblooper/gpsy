@@ -24,7 +24,7 @@ public class PersonalizationDbBasedService {
     @Autowired
     TrackDbMapper trackDbMapper;
 
-    public List<DbMostFrequentTrack> dbMostFrequentTracks() {
+    public List<DbMostFrequentTrack> saveSpotifyByDbDataMostFrequentTracks() {
         List<MostFrequentTrackDto> mostFrequentTrackDtos = spotifyRecentPlayedTrackRepository.retrieveWeekMostPopularTrack();
         List<DbMostFrequentTrack> dbMostFrequentTracksFromDb = dbPopularWeekTracksRepository.findAll();
         List<DbMostFrequentTrack> retireveDbMostFrequentTracksResult = new ArrayList<>();
@@ -52,5 +52,13 @@ public class PersonalizationDbBasedService {
         }
 
        return retireveDbMostFrequentTracksResult;
+    }
+
+    public List<DbMostFrequentTrack> getMostPopularTracks() {
+        List<DbMostFrequentTrack> dbMostFrequentTracks = new ArrayList<>();
+
+        dbMostFrequentTracks.addAll(dbPopularWeekTracksRepository.findAll());
+
+        return dbMostFrequentTracks;
     }
 }

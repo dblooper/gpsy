@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 public class RecentPlayedTrackDto {
-
-    private long id;
 
     private String trackId;
 
@@ -17,9 +16,9 @@ public class RecentPlayedTrackDto {
 
     private String authors;
 
-    private String playDate;
+    private LocalDateTime playDate;
 
-    public RecentPlayedTrackDto(String trackId, String title, String authors, String playDate) {
+    public RecentPlayedTrackDto(String trackId, String title, String authors, LocalDateTime playDate) {
         this.trackId = trackId;
         this.title = title;
         this.authors = authors;

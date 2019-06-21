@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class DbMostFrequentTrack {
+public class DbMostFrequentTrack implements Comparable<DbMostFrequentTrack> {
 
     @Id
     @NotNull
@@ -21,7 +21,7 @@ public class DbMostFrequentTrack {
 
     private String track_ids;
 
-    private int popularity;
+    private Integer popularity;
 
     @Override
     public boolean equals(Object o) {
@@ -46,5 +46,10 @@ public class DbMostFrequentTrack {
 
     public void setPopularity(int popularity) {
         this.popularity = popularity;
+    }
+
+    @Override
+    public int compareTo(DbMostFrequentTrack dbMostFrequentTrack) {
+        return this.popularity.compareTo(dbMostFrequentTrack.getPopularity());
     }
 }

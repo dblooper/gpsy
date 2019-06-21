@@ -12,16 +12,18 @@ import com.gpsy.spotify.client.SpotifyClient;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class SpotifyDataDbService {
 
     @Autowired
@@ -68,14 +70,12 @@ public class SpotifyDataDbService {
     public List<DbRecentPlayedTrack> saveRecentPlayedTracks() {
         List<DbRecentPlayedTrack> savedTracks = new ArrayList<>();
         List<DbRecentPlayedTrack> storedTracks = spotifyRecentPlayedTrackRepository.findAll();
-        Collections.sort(storedTracks, Collections.reverseOrder());
-        List<PlayHistory> recentTracks = spotifyClient.getSppotifyRecentPlayedTracks();
+        List<PlayHistory> recentTracks = spotifyClient.getSpotifyRecentPlayedTracks();
 
         if (storedTracks.size() == 0) {
             for (PlayHistory recentTrack : recentTracks) {
                 savedTracks.add(spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(recentTrack)));
             }
-            Collections.sort(savedTracks, Collections.reverseOrder());
             return savedTracks;
         }
 
@@ -93,7 +93,6 @@ public class SpotifyDataDbService {
 ////                }
 //
 //        }
-        Collections.sort(savedTracks, Collections.reverseOrder());
         return savedTracks;
     }
 
@@ -109,5 +108,16 @@ public class SpotifyDataDbService {
         }
 
         return savedPlaylists;
+    }
+
+    public List<String> returnRecommendedTracks() {
+        List<String> recommendedTracks = new ArrayList<>();
+        List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
+        recommendedTracks = tracksSimplified.stream()
+                .map(track -> track.getName())
+                .collect(Collectors.toList());
+
+
+        return recommendedTracks;
     }
 }

@@ -5,8 +5,10 @@ import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.domain.dto.RecentPlayedTrackDto;
 import com.gpsy.mapper.TrackMapper;
+import com.gpsy.service.DbUserService;
 import com.gpsy.service.PersonalizationDbBasedService;
 import com.gpsy.service.SpotifyDataDbService;
+import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ public class GpsyController {
     private PersonalizationDbBasedService personalizationDbBasedService;
 
     @Autowired
+    private DbUserService dbUserService;
+
+    @Autowired
     private TrackMapper trackMapper;
 
     @GetMapping(value = "/tracks")
@@ -34,7 +39,7 @@ public class GpsyController {
 
     @GetMapping(value = "/tracks/recent")
     public List<RecentPlayedTrackDto> getRecentTracks() {
-        return trackMapper.mapDbRecentPlayedTrackToDto(spotifyDataDbService.saveRecentPlayedTracks());
+        return dbUserService.fetchRecentPlayedTracks();
     }
 
     @GetMapping(value = "/playlists/current")
@@ -42,8 +47,13 @@ public class GpsyController {
         return spotifyDataDbService.saveUserPlaylists();
     }
 
-    @GetMapping(value = "/poptracks")
+    @GetMapping(value = "/tracks/popular")
     public List<DbMostFrequentTrack> getPopTracks() {
-        return personalizationDbBasedService.dbMostFrequentTracks();
+        return personalizationDbBasedService.saveSpotifyByDbDataMostFrequentTracks();
+    }
+
+    @GetMapping(value = "/tracks/recommended")
+    public List<String> gerRecommendedTracks() {
+        return spotifyDataDbService.returnRecommendedTracks();
     }
 }
