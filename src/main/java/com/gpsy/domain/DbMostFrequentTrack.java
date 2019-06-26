@@ -21,7 +21,18 @@ public class DbMostFrequentTrack implements Comparable<DbMostFrequentTrack> {
 
     private String track_ids;
 
+    private String titles;
+
+    private String authors;
+
     private Integer popularity;
+
+    public DbMostFrequentTrack(String track_ids, String titles, String authors, Integer popularity) {
+        this.track_ids = track_ids;
+        this.titles = titles;
+        this.authors = authors;
+        this.popularity = popularity;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -37,11 +48,6 @@ public class DbMostFrequentTrack implements Comparable<DbMostFrequentTrack> {
     @Override
     public int hashCode() {
         return track_ids.hashCode();
-    }
-
-    public DbMostFrequentTrack(String track_ids, int popularity) {
-        this.track_ids = track_ids;
-        this.popularity = popularity;
     }
 
     public void setPopularity(int popularity) {

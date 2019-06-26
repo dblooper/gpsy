@@ -1,7 +1,7 @@
 package com.gpsy.service;
 
 import com.gpsy.domain.DbMostFrequentTrack;
-import com.gpsy.domain.dto.database.MostFrequentTrackDto;
+import com.gpsy.domain.dto.MostFrequentTrackDto;
 import com.gpsy.domain.dto.database.mapper.TrackDbMapper;
 import com.gpsy.repository.DbPopularWeekTracksRepository;
 import com.gpsy.repository.SpotifyRecentPlayedTrackRepository;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PersonalizationDbBasedService {
@@ -56,7 +55,7 @@ public class PersonalizationDbBasedService {
 
     public List<DbMostFrequentTrack> getMostPopularTracks() {
         List<DbMostFrequentTrack> dbMostFrequentTracks = new ArrayList<>();
-
+        saveSpotifyByDbDataMostFrequentTracks();
         dbMostFrequentTracks.addAll(dbPopularWeekTracksRepository.findAll());
 
         return dbMostFrequentTracks;

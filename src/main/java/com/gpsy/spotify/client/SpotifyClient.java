@@ -1,7 +1,6 @@
 package com.gpsy.spotify.client;
 
 import com.gpsy.domain.DbMostFrequentTrack;
-import com.gpsy.domain.dto.database.MostFrequentTrackDto;
 import com.gpsy.service.PersonalizationDbBasedService;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.specification.*;
@@ -15,14 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @NoArgsConstructor

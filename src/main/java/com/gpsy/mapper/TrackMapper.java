@@ -1,8 +1,11 @@
 package com.gpsy.mapper;
 
+import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.DbRecommendedTrack;
+import com.gpsy.domain.dto.PlaylistTrackDto;
+import com.gpsy.domain.dto.PopularTrackDto;
 import com.gpsy.domain.dto.RecentPlayedTrackDto;
 import com.wrapper.spotify.model_objects.specification.*;
 import org.springframework.stereotype.Component;
@@ -38,5 +41,10 @@ public class TrackMapper {
 //
 //    }
 
+    public List<PopularTrackDto> mapToPopularTrackDtoList(List<DbMostFrequentTrack> dbPopularTracks) {
+        return dbPopularTracks.stream()
+                .map(track -> new PopularTrackDto(track.getTrack_ids(), track.getTitles(), track.getAuthors(), track.getPopularity()))
+                .collect(Collectors.toList());
+    }
 
 }

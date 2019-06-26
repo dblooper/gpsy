@@ -3,7 +3,9 @@ package com.gpsy.controller;
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbUserPlaylist;
+import com.gpsy.domain.dto.PopularTrackDto;
 import com.gpsy.domain.dto.RecentPlayedTrackDto;
+import com.gpsy.domain.dto.UserPlaylistDto;
 import com.gpsy.mapper.TrackMapper;
 import com.gpsy.service.DbUserService;
 import com.gpsy.service.PersonalizationDbBasedService;
@@ -43,13 +45,13 @@ public class GpsyController {
     }
 
     @GetMapping(value = "/playlists/current")
-    public List<DbUserPlaylist> getCurrentUserPlaylists() {
-        return spotifyDataDbService.saveUserPlaylists();
+    public List<UserPlaylistDto> getCurrentUserPlaylists() {
+        return dbUserService.fetchUserPlaylists();
     }
 
     @GetMapping(value = "/tracks/popular")
-    public List<DbMostFrequentTrack> getPopTracks() {
-        return personalizationDbBasedService.saveSpotifyByDbDataMostFrequentTracks();
+    public List<PopularTrackDto> getPopularTracks() {
+        return trackMapper.mapToPopularTrackDtoList(personalizationDbBasedService.getMostPopularTracks());
     }
 
     @GetMapping(value = "/tracks/recommended")

@@ -3,7 +3,7 @@ package com.gpsy.service;
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.DbUserPlaylist;
-import com.gpsy.mapper.PlaylistMapper;
+import com.gpsy.mapper.SpotifyPlaylistMapper;
 import com.gpsy.mapper.TrackMapper;
 import com.gpsy.repository.SpotifyPopularTrackRepository;
 import com.gpsy.repository.SpotifyRecentPlayedTrackRepository;
@@ -36,7 +36,7 @@ public class SpotifyDataDbService {
     @Autowired
     private TrackMapper trackMapper;
     @Autowired
-    private PlaylistMapper playlistMapper;
+    private SpotifyPlaylistMapper spotifyPlaylistMapper;
 
     @Autowired
     private SpotifyClient spotifyClient;
@@ -70,12 +70,14 @@ public class SpotifyDataDbService {
     public List<DbRecentPlayedTrack> saveRecentPlayedTracks() {
         List<DbRecentPlayedTrack> savedTracks = new ArrayList<>();
         List<DbRecentPlayedTrack> storedTracks = spotifyRecentPlayedTrackRepository.findAll();
+        Collections.sort(storedTracks, Collections.reverseOrder());
         List<PlayHistory> recentTracks = spotifyClient.getSpotifyRecentPlayedTracks();
 
         if (storedTracks.size() == 0) {
             for (PlayHistory recentTrack : recentTracks) {
                 savedTracks.add(spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(recentTrack)));
             }
+            Collections.sort(savedTracks, Collections.reverseOrder());
             return savedTracks;
         }
 
@@ -93,6 +95,8 @@ public class SpotifyDataDbService {
 ////                }
 //
 //        }
+
+        Collections.sort(savedTracks, Collections.reverseOrder());
         return savedTracks;
     }
 
@@ -102,8 +106,8 @@ public class SpotifyDataDbService {
         List<PlaylistSimplified> spotifyUserPlaylists = spotifyClient.getUserPlaylists();
 
         for(PlaylistSimplified playlistSimplified: spotifyUserPlaylists) {
-            if(!dbUserPlaylists.contains(playlistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified))) {
-                savedPlaylists.add(spotifyUserPlaylistsRepository.save(playlistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
+            if(!dbUserPlaylists.contains(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified))) {
+                savedPlaylists.add(spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
             }
         }
 

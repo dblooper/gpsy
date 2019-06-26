@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class PlaylistMapper {
+public class SpotifyPlaylistMapper {
 
     @Autowired
     SpotifyClient spotifyClient;
@@ -27,7 +27,7 @@ public class PlaylistMapper {
         return spotifyClient.getPlaylistTracks(playlistId).stream()
                 .map(track -> new PlaylistTrack(track.getTrack().getId(),track.getTrack().getName(), UniversalMethods.simplifyArtist(track.getTrack().getArtists()).toString()))
                 .collect(Collectors.toList());
-
-
     }
+
+
 }

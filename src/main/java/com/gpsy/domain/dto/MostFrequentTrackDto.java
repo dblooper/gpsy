@@ -1,9 +1,8 @@
-package com.gpsy.domain.dto.database;
+package com.gpsy.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,7 +21,18 @@ public class MostFrequentTrackDto {
 
     private String track_ids;
 
+    private String titles;
+
+    private String authors;
+
     private int popularity;
+
+    public MostFrequentTrackDto(String track_ids, String titles, String authors, int popularity) {
+        this.track_ids = track_ids;
+        this.titles = titles;
+        this.authors = authors;
+        this.popularity = popularity;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -40,8 +50,4 @@ public class MostFrequentTrackDto {
         return track_ids.hashCode();
     }
 
-    public MostFrequentTrackDto(String track_ids, int popularity) {
-        this.track_ids = track_ids;
-        this.popularity = popularity;
-    }
 }

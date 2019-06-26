@@ -1,17 +1,16 @@
 package com.gpsy.domain;
 
-import com.gpsy.domain.dto.database.MostFrequentTrackDto;
+import com.gpsy.domain.dto.MostFrequentTrackDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @NamedNativeQuery(
         name = "DbRecentPlayedTrack.retrieveWeekMostPopularTrack",
-        query = "SELECT id, track_ids, COUNT(*) AS popularity " +
+        query = "SELECT id, track_ids, titles, authors, COUNT(*) AS popularity " +
                 "FROM recent_tracks " +
                 "GROUP BY track_ids " +
                 "order by popularity desc",

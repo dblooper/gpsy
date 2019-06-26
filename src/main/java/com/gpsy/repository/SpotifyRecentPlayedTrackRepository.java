@@ -1,10 +1,8 @@
 package com.gpsy.repository;
 
-import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
-import com.gpsy.domain.dto.database.MostFrequentTrackDto;
+import com.gpsy.domain.dto.MostFrequentTrackDto;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
