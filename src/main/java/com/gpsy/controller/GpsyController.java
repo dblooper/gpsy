@@ -70,8 +70,14 @@ public class GpsyController {
     }
 
     @PostMapping(value = "playlists/addToPlaylist")
-    public UserPlaylistDto userPlaylist(@RequestBody UserPlaylistDto playlistDto) {
+    public UserPlaylistDto updateUserPlaylist(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.updatePlaylistTracks(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
+        return playlistDto;
+    }
+
+    @DeleteMapping(value = "playlists/deleteTrack")
+    public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
+        spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
         return playlistDto;
     }
 }

@@ -1,5 +1,7 @@
 package com.gpsy.spotify.client;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.service.PersonalizationDbBasedService;
@@ -12,6 +14,7 @@ import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTra
 import com.wrapper.spotify.requests.data.playlists.AddTracksToPlaylistRequest;
 import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
+import com.wrapper.spotify.requests.data.playlists.RemoveTracksFromPlaylistRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +38,12 @@ public class SpotifyClient {
 
     @Autowired
     private PersonalizationDbBasedService personalizationDbBasedService;
+
+    private String[] getTrackUrisForSpotifyRequest(DbUserPlaylist dbUserPlaylist) {
+        return dbUserPlaylist.getTracks().stream()
+                .map(track -> track.getStringNameForAddingToPlaylist())
+                .toArray(String[]::new);
+    }
 
     public List<Track> getSpotifyPopularTracks() {
         final List<Track> tracks = new ArrayList<>();
@@ -154,10 +163,35 @@ public class SpotifyClient {
         return dbUserPlaylist;
     }
 
-    private String[] getTrackUrisForSpotifyRequest(DbUserPlaylist dbUserPlaylist) {
-        return dbUserPlaylist.getTracks().stream()
-                .map(track -> track.getStringNameForAddingToPlaylist())
-                .toArray(String[]::new);
+    public void deletePlaylistTrack(DbUserPlaylist dbUserPlaylist) {
+
+        final RemoveTracksFromPlaylistRequest removeTracksFromPlaylistRequest = SpofyAuthorizator.spotifyApi
+                .removeTracksFromPlaylist(dbUserPlaylist.getPlaylistStringId(), jsonArrayTrackToDeleteMaker(dbUserPlaylist)).build();
+
+        try {
+            final SnapshotResult snapshotResult = removeTracksFromPlaylistRequest.execute();
+        } catch(IOException | SpotifyWebApiException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
+
+    private JsonArray jsonArrayTrackToDeleteMaker(DbUserPlaylist dbUserPlaylist) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if(dbUserPlaylist.getTracks().size() == 1) {
+            stringBuilder.append("{\"uri\":\"").append(dbUserPlaylist.getTracks().get(0).getStringNameForAddingToPlaylist()).append("\"}");
+        } else if(dbUserPlaylist.getTracks().size() > 1) {
+            for(int i = 0; i < dbUserPlaylist.getTracks().size() - 1; i++) {
+                stringBuilder.append("{\"uri\":\"").append(dbUserPlaylist.getTracks().get(i).getStringNameForAddingToPlaylist()).append("\"},");
+            }
+            stringBuilder.append("{\"uri\":\"").append(dbUserPlaylist.getTracks().get(dbUserPlaylist.getTracks().size() - 1).getStringNameForAddingToPlaylist()).append("\"}");
+        }
+//        dbUserPlaylist.getTracks().stream()
+//                .forEach(track -> stringBuilder.append("{\"uri\":\"").append(track.getStringNameForAddingToPlaylist()).append("\"},"));
+
+        String trackToRemove = "["+ stringBuilder.toString() +"]";
+        return new JsonParser().parse(trackToRemove).getAsJsonArray();
+    }
+
 
 }

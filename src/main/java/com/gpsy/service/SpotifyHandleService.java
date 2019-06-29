@@ -15,4 +15,9 @@ public class SpotifyHandleService {
         spotifyClient.updatePlaylistTracks(dbUserPlaylist);
         return dbUserPlaylist;
     }
+
+    public DbUserPlaylist deletePlaylistTrack(DbUserPlaylist dbUserPlaylist) {
+        spotifyClient.deletePlaylistTrack(dbUserPlaylist);
+        return dbUserPlaylist;
+    }
 }
