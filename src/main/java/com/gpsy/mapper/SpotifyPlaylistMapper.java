@@ -2,6 +2,7 @@ package com.gpsy.mapper;
 
 import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.domain.PlaylistTrack;
+import com.gpsy.domain.dto.UserPlaylistDto;
 import com.gpsy.spotify.client.SpotifyClient;
 import com.wrapper.spotify.model_objects.miscellaneous.PlaylistTracksInformation;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
@@ -17,6 +18,9 @@ public class SpotifyPlaylistMapper {
     @Autowired
     SpotifyClient spotifyClient;
 
+    @Autowired
+    TrackMapper trackMapper;
+
     public DbUserPlaylist mapSpotifyPlaylistToDbUserPlaylist(PlaylistSimplified playlistSimplified) {
 
         return new DbUserPlaylist(playlistSimplified.getName(), playlistSimplified.getId(), mapToPlaylistTracks(playlistSimplified.getId()));
@@ -29,5 +33,8 @@ public class SpotifyPlaylistMapper {
                 .collect(Collectors.toList());
     }
 
+    public DbUserPlaylist mapToDbUserPlaylist(UserPlaylistDto userPlaylistDto) {
+        return new DbUserPlaylist(userPlaylistDto.getPlaylistStringId(), userPlaylistDto.getPlaylistStringId(),trackMapper.mapToPlaylistTrack(userPlaylistDto.getTracks()));
+    }
 
 }

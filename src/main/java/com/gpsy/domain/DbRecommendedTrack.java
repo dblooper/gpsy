@@ -22,4 +22,19 @@ public class DbRecommendedTrack {
     @Column(name = "tracks_sting_id")
     private String stringId;
 
+    @Column(name = "titles")
+    private String titles;
+
+    @Column(name = "authors")
+    private String authors;
+
+    @Column(name = "short_plays")
+    private String url;
+
+    public DbRecommendedTrack(String stringId, String titles, String authors, String url) {
+        this.stringId = stringId;
+        this.titles = titles;
+        this.authors = authors;
+        this.url = url;
+    }
 }

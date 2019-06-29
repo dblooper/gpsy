@@ -47,4 +47,23 @@ public class PlaylistTrack {
     private void setPlaylists(List<DbUserPlaylist> playlists) {
         this.playlists = playlists;
     }
+
+    public String getStringNameForAddingToPlaylist() {
+        return "spotify:track:" + this.trackStringId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlaylistTrack that = (PlaylistTrack) o;
+
+        return trackStringId.equals(that.trackStringId);
+    }
+
+    @Override
+    public int hashCode() {
+        return trackStringId.hashCode();
+    }
 }

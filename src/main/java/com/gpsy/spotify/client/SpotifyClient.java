@@ -1,12 +1,15 @@
 package com.gpsy.spotify.client;
 
 import com.gpsy.domain.DbMostFrequentTrack;
+import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.service.PersonalizationDbBasedService;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.special.SnapshotResult;
 import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.browse.GetRecommendationsRequest;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
+import com.wrapper.spotify.requests.data.playlists.AddTracksToPlaylistRequest;
 import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import lombok.AllArgsConstructor;
@@ -134,6 +137,27 @@ public class SpotifyClient {
         }
 
         return stringBuilder.toString();
+    }
+
+    public DbUserPlaylist updatePlaylistTracks(DbUserPlaylist dbUserPlaylist) {
+
+        final AddTracksToPlaylistRequest addTracksToPlaylistRequest = SpofyAuthorizator.spotifyApi
+                .addTracksToPlaylist(dbUserPlaylist.getPlaylistStringId(), getTrackUrisForSpotifyRequest(dbUserPlaylist))
+                .build();
+
+        try {
+            final SnapshotResult snapshotResult = addTracksToPlaylistRequest.execute();
+        } catch(IOException | SpotifyWebApiException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return dbUserPlaylist;
+    }
+
+    private String[] getTrackUrisForSpotifyRequest(DbUserPlaylist dbUserPlaylist) {
+        return dbUserPlaylist.getTracks().stream()
+                .map(track -> track.getStringNameForAddingToPlaylist())
+                .toArray(String[]::new);
     }
 
 }

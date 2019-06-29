@@ -63,4 +63,8 @@ public class DbUserPlaylist {
     public int hashCode() {
         return Integer.parseInt(this.playlistStringId);
     }
+
+    public void setTracks(List<PlaylistTrack> tracks) {
+        this.tracks = tracks;
+    }
 }
