@@ -1,14 +1,12 @@
-package com.gpsy.service;
+package com.gpsy.service.spotify;
 
-import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.dto.RecentPlayedTrackDto;
 import com.gpsy.domain.dto.UserPlaylistDto;
-import com.gpsy.mapper.DbPlaylistMapper;
-import com.gpsy.mapper.TrackMapper;
-import com.gpsy.repository.SpotifyPopularTrackRepository;
-import com.gpsy.repository.SpotifyRecentPlayedTrackRepository;
-import com.gpsy.repository.SpotifyUserPlaylistsRepository;
+import com.gpsy.mapper.spotify.DbPlaylistMapper;
+import com.gpsy.mapper.spotify.TrackMapper;
+import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
+import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

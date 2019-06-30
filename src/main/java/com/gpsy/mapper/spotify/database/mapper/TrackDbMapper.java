@@ -1,4 +1,4 @@
-package com.gpsy.domain.dto.database.mapper;
+package com.gpsy.mapper.spotify.database.mapper;
 
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.dto.MostFrequentTrackDto;

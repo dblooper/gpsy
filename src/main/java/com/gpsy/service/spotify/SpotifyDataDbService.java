@@ -1,16 +1,16 @@
-package com.gpsy.service;
+package com.gpsy.service.spotify;
 
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.DbRecommendedTrack;
 import com.gpsy.domain.DbUserPlaylist;
-import com.gpsy.mapper.SpotifyPlaylistMapper;
-import com.gpsy.mapper.TrackMapper;
-import com.gpsy.mapper.UniversalMethods;
-import com.gpsy.repository.SpotifyPopularTrackRepository;
-import com.gpsy.repository.SpotifyRecentPlayedTrackRepository;
-import com.gpsy.repository.SpotifyUserPlaylistsRepository;
-import com.gpsy.spotify.client.SpotifyClient;
+import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
+import com.gpsy.mapper.spotify.TrackMapper;
+import com.gpsy.mapper.spotify.UniversalMethods;
+import com.gpsy.repository.spotify.SpotifyPopularTrackRepository;
+import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
+import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
+import com.gpsy.externalApis.spotify.client.SpotifyClient;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;

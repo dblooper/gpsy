@@ -1,4 +1,4 @@
-package com.gpsy.mapper;
+package com.gpsy.mapper.spotify;
 
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbPopularTrack;
@@ -12,7 +12,6 @@ import com.gpsy.domain.dto.RecommendedTrackDto;
 import com.wrapper.spotify.model_objects.specification.*;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;

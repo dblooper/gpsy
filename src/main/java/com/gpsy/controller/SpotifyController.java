@@ -5,13 +5,13 @@ import com.gpsy.domain.dto.PopularTrackDto;
 import com.gpsy.domain.dto.RecentPlayedTrackDto;
 import com.gpsy.domain.dto.RecommendedTrackDto;
 import com.gpsy.domain.dto.UserPlaylistDto;
-import com.gpsy.mapper.DbPlaylistMapper;
-import com.gpsy.mapper.SpotifyPlaylistMapper;
-import com.gpsy.mapper.TrackMapper;
-import com.gpsy.service.DbUserService;
-import com.gpsy.service.PersonalizationDbBasedService;
-import com.gpsy.service.SpotifyHandleService;
-import com.gpsy.service.SpotifyDataDbService;
+import com.gpsy.mapper.spotify.DbPlaylistMapper;
+import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
+import com.gpsy.mapper.spotify.TrackMapper;
+import com.gpsy.service.spotify.DbUserService;
+import com.gpsy.service.spotify.PersonalizationDbBasedService;
+import com.gpsy.service.spotify.SpotifyHandleService;
+import com.gpsy.service.spotify.SpotifyDataDbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/gpsy")
-public class GpsyController {
+public class SpotifyController {
 
     @Autowired
     private SpotifyDataDbService spotifyDataDbService;

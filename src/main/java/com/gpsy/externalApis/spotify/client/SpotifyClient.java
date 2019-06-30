@@ -1,10 +1,10 @@
-package com.gpsy.spotify.client;
+package com.gpsy.externalApis.spotify.client;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbUserPlaylist;
-import com.gpsy.service.PersonalizationDbBasedService;
+import com.gpsy.service.spotify.PersonalizationDbBasedService;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.special.SnapshotResult;
 import com.wrapper.spotify.model_objects.specification.*;
@@ -15,9 +15,7 @@ import com.wrapper.spotify.requests.data.playlists.AddTracksToPlaylistRequest;
 import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import com.wrapper.spotify.requests.data.playlists.RemoveTracksFromPlaylistRequest;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,13 +26,11 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class SpotifyClient {
 
     @Autowired
-    SpotifyConfig spotifyConfig;
+    private SpofyAuthorizator spotifyAuthorizator;
 
     @Autowired
     private PersonalizationDbBasedService personalizationDbBasedService;
@@ -49,7 +45,7 @@ public class SpotifyClient {
         final List<Track> tracks = new ArrayList<>();
 
         try {
-            GetUsersTopTracksRequest getUsersTopTracksRequest = SpofyAuthorizator.spotifyApi.getUsersTopTracks()
+            GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyAuthorizator.getSpotifyApi().getUsersTopTracks()
                     .limit(20)
                     .build();
             final Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
@@ -66,7 +62,7 @@ public class SpotifyClient {
         final List<PlayHistory> recentTracks = new ArrayList<>();
 
         try {
-            GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = SpofyAuthorizator.spotifyApi.getCurrentUsersRecentlyPlayedTracks()
+            GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = spotifyAuthorizator.getSpotifyApi().getCurrentUsersRecentlyPlayedTracks()
                     .limit(10)
                     .build();
             final PagingCursorbased<PlayHistory> historyOfPlays = getCurrentUsersRecentlyPlayedTracksRequest.execute();
@@ -82,7 +78,7 @@ public class SpotifyClient {
         List<PlaylistSimplified> playlistsSimplified = new ArrayList<>();
 
         try {
-            final GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = SpofyAuthorizator.spotifyApi.getListOfCurrentUsersPlaylists().build();
+            final GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = spotifyAuthorizator.getSpotifyApi().getListOfCurrentUsersPlaylists().build();
             final Paging<PlaylistSimplified> playlistSimplifiedPaging = getListOfCurrentUsersPlaylistsRequest.execute();
 
             playlistsSimplified.addAll(Arrays.asList(playlistSimplifiedPaging.getItems()));
@@ -98,7 +94,7 @@ public class SpotifyClient {
         List<PlaylistTrack> playlistTracks = new ArrayList<>();
 
         try {
-            final GetPlaylistsTracksRequest playlistsTracksRequest = SpofyAuthorizator.spotifyApi.getPlaylistsTracks(playlistId)
+            final GetPlaylistsTracksRequest playlistsTracksRequest = spotifyAuthorizator.getSpotifyApi().getPlaylistsTracks(playlistId)
                     .limit(50)
                     .build();
             final Paging<PlaylistTrack> playlistTracksPaging = playlistsTracksRequest.execute();
@@ -114,7 +110,7 @@ public class SpotifyClient {
     public List<TrackSimplified> getRecommendedTracks() {
         List<TrackSimplified> recommendedTracks = new ArrayList<>();
         try {
-            final GetRecommendationsRequest getRecommendationsRequest = SpofyAuthorizator.spotifyApi.getRecommendations()
+            final GetRecommendationsRequest getRecommendationsRequest = spotifyAuthorizator.getSpotifyApi().getRecommendations()
                     .limit(20)
                     .seed_tracks(recentlyPlayedTracksMerge())
                     .build();
@@ -150,7 +146,7 @@ public class SpotifyClient {
 
     public DbUserPlaylist updatePlaylistTracks(DbUserPlaylist dbUserPlaylist) {
 
-        final AddTracksToPlaylistRequest addTracksToPlaylistRequest = SpofyAuthorizator.spotifyApi
+        final AddTracksToPlaylistRequest addTracksToPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
                 .addTracksToPlaylist(dbUserPlaylist.getPlaylistStringId(), getTrackUrisForSpotifyRequest(dbUserPlaylist))
                 .build();
 
@@ -165,7 +161,7 @@ public class SpotifyClient {
 
     public void deletePlaylistTrack(DbUserPlaylist dbUserPlaylist) {
 
-        final RemoveTracksFromPlaylistRequest removeTracksFromPlaylistRequest = SpofyAuthorizator.spotifyApi
+        final RemoveTracksFromPlaylistRequest removeTracksFromPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
                 .removeTracksFromPlaylist(dbUserPlaylist.getPlaylistStringId(), jsonArrayTrackToDeleteMaker(dbUserPlaylist)).build();
 
         try {

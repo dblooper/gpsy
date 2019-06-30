@@ -1,7 +1,7 @@
-package com.gpsy.service;
+package com.gpsy.service.spotify;
 
 import com.gpsy.domain.DbUserPlaylist;
-import com.gpsy.spotify.client.SpotifyClient;
+import com.gpsy.externalApis.spotify.client.SpotifyClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

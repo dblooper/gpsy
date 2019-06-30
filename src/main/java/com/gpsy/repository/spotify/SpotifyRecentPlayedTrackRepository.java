@@ -1,4 +1,4 @@
-package com.gpsy.repository;
+package com.gpsy.repository.spotify;
 
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.dto.MostFrequentTrackDto;

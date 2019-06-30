@@ -1,4 +1,4 @@
-package com.gpsy.repository;
+package com.gpsy.repository.spotify;
 
 import com.gpsy.domain.DbPopularTrack;
 import org.springframework.data.jpa.repository.JpaRepository;

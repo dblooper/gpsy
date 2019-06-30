@@ -1,4 +1,4 @@
-package com.gpsy.mapper;
+package com.gpsy.mapper.spotify;
 
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 

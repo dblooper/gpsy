@@ -1,10 +1,9 @@
-package com.gpsy.mapper;
+package com.gpsy.mapper.spotify;
 
 import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.domain.PlaylistTrack;
 import com.gpsy.domain.dto.UserPlaylistDto;
-import com.gpsy.spotify.client.SpotifyClient;
-import com.wrapper.spotify.model_objects.miscellaneous.PlaylistTracksInformation;
+import com.gpsy.externalApis.spotify.client.SpotifyClient;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

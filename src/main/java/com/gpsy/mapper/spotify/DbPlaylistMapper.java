@@ -1,4 +1,4 @@
-package com.gpsy.mapper;
+package com.gpsy.mapper.spotify;
 
 import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.domain.PlaylistTrack;
