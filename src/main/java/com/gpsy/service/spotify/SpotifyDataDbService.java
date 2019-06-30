@@ -1,5 +1,6 @@
 package com.gpsy.service.spotify;
 
+import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.DbPopularTrack;
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.DbRecommendedTrack;
@@ -132,6 +133,7 @@ public class SpotifyDataDbService {
         List<DbRecommendedTrack> recommendedTracks = new ArrayList<>();
         List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
         recommendedTracks = tracksSimplified.stream()
+                .limit(InitialLimitValues.LIMIT_RECOMMENDED_TRACKS_ON_BOARD)
                 .map(track -> new DbRecommendedTrack(track.getId(), track.getName(), UniversalMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
                 .collect(Collectors.toList());
         return recommendedTracks;

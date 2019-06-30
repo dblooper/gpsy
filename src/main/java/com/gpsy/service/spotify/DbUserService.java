@@ -1,5 +1,6 @@
 package com.gpsy.service.spotify;
 
+import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.DbRecentPlayedTrack;
 import com.gpsy.domain.dto.RecentPlayedTrackDto;
 import com.gpsy.domain.dto.UserPlaylistDto;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DbUserService {
@@ -37,7 +39,10 @@ public class DbUserService {
         spotifyDataDbService.saveRecentPlayedTracks();
         List<DbRecentPlayedTrack> recentPlayedTracks = spotifyRecentPlayedTrackRepository.findAll();
         Collections.sort(recentPlayedTracks, Collections.reverseOrder());
-        return trackMapper.mapToRecentPlayedTrackDtos(recentPlayedTracks) ;
+        List<DbRecentPlayedTrack> limitedRecentPlayedTracks = recentPlayedTracks.stream()
+                .limit(InitialLimitValues.LIMIT_RECENT)
+                .collect(Collectors.toList());
+        return trackMapper.mapToRecentPlayedTrackDtos(limitedRecentPlayedTracks) ;
     }
 
     public List<UserPlaylistDto> fetchUserPlaylists() {

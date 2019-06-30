@@ -1,14 +1,8 @@
 package com.gpsy.mapper.spotify;
 
-import com.gpsy.domain.DbMostFrequentTrack;
-import com.gpsy.domain.DbPopularTrack;
-import com.gpsy.domain.DbRecentPlayedTrack;
-import com.gpsy.domain.DbRecommendedTrack;
+import com.gpsy.domain.*;
 import com.gpsy.domain.PlaylistTrack;
-import com.gpsy.domain.dto.PlaylistTrackDto;
-import com.gpsy.domain.dto.PopularTrackDto;
-import com.gpsy.domain.dto.RecentPlayedTrackDto;
-import com.gpsy.domain.dto.RecommendedTrackDto;
+import com.gpsy.domain.dto.*;
 import com.wrapper.spotify.model_objects.specification.*;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +51,12 @@ public class TrackMapper {
     public List<PlaylistTrack> mapToPlaylistTrack(List<PlaylistTrackDto> playlistTrackDtoList) {
         return playlistTrackDtoList.stream()
                 .map(playlistTrackDto -> new PlaylistTrack(playlistTrackDto.getTrackStringId(), playlistTrackDto.getTitle(), playlistTrackDto.getAuthors()))
+                .collect(Collectors.toList());
+    }
+
+    public List<RecommendedTrackForPlaylistDto> mapToRecommendedTrackForPlaylistDto(List<RecommendedTrackForPlaylist> recommendedTrackForPlaylist) {
+        return recommendedTrackForPlaylist.stream()
+                .map(track -> new RecommendedTrackForPlaylistDto(track.getStringId(), track.getTitles(), track.getAuthors(), track.getUrl()))
                 .collect(Collectors.toList());
     }
 }
