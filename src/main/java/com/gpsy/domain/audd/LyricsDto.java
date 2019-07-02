@@ -18,6 +18,15 @@ public class LyricsDto {
     @JsonProperty(value = "artist")
     private String artist;
 
-    @JsonProperty("lyrics")
+    @JsonProperty(value = "lyrics")
     private String lyrics;
+
+    @Override
+    public String toString() {
+        return "LyricsDto{" +
+                "title='" + title + '\'' +
+                ", artist='" + artist + '\'' +
+                ", lyrics='" + lyrics + '\'' +
+                '}';
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface LyricsDbRepository extends JpaRepository<DbLyrics, Long> {
 
     @Query(value = "SELECT * FROM lyrics L " +
-            "WHERE L.titles LIKE :TITLE AND L.artists LIKE :ARTIST",
+            "WHERE L.titles LIKE CONCAT(:TITLE, '%') AND L.artists LIKE CONCAT(:ARTIST, '%')",
             nativeQuery = true)
-    Optional<DbLyrics> findByTitleAndArtist(@Param("TITLE") String title, @Param("ARTIST") String artist);
+    DbLyrics findByTitleAndArtist(@Param("TITLE") String title, @Param("ARTIST") String artist);
 }

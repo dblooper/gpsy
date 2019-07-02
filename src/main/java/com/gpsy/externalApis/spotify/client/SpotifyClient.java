@@ -2,6 +2,7 @@ package com.gpsy.externalApis.spotify.client;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbUserPlaylist;
 import com.gpsy.service.spotify.PersonalizationDbBasedService;
@@ -46,7 +47,7 @@ public class SpotifyClient {
 
         try {
             GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyAuthorizator.getSpotifyApi().getUsersTopTracks()
-                    .limit(20)
+                    .limit(InitialLimitValues.LIMIT_POPULAR)
                     .build();
             final Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
             Track[] tracksArray = trackPaging.getItems();
@@ -63,7 +64,7 @@ public class SpotifyClient {
 
         try {
             GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = spotifyAuthorizator.getSpotifyApi().getCurrentUsersRecentlyPlayedTracks()
-                    .limit(10)
+                    .limit(InitialLimitValues.LIMIT_RECENT)
                     .build();
             final PagingCursorbased<PlayHistory> historyOfPlays = getCurrentUsersRecentlyPlayedTracksRequest.execute();
             PlayHistory[] tracksArray = historyOfPlays.getItems();
@@ -95,7 +96,7 @@ public class SpotifyClient {
 
         try {
             final GetPlaylistsTracksRequest playlistsTracksRequest = spotifyAuthorizator.getSpotifyApi().getPlaylistsTracks(playlistId)
-                    .limit(50)
+                    .limit(InitialLimitValues.LIMIT_FETCHING_PLAYLIST_TRACKS_FROM_SPOTIFY)
                     .build();
             final Paging<PlaylistTrack> playlistTracksPaging = playlistsTracksRequest.execute();
             PlaylistTrack[] playlistTracksSpotify = playlistTracksPaging.getItems();
@@ -111,7 +112,7 @@ public class SpotifyClient {
         List<TrackSimplified> recommendedTracks = new ArrayList<>();
         try {
             final GetRecommendationsRequest getRecommendationsRequest = spotifyAuthorizator.getSpotifyApi().getRecommendations()
-                    .limit(20)
+                    .limit(InitialLimitValues.LIMIT_FETCHING_RECOMMENDED_FROM_SPOTIFY)
                     .seed_tracks(recentlyPlayedTracksMerge())
                     .build();
             final Recommendations recommendations = getRecommendationsRequest.execute();
@@ -128,7 +129,7 @@ public class SpotifyClient {
     private String recentlyPlayedTracksMerge() {
         List<DbMostFrequentTrack> dbMostFrequentTracks = personalizationDbBasedService.getMostPopularTracks();
         Collections.sort(dbMostFrequentTracks, Collections.reverseOrder());
-        int quantityOfTracksToTake = 3;
+        int quantityOfTracksToTake = InitialLimitValues.LIMIT_TOP_TRACK_SIMILAR_TO_RECOMMEND;
         StringBuilder stringBuilder = new StringBuilder();
 
         for(int i = 1; i <= quantityOfTracksToTake; i++) {

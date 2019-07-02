@@ -2,11 +2,10 @@ package com.gpsy.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter
-public class RecommendedTrackDto {
+public class RecommendedTrackForPlaylistDto {
 
     private String stringId;
 
