@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuddService {
@@ -24,17 +25,21 @@ public class AuddService {
     @Autowired
     private LyricsMapper lyricsMapper;
 
-    public DbLyrics fetchLirycs(TrackInfoForLyricsDto trackInfoForLyricsDto) throws LyricsNotFoundException {
+    public DbLyrics fetchLirycs(String title, String author) {
+
+        TrackInfoForLyricsDto trackInfoForLyricsDto = new TrackInfoForLyricsDto(title, author);
 
         List<DbLyrics> dbLyricsInDatabase = lyricsDbRepository.findAll();
-        LyricsBaseDto lyricsReceived = auddClient.fetchLyrics(trackInfoForLyricsDto);
 
+        if(findLyrics(trackInfoForLyricsDto).isPresent()) {
+            return findLyrics(trackInfoForLyricsDto).get();
+        }
+
+        LyricsBaseDto lyricsReceived = auddClient.fetchLyrics(trackInfoForLyricsDto);
+        System.out.println(lyricsReceived);
         if(lyricsReceived.getLyrics().size() > 0) {
             DbLyrics lyricsToFetch = lyricsMapper.mapToDbLyrics(lyricsReceived.getLyrics().get(0));
-
-            if(findLyrics(trackInfoForLyricsDto) != null) {
-                return findLyrics(trackInfoForLyricsDto);
-            }
+            System.out.println(lyricsToFetch);
 
             if(lyricsReceived.getStatus().equals("success")) {
                 if(!dbLyricsInDatabase.contains(lyricsToFetch)) {
@@ -44,11 +49,11 @@ public class AuddService {
                 }
             }
         }
-        return new DbLyrics(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors(), "Not found. Limit exceeded. Try tomorrow!");
+        return new DbLyrics(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors(), "Not found in database . Limit exceeded for searching. Try tomorrow!");
     }
 
-    private DbLyrics findLyrics(TrackInfoForLyricsDto trackInfoForLyricsDto) throws LyricsNotFoundException {
-
-        return lyricsDbRepository.findByTitleAndArtist(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors()).orElseThrow(LyricsNotFoundException::new);
+    private Optional<DbLyrics> findLyrics(TrackInfoForLyricsDto trackInfoForLyricsDto) {
+        System.out.println(trackInfoForLyricsDto.getAuthors() + trackInfoForLyricsDto.getTitle());
+        return Optional.ofNullable(lyricsDbRepository.findByTitleAndArtist(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors()));
     }
 }

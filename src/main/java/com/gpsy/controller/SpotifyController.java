@@ -63,22 +63,22 @@ public class SpotifyController {
     }
 
     @GetMapping(value = "/tracks/recommended")
-    public List<RecommendedTrackDto> gerRecommendedTracks() {
+    public List<RecommendedTrackDto> getRecommendedTracks() {
         return trackMapper.mapToRecommendedTrackDtoList(spotifyDataDbService.returnRecommendedTracks());
     }
 
-    @GetMapping(value = "playlists/recommended")
+    @GetMapping(value = "/playlists/recommended")
     public RecommendedPlaylistDto getRecommendedPlaylist(@RequestParam int qty) {
         return dbPlaylistMapper.mapToRecommendedPlaylistDto(personalizationDbBasedService.fetchRecommendedPlaylistFromDb(qty));
     }
 
-    @PostMapping(value = "playlists/addToPlaylist")
+    @PostMapping(value = "/playlists/addToPlaylist")
     public UserPlaylistDto updateUserPlaylist(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.updatePlaylistTracks(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
         return playlistDto;
     }
 
-    @DeleteMapping(value = "playlists/deleteTrack")
+    @DeleteMapping(value = "/playlists/deleteTrack")
     public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
         return playlistDto;

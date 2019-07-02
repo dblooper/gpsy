@@ -30,14 +30,15 @@ public class AuddClient {
     public LyricsBaseDto fetchLyrics(final TrackInfoForLyricsDto trackInfoForLyricsDto) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(auddConfig.getAuddApiEndpointRoot() + "/findLyrics/")
-                .queryParam("q",trackInfoForLyricsDto.getAuthors() + " " + trackInfoForLyricsDto.getTitle())
+                .queryParam("q", trackInfoForLyricsDto.getTitle() + " " + trackInfoForLyricsDto.getAuthors())
+//                .queryParam("q",trackInfoForLyricsDto.getTitle())
                 .build().encode().toUri();
         System.out.println(uri);
 //        try {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
         ResponseEntity<LyricsBaseDto> res = restTemplate.exchange(uri, HttpMethod.GET, entity, LyricsBaseDto.class);
         LyricsBaseDto responseValue = Optional.ofNullable(res.getBody()).orElse(new LyricsBaseDto(RESPONSE_NULL_STATUS));
 
@@ -48,8 +49,6 @@ public class AuddClient {
             responseValue.setStatus("Null object received. Server doesn't work properly");
             responseValue.setLyrics(new ArrayList<>());
         }
-
-        System.out.println(responseValue);
 
 //            LyricsBaseDto[] lyrics = restTemplate.getForObject(uri, LyricsBaseDto[].class);
 //            return Optional.ofNullable(lyrics).map(Arrays::asList).orElse(new ArrayList<>());

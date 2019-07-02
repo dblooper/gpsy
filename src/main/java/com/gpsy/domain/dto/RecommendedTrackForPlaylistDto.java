@@ -13,5 +13,5 @@ public class RecommendedTrackForPlaylistDto {
 
     private String authors;
 
-    private String url;
+    private String sample;
 }

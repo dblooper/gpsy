@@ -23,7 +23,7 @@ public class DbLyrics {
     @Column(name = "artists")
     private String artist;
 
-    @Column(name = "lyrics")
+    @Column(name = "lyrics", columnDefinition = "TEXT")
     private String lyrics;
 
     @Override
