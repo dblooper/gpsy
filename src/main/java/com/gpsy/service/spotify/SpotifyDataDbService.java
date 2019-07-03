@@ -12,7 +12,6 @@ import com.gpsy.repository.spotify.SpotifyPopularTrackRepository;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
 import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
-import com.sun.org.apache.xml.internal.security.Init;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
