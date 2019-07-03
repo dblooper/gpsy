@@ -12,6 +12,7 @@ import com.gpsy.repository.spotify.SpotifyPopularTrackRepository;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
 import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
+import com.sun.org.apache.xml.internal.security.Init;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -44,6 +45,7 @@ public class SpotifyDataDbService {
     @Autowired
     private SpotifyClient spotifyClient;
 
+
     public List<DbPopularTrack> savePopularTracks() {
         List<DbPopularTrack> savedTracks = new ArrayList<>();
         List<DbPopularTrack> storedTracks = spotifyPopularTrackRepository.findAll();
@@ -56,7 +58,7 @@ public class SpotifyDataDbService {
             return savedTracks;
         }
 
-        for(DbPopularTrack dbPopularTrack : storedTracks) {
+        for(DbPopularTrack dbPopularTrack: storedTracks) {
             for (Track spotifyTrack : spotifyStoredTracks) {
                     if(dbPopularTrack.getTrackId().equals(spotifyTrack.getId()) && dbPopularTrack.getPopularity() != spotifyTrack.getPopularity()){
                         dbPopularTrack.setPopularity(spotifyTrack.getPopularity());
@@ -68,6 +70,14 @@ public class SpotifyDataDbService {
         }
         Collections.sort(savedTracks, Collections.reverseOrder());
         return savedTracks;
+    }
+
+    public List<DbPopularTrack> fetchPopularTracks() {
+        savePopularTracks();
+        return spotifyPopularTrackRepository.findAll().stream()
+                .limit(InitialLimitValues.LIMIT_POPULAR)
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList());
     }
 
     public List<DbRecentPlayedTrack> saveRecentPlayedTracks() {
@@ -89,15 +99,6 @@ public class SpotifyDataDbService {
                     savedTracks.add(spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(spotifyTrack)));
                 }
         }
-
-//
-////                if(dbPopularTrack.getTrackId().equals(spotifyTrack.getId()) && dbPopularTrack.getPopularity() != spotifyTrack.getPopularity()){
-////                    savedTracks.add(spotifyPopularTrackRepository.save(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack)));
-////                }else if(!storedTracks.contains(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack))) {
-////                    savedTracks.add(spotifyPopularTrackRepository.save(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack)));
-////                }
-//
-//        }
 
         Collections.sort(savedTracks, Collections.reverseOrder());
         return savedTracks;
@@ -121,11 +122,15 @@ public class SpotifyDataDbService {
                         spotifyUserPlaylistsRepository.delete(dbUserPlaylist);
                         savedPlaylists.add(spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
                     }
+
+                    if(dbUserPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && !dbUserPlaylist.getName().equals(playlistSimplified.getName())) {
+                            DbUserPlaylist playlistToUpdate = spotifyUserPlaylistsRepository.findByPlaylistStringId(dbUserPlaylist.getPlaylistStringId());
+                            dbUserPlaylist.setName(playlistSimplified.getName());
+                            savedPlaylists.add(spotifyUserPlaylistsRepository.save(playlistToUpdate));
+                    }
                 }
             }
         }
-
-
         return savedPlaylists;
     }
 

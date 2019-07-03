@@ -20,4 +20,11 @@ public class SpotifyHandleService {
         spotifyClient.deletePlaylistTrack(dbUserPlaylist);
         return dbUserPlaylist;
     }
+
+    public DbUserPlaylist updatePlaylistName(DbUserPlaylist newDbUserPlaylist) {
+        if(!newDbUserPlaylist.getPlaylistStringId().equals("2ptqwasYqv1677gL4OEkIL")) {
+            spotifyClient.updatePlaylistDetails(newDbUserPlaylist);
+        }
+        return newDbUserPlaylist;
+    }
 }

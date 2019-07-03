@@ -32,7 +32,7 @@ public class DbPlaylistMapper {
     }
 
     public RecommendedPlaylistDto mapToRecommendedPlaylistDto(RecommendedPlaylist recommendedPlaylist) {
-        return new RecommendedPlaylistDto(recommendedPlaylist.getPlaylistStringId(), recommendedPlaylist.getName(), trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedTracksForPlaylist()), recommendedPlaylist.getNumberOfTracks(), recommendedPlaylist.isActual());
+        return new RecommendedPlaylistDto(recommendedPlaylist.getPlaylistStringId(), recommendedPlaylist.getName(), trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()), recommendedPlaylist.getNumberOfTracks(), recommendedPlaylist.isActual());
     }
 
 }

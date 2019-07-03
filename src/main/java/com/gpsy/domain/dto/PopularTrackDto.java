@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor
