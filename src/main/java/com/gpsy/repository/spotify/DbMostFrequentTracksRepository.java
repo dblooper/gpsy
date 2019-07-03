@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface DbPopularWeekTracksRepository extends JpaRepository<DbMostFrequentTrack, Long> {
+public interface DbMostFrequentTracksRepository extends JpaRepository<DbMostFrequentTrack, Long> {
 
     List<DbMostFrequentTrack> findAllByPopularityGreaterThanOrderByPopularityDesc(int quantity, Pageable pageable);
 }

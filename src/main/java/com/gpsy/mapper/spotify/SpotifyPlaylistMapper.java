@@ -33,7 +33,7 @@ public class SpotifyPlaylistMapper {
     }
 
     public DbUserPlaylist mapToDbUserPlaylist(UserPlaylistDto userPlaylistDto) {
-        return new DbUserPlaylist(userPlaylistDto.getPlaylistStringId(), userPlaylistDto.getPlaylistStringId(),trackMapper.mapToPlaylistTrack(userPlaylistDto.getTracks()));
+        return new DbUserPlaylist(userPlaylistDto.getName(), userPlaylistDto.getPlaylistStringId(),trackMapper.mapToPlaylistTrack(userPlaylistDto.getTracks()));
     }
 
 }

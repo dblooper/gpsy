@@ -1,6 +1,6 @@
 package com.gpsy.domain;
 
-import com.gpsy.domain.dto.MostFrequentTrackDto;
+import com.gpsy.domain.dto.DbMostFrequentTrackDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ import java.util.Date;
                 "FROM recent_tracks " +
                 "GROUP BY track_ids " +
                 "order by popularity desc",
-        resultClass = MostFrequentTrackDto.class
+        resultClass = DbMostFrequentTrackDto.class
 )
 
 @Entity

@@ -9,4 +9,6 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface SpotifyUserPlaylistsRepository extends JpaRepository<DbUserPlaylist, Long> {
+
+    DbUserPlaylist findByPlaylistStringId(String playlistID);
 }

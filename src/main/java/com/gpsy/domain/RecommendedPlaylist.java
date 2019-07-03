@@ -1,7 +1,9 @@
 package com.gpsy.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,12 +13,15 @@ import java.util.List;
 @Entity
 @Table(name = "recommended_playlists")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class RecommendedPlaylist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "playlist_id", unique = true)
     private Long id;
 
     @Column(name = "playlists_ids")
@@ -25,34 +30,44 @@ public class RecommendedPlaylist {
     @Column(name= "names")
     private String name;
 
-    @Column
+    @Column(name = "number_of_tracks")
     private Integer numberOfTracks;
 
     @Column(name = "actual")
     private boolean actual;
 
-    @OneToMany(
-            targetEntity = RecommendedTrackForPlaylist.class,
-            mappedBy = "recommendedPlaylist",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "JOIN_PL_RECOMMENDED_TRACK",
+            joinColumns = {@JoinColumn(name = "playlist_id", referencedColumnName = "playlist_id")},
+                    inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}
     )
-    @Column(name = "recommended_racks")
-    private List<RecommendedTrackForPlaylist> recommendedTracksForPlaylist = new ArrayList<>();
+    private List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
 
-    public RecommendedPlaylist(String playlistStringId, String name, List<RecommendedTrackForPlaylist> playlistTracks, Integer numberOfTracks, boolean actual) {
+    public RecommendedPlaylist(String playlistStringId, String name, List<RecommendedPlaylistTrack> recommendedPlaylistTracks, boolean actual) {
         this.playlistStringId = playlistStringId;
         this.name = name;
-        this.recommendedTracksForPlaylist = playlistTracks;
-        this.numberOfTracks = numberOfTracks;
+        this.recommendedPlaylistTracks = recommendedPlaylistTracks;
+        this.numberOfTracks = recommendedPlaylistTracks.size();
         this.actual = actual;
     }
 
-    public void setActual(boolean actual) {
-        this.actual = actual;
+    public void setNumberOfTracks() {
+        this.numberOfTracks = recommendedPlaylistTracks.size();
     }
 
-    private void setPlaylistTracks(List<RecommendedTrackForPlaylist> recommendedTrackForPlaylist) {
-        this.recommendedTracksForPlaylist = recommendedTrackForPlaylist;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RecommendedPlaylist that = (RecommendedPlaylist) o;
+
+        return playlistStringId.equals(that.playlistStringId);
+    }
+
+    @Override
+    public int hashCode() {
+        return playlistStringId.hashCode();
     }
 }

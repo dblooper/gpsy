@@ -17,19 +17,19 @@ public class DbMostFrequentTrack implements Comparable<DbMostFrequentTrack> {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long uniqueId;
+    private long id;
 
-    private String track_ids;
+    private String trackId;
 
-    private String titles;
+    private String title;
 
     private String authors;
 
     private Integer popularity;
 
-    public DbMostFrequentTrack(String track_ids, String titles, String authors, Integer popularity) {
-        this.track_ids = track_ids;
-        this.titles = titles;
+    public DbMostFrequentTrack(String trackId, String title, String authors, Integer popularity) {
+        this.trackId = trackId;
+        this.title = title;
         this.authors = authors;
         this.popularity = popularity;
     }
@@ -41,13 +41,13 @@ public class DbMostFrequentTrack implements Comparable<DbMostFrequentTrack> {
 
         DbMostFrequentTrack that = (DbMostFrequentTrack) o;
 
-        return track_ids.equals(that.track_ids);
+        return trackId.equals(that.trackId);
 
     }
 
     @Override
     public int hashCode() {
-        return track_ids.hashCode();
+        return trackId.hashCode();
     }
 
     public void setPopularity(int popularity) {

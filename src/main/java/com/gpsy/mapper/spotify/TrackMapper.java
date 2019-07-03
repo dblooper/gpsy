@@ -32,13 +32,9 @@ public class TrackMapper {
                 .collect(Collectors.toList());
     }
 
-//    public DbRecommendedTrack mapSpotifyRecommendedTrackToDbRecommendedTrack() {
-//
-//    }
-
-    public List<PopularTrackDto> mapToPopularTrackDtoList(List<DbMostFrequentTrack> dbPopularTracks) {
+    public List<MostFrequentTrackDto> mapToPopularTrackDtoList(List<DbMostFrequentTrack> dbPopularTracks) {
         return dbPopularTracks.stream()
-                .map(track -> new PopularTrackDto(track.getTrack_ids(), track.getTitles(), track.getAuthors(), track.getPopularity()))
+                .map(track -> new MostFrequentTrackDto(track.getTrackId(), track.getTitle(), track.getAuthors(), track.getPopularity()))
                 .collect(Collectors.toList());
     }
 
@@ -54,9 +50,15 @@ public class TrackMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<RecommendedTrackForPlaylistDto> mapToRecommendedTrackForPlaylistDto(List<RecommendedTrackForPlaylist> recommendedTrackForPlaylist) {
-        return recommendedTrackForPlaylist.stream()
+    public List<RecommendedTrackForPlaylistDto> mapToRecommendedTrackForPlaylistDto(List<RecommendedPlaylistTrack> recommendedPlaylistTrack) {
+        return recommendedPlaylistTrack.stream()
                 .map(track -> new RecommendedTrackForPlaylistDto(track.getStringId(), track.getTitles(), track.getAuthors(), track.getUrl()))
+                .collect(Collectors.toList());
+    }
+
+    public List<PopularTrackDto> mapPopularTrackToPopularTrackDtoList(List<DbPopularTrack> dbPopularTracks) {
+        return dbPopularTracks.stream()
+                .map(track -> new PopularTrackDto(track.getTrackId(), track.getTitle(), track.getAuthors(), track.getPopularity()))
                 .collect(Collectors.toList());
     }
 }

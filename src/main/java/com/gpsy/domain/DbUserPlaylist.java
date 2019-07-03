@@ -67,4 +67,8 @@ public class DbUserPlaylist {
     public void setTracks(List<PlaylistTrack> tracks) {
         this.tracks = tracks;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
