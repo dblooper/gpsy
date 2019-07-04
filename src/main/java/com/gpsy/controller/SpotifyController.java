@@ -87,6 +87,12 @@ public class SpotifyController {
         return playlistDto;
     }
 
+    @PostMapping(value = "/playlists/addNewPlaylist")
+    public UserPlaylistDto createNewPlaylist(@RequestBody UserPlaylistDto playlistDto) {
+        spotifyHandleService.createPlaylist(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
+        return playlistDto;
+    }
+
     @DeleteMapping(value = "/playlists/deleteTrack")
     public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
