@@ -3,6 +3,7 @@ package com.gpsy.service.audd;
 import com.gpsy.domain.audd.DbLyrics;
 import com.gpsy.domain.audd.LyricsBaseDto;
 import com.gpsy.domain.audd.TrackInfoForLyricsDto;
+import com.gpsy.exceptions.LyricsServerResponseException;
 import com.gpsy.externalApis.auddApi.client.AuddClient;
 import com.gpsy.mapper.audd.LyricsMapper;
 import com.gpsy.repository.audd.LyricsDbRepository;
@@ -24,7 +25,7 @@ public class AuddService {
     @Autowired
     private LyricsMapper lyricsMapper;
 
-    public DbLyrics fetchLirycs(String title, String author) {
+    public DbLyrics fetchLirycs(String title, String author) throws LyricsServerResponseException {
 
         TrackInfoForLyricsDto trackInfoForLyricsDto = new TrackInfoForLyricsDto(title, author);
 
@@ -36,18 +37,18 @@ public class AuddService {
 
         LyricsBaseDto lyricsReceived = auddClient.fetchLyrics(trackInfoForLyricsDto);
         System.out.println(lyricsReceived);
-        if(lyricsReceived.getLyrics().size() > 0) {
-            DbLyrics lyricsToFetch = lyricsMapper.mapToDbLyrics(lyricsReceived.getLyrics().get(0));
-            System.out.println(lyricsToFetch);
 
-            if(lyricsReceived.getStatus().equals("success")) {
+        DbLyrics lyricsToFetch = lyricsMapper.mapToDbLyrics(lyricsReceived.getBody());
+        System.out.println(lyricsToFetch);
+
+            if(lyricsReceived.getStatusCode() == 200) {
                 if(!dbLyricsInDatabase.contains(lyricsToFetch)) {
                     return lyricsDbRepository.save(lyricsToFetch);
                 } else {
                     return dbLyricsInDatabase.get(dbLyricsInDatabase.indexOf(lyricsToFetch));
                 }
             }
-        }
+
         return new DbLyrics(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors(), "Not found in database . Limit exceeded for searching. Try tomorrow!");
     }
 

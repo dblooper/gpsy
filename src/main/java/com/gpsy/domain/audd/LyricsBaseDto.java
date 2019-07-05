@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 //@Component
 @NoArgsConstructor
 @Getter
@@ -15,21 +13,22 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LyricsBaseDto {
 
-    @JsonProperty(value = "status")
-    private String status;
+    @JsonProperty(value = "statusCode")
+    private int statusCode;
 
     @JsonProperty(value = "result")
-    private List<LyricsDto> lyrics;
+    private LyricsDto body;
 
-    public LyricsBaseDto(String status) {
-        this.status = status;
+    public LyricsBaseDto(int statusCode, LyricsDto body) {
+        this.statusCode = statusCode;
+        this.body = body;
     }
 
     @Override
     public String toString() {
         return "LyricsBaseDto{" +
-                "status='" + status + '\'' +
-                ", lyrics=" + lyrics +
+                "statusCode='" + statusCode + '\'' +
+                ", body=" + body +
                 '}';
     }
 
