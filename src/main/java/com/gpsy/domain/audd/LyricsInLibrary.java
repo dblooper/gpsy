@@ -1,5 +1,6 @@
 package com.gpsy.domain.audd;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,14 +8,16 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "lyrics")
+@Table(name = "library_lyrics")
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class DbLyrics {
+public class LyricsInLibrary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
+    @Column(name = "lyrics_id")
     private Long id;
 
     @Column(name = "titles")
@@ -26,6 +29,9 @@ public class DbLyrics {
     @Column(name = "body", columnDefinition = "TEXT")
     private String lyrics;
 
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "lyrics")
+    private Library library;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -33,7 +39,7 @@ public class DbLyrics {
 
         DbLyrics dbLyrics = (DbLyrics) o;
 
-        return lyrics.equals(dbLyrics.lyrics);
+        return lyrics.equals(dbLyrics.getLyrics());
     }
 
     @Override
@@ -41,9 +47,13 @@ public class DbLyrics {
         return lyrics.hashCode();
     }
 
-    public DbLyrics(String title, String artist, String lyrics) {
+    public LyricsInLibrary(String title, String artist, String lyrics) {
         this.title = title;
         this.artist = artist;
         this.lyrics = lyrics;
+    }
+
+    private void setLibrary(Library library) {
+        this.library = library;
     }
 }

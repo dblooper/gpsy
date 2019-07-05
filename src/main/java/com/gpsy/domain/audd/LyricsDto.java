@@ -26,7 +26,15 @@ public class LyricsDto {
         return "LyricsDto{" +
                 "title='" + title + '\'' +
                 ", artist='" + artist + '\'' +
-                ", lyrics='" + lyrics + '\'' +
+                ", body='" + lyrics + '\'' +
                 '}';
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 }
