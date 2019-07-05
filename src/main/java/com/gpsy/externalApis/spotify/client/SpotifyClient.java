@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.DbMostFrequentTrack;
 import com.gpsy.domain.DbUserPlaylist;
+import com.gpsy.externalApis.spotify.config.SpotifyConfig;
 import com.gpsy.service.spotify.PersonalizationDbBasedService;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.special.SnapshotResult;
@@ -32,6 +33,9 @@ public class SpotifyClient {
 
     @Autowired
     private PersonalizationDbBasedService personalizationDbBasedService;
+
+    @Autowired
+    private SpotifyConfig spotifyConfig;
 
     private String[] getTrackUrisForSpotifyRequest(DbUserPlaylist dbUserPlaylist) {
         return dbUserPlaylist.getTracks().stream()
@@ -183,6 +187,19 @@ public class SpotifyClient {
 
         try {
             final String changePlaylistName = changePlaylistsDetailsRequest.execute();
+        } catch(IOException | SpotifyWebApiException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void createPlaylist(DbUserPlaylist newPlaylist) {
+
+        final CreatePlaylistRequest createPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
+                .createPlaylist(spotifyConfig.getUserId(), newPlaylist.getName())
+                .build();
+
+        try {
+            final Playlist playlist = createPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
             System.out.println("Error: " + e.getMessage());
         }

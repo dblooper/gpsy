@@ -11,6 +11,9 @@ public class SpotifyHandleService {
     @Autowired
     private SpotifyClient spotifyClient;
 
+    @Autowired
+    private SpotifyDataDbService spotifyDataDbService;
+
     public DbUserPlaylist updatePlaylistTracks(DbUserPlaylist dbUserPlaylist) {
         spotifyClient.updatePlaylistTracks(dbUserPlaylist);
         return dbUserPlaylist;
@@ -26,5 +29,10 @@ public class SpotifyHandleService {
             spotifyClient.updatePlaylistDetails(newDbUserPlaylist);
         }
         return newDbUserPlaylist;
+    }
+
+    public DbUserPlaylist createPlaylist(DbUserPlaylist dbUserPlaylist) {
+        spotifyClient.createPlaylist(dbUserPlaylist);
+        return spotifyDataDbService.saveUserPlaylists().get(0);
     }
 }

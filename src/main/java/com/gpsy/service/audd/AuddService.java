@@ -3,7 +3,6 @@ package com.gpsy.service.audd;
 import com.gpsy.domain.audd.DbLyrics;
 import com.gpsy.domain.audd.LyricsBaseDto;
 import com.gpsy.domain.audd.TrackInfoForLyricsDto;
-import com.gpsy.exceptions.LyricsNotFoundException;
 import com.gpsy.externalApis.auddApi.client.AuddClient;
 import com.gpsy.mapper.audd.LyricsMapper;
 import com.gpsy.repository.audd.LyricsDbRepository;
