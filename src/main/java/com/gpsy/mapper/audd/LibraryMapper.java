@@ -23,4 +23,20 @@ public class LibraryMapper {
                 .map(lyrics -> new LyricsInLibraryDto(lyrics.getTitle(), lyrics.getArtist(), lyrics.getLyrics()))
                 .collect(Collectors.toList());
     }
+
+    public List<LyricsInLibrary> mapToLyricsInLibrary(List<LyricsInLibraryDto> lyricsInLibraryDtoList) {
+        return lyricsInLibraryDtoList.stream()
+                .map(lyricsInLibraryDto -> new LyricsInLibrary(lyricsInLibraryDto.getTitle(), lyricsInLibraryDto.getArtist(), lyricsInLibraryDto.getLyrics()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Library> mapToLibraries(List<LibraryDto> libraryDtoList) {
+        return libraryDtoList.stream()
+                .map(libraryDto -> new Library(libraryDto.getLibraryName(), mapToLyricsInLibrary(libraryDto.getLyrics()) ))
+                .collect(Collectors.toList());
+    }
+
+    public Library mapToLibrary(LibraryDto libraryDto) {
+        return new Library(libraryDto.getLibraryName(), mapToLyricsInLibrary(libraryDto.getLyrics()));
+    }
 }

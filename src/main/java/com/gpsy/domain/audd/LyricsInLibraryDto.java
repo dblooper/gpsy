@@ -2,11 +2,9 @@ package com.gpsy.domain.audd;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class LyricsInLibraryDto {
