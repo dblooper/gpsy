@@ -1,6 +1,6 @@
 package com.gpsy.repository.spotify;
 
-import com.gpsy.domain.RecommendedPlaylistTrack;
+import com.gpsy.domain.spotify.RecommendedPlaylistTrack;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

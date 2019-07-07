@@ -1,13 +1,13 @@
 package com.gpsy.service.spotify;
 
 import com.gpsy.config.InitialLimitValues;
-import com.gpsy.domain.DbPopularTrack;
-import com.gpsy.domain.DbRecentPlayedTrack;
-import com.gpsy.domain.DbRecommendedTrack;
-import com.gpsy.domain.DbUserPlaylist;
+import com.gpsy.domain.spotify.PopularTrack;
+import com.gpsy.domain.spotify.RecentPlayedTrack;
+import com.gpsy.domain.spotify.RecommendedTrack;
+import com.gpsy.domain.spotify.UserPlaylist;
 import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
 import com.gpsy.mapper.spotify.TrackMapper;
-import com.gpsy.mapper.spotify.UniversalMethods;
+import com.gpsy.mapper.spotify.UniversalMappingMethods;
 import com.gpsy.repository.spotify.SpotifyPopularTrackRepository;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
 import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
@@ -45,9 +45,9 @@ public class SpotifyDataDbService {
     private SpotifyClient spotifyClient;
 
 
-    public List<DbPopularTrack> savePopularTracks() {
-        List<DbPopularTrack> savedTracks = new ArrayList<>();
-        List<DbPopularTrack> storedTracks = spotifyPopularTrackRepository.findAll();
+    public List<PopularTrack> savePopularTracks() {
+        List<PopularTrack> savedTracks = new ArrayList<>();
+        List<PopularTrack> storedTracks = spotifyPopularTrackRepository.findAll();
         List<Track> spotifyStoredTracks = spotifyClient.getSpotifyPopularTracks();
         if(storedTracks.size() == 0) {
             for (Track spotifyTrack : spotifyClient.getSpotifyPopularTracks()) {
@@ -57,11 +57,11 @@ public class SpotifyDataDbService {
             return savedTracks;
         }
 
-        for(DbPopularTrack dbPopularTrack: storedTracks) {
+        for(PopularTrack popularTrack : storedTracks) {
             for (Track spotifyTrack : spotifyStoredTracks) {
-                    if(dbPopularTrack.getTrackId().equals(spotifyTrack.getId()) && dbPopularTrack.getPopularity() != spotifyTrack.getPopularity()){
-                        dbPopularTrack.setPopularity(spotifyTrack.getPopularity());
-                        savedTracks.add(spotifyPopularTrackRepository.save(dbPopularTrack));
+                    if(popularTrack.getTrackId().equals(spotifyTrack.getId()) && popularTrack.getPopularity() != spotifyTrack.getPopularity()){
+                        popularTrack.setPopularity(spotifyTrack.getPopularity());
+                        savedTracks.add(spotifyPopularTrackRepository.save(popularTrack));
                     }else if(!storedTracks.contains(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack))) {
                         savedTracks.add(spotifyPopularTrackRepository.save(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack)));
                     }
@@ -71,7 +71,7 @@ public class SpotifyDataDbService {
         return savedTracks;
     }
 
-    public List<DbPopularTrack> fetchPopularTracks() {
+    public List<PopularTrack> fetchPopularTracks() {
         savePopularTracks();
         return spotifyPopularTrackRepository.findAll().stream()
                 .limit(InitialLimitValues.LIMIT_POPULAR)
@@ -79,9 +79,9 @@ public class SpotifyDataDbService {
                 .collect(Collectors.toList());
     }
 
-    public List<DbRecentPlayedTrack> saveRecentPlayedTracks() {
-        List<DbRecentPlayedTrack> savedTracks = new ArrayList<>();
-        List<DbRecentPlayedTrack> storedTracks = spotifyRecentPlayedTrackRepository.findAll();
+    public List<RecentPlayedTrack> saveRecentPlayedTracks() {
+        List<RecentPlayedTrack> savedTracks = new ArrayList<>();
+        List<RecentPlayedTrack> storedTracks = spotifyRecentPlayedTrackRepository.findAll();
         Collections.sort(storedTracks, Collections.reverseOrder());
         List<PlayHistory> recentTracks = spotifyClient.getSpotifyRecentPlayedTracks();
 
@@ -103,28 +103,28 @@ public class SpotifyDataDbService {
         return savedTracks;
     }
 
-    public List<DbUserPlaylist> saveUserPlaylists() {
-        List<DbUserPlaylist> savedPlaylists = new ArrayList<>();
-        List<DbUserPlaylist> dbUserPlaylists = spotifyUserPlaylistsRepository.findAll();
+    public List<UserPlaylist> saveUserPlaylists() {
+        List<UserPlaylist> savedPlaylists = new ArrayList<>();
+        List<UserPlaylist> userPlaylists = spotifyUserPlaylistsRepository.findAll();
         List<PlaylistSimplified> spotifyUserPlaylists = spotifyClient.getUserPlaylists();
 
         for (PlaylistSimplified playlistSimplified : spotifyUserPlaylists) {
-                if(!dbUserPlaylists.contains(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified))) {
+                if(!userPlaylists.contains(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified))) {
                     savedPlaylists.add(spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
             }
         }
 
-        if(dbUserPlaylists.size() !=0) {
+        if(userPlaylists.size() !=0) {
             for (PlaylistSimplified playlistSimplified : spotifyUserPlaylists) {
-                for (DbUserPlaylist dbUserPlaylist : dbUserPlaylists) {
-                    if (dbUserPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && dbUserPlaylist.getTracks().size() != playlistSimplified.getTracks().getTotal()) {
-                        spotifyUserPlaylistsRepository.delete(dbUserPlaylist);
+                for (UserPlaylist userPlaylist : userPlaylists) {
+                    if (userPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && userPlaylist.getTracks().size() != playlistSimplified.getTracks().getTotal()) {
+                        spotifyUserPlaylistsRepository.delete(userPlaylist);
                         savedPlaylists.add(spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
                     }
 
-                    if(dbUserPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && !dbUserPlaylist.getName().equals(playlistSimplified.getName())) {
-                            DbUserPlaylist playlistToUpdate = spotifyUserPlaylistsRepository.findByPlaylistStringId(dbUserPlaylist.getPlaylistStringId());
-                            dbUserPlaylist.setName(playlistSimplified.getName());
+                    if(userPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && !userPlaylist.getName().equals(playlistSimplified.getName())) {
+                            UserPlaylist playlistToUpdate = spotifyUserPlaylistsRepository.findByPlaylistStringId(userPlaylist.getPlaylistStringId());
+                            userPlaylist.setName(playlistSimplified.getName());
                             savedPlaylists.add(spotifyUserPlaylistsRepository.save(playlistToUpdate));
                     }
                 }
@@ -133,12 +133,12 @@ public class SpotifyDataDbService {
         return savedPlaylists;
     }
 
-    public List<DbRecommendedTrack> returnRecommendedTracks() {
-        List<DbRecommendedTrack> recommendedTracks = new ArrayList<>();
+    public List<RecommendedTrack> returnRecommendedTracks() {
+        List<RecommendedTrack> recommendedTracks = new ArrayList<>();
         List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
         recommendedTracks = tracksSimplified.stream()
                 .limit(InitialLimitValues.LIMIT_RECOMMENDED_TRACKS_ON_BOARD)
-                .map(track -> new DbRecommendedTrack(track.getId(), track.getName(), UniversalMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
+                .map(track -> new RecommendedTrack(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
                 .collect(Collectors.toList());
         return recommendedTracks;
     }

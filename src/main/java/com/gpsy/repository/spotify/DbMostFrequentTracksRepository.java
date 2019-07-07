@@ -1,7 +1,6 @@
 package com.gpsy.repository.spotify;
 
-import com.gpsy.domain.DbMostFrequentTrack;
-import com.gpsy.domain.DbRecentPlayedTrack;
+import com.gpsy.domain.spotify.MostFrequentTrack;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface DbMostFrequentTracksRepository extends JpaRepository<DbMostFrequentTrack, Long> {
+public interface DbMostFrequentTracksRepository extends JpaRepository<MostFrequentTrack, Long> {
 
-    List<DbMostFrequentTrack> findAllByPopularityGreaterThanOrderByPopularityDesc(int quantity, Pageable pageable);
+    List<MostFrequentTrack> findAllByPopularityGreaterThanOrderByPopularityDesc(int quantity, Pageable pageable);
 }

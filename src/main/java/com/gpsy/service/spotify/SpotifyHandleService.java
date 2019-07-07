@@ -1,9 +1,13 @@
 package com.gpsy.service.spotify;
 
-import com.gpsy.domain.DbUserPlaylist;
+import com.gpsy.domain.spotify.UserPlaylist;
+import com.gpsy.domain.spotify.dto.SearchTrackDto;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
+import com.gpsy.mapper.spotify.TrackMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SpotifyHandleService {
@@ -14,25 +18,32 @@ public class SpotifyHandleService {
     @Autowired
     private SpotifyDataDbService spotifyDataDbService;
 
-    public DbUserPlaylist updatePlaylistTracks(DbUserPlaylist dbUserPlaylist) {
-        spotifyClient.updatePlaylistTracks(dbUserPlaylist);
-        return dbUserPlaylist;
+    @Autowired
+    private TrackMapper trackMapper;
+
+    public UserPlaylist updatePlaylistTracks(UserPlaylist userPlaylist) {
+        spotifyClient.updatePlaylistTracks(userPlaylist);
+        return userPlaylist;
     }
 
-    public DbUserPlaylist deletePlaylistTrack(DbUserPlaylist dbUserPlaylist) {
-        spotifyClient.deletePlaylistTrack(dbUserPlaylist);
-        return dbUserPlaylist;
+    public UserPlaylist deletePlaylistTrack(UserPlaylist userPlaylist) {
+        spotifyClient.deletePlaylistTrack(userPlaylist);
+        return userPlaylist;
     }
 
-    public DbUserPlaylist updatePlaylistName(DbUserPlaylist newDbUserPlaylist) {
-        if(!newDbUserPlaylist.getPlaylistStringId().equals("2ptqwasYqv1677gL4OEkIL")) {
-            spotifyClient.updatePlaylistDetails(newDbUserPlaylist);
+    public UserPlaylist updatePlaylistName(UserPlaylist newUserPlaylist) {
+        if(!newUserPlaylist.getPlaylistStringId().equals("2ptqwasYqv1677gL4OEkIL")) {
+            spotifyClient.updatePlaylistDetails(newUserPlaylist);
         }
-        return newDbUserPlaylist;
+        return newUserPlaylist;
     }
 
-    public DbUserPlaylist createPlaylist(DbUserPlaylist dbUserPlaylist) {
-        spotifyClient.createPlaylist(dbUserPlaylist);
+    public UserPlaylist createPlaylist(UserPlaylist userPlaylist) {
+        spotifyClient.createPlaylist(userPlaylist);
         return spotifyDataDbService.saveUserPlaylists().get(0);
+    }
+
+    public List<SearchTrackDto> searchForTracks(String searchedItem) {
+        return trackMapper.mapToSearchTrackDto(spotifyClient.searchForTrack(searchedItem));
     }
 }
