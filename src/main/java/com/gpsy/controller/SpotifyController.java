@@ -1,6 +1,6 @@
 package com.gpsy.controller;
 
-import com.gpsy.domain.dto.*;
+import com.gpsy.domain.spotify.dto.*;
 import com.gpsy.mapper.spotify.DbPlaylistMapper;
 import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
 import com.gpsy.mapper.spotify.TrackMapper;
@@ -37,6 +37,11 @@ public class SpotifyController {
 
     @Autowired
     private DbPlaylistMapper dbPlaylistMapper;
+
+    @GetMapping(value = "/tracks/search")
+    public List<SearchTrackDto> fetchSearchedTracks(@RequestParam String searchedItem) {
+        return spotifyHandleService.searchForTracks(searchedItem);
+    }
 
     @GetMapping(value = "/tracks/spotify/popular")
     public List<PopularTrackDto> fetchTracks() {

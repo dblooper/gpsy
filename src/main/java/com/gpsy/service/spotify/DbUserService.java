@@ -1,10 +1,8 @@
 package com.gpsy.service.spotify;
 
 import com.gpsy.config.InitialLimitValues;
-import com.gpsy.domain.DbRecentPlayedTrack;
-import com.gpsy.domain.DbUserPlaylist;
-import com.gpsy.domain.dto.RecentPlayedTrackDto;
-import com.gpsy.domain.dto.UserPlaylistDto;
+import com.gpsy.domain.spotify.RecentPlayedTrack;
+import com.gpsy.domain.spotify.UserPlaylist;
 import com.gpsy.mapper.spotify.DbPlaylistMapper;
 import com.gpsy.mapper.spotify.TrackMapper;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
@@ -36,17 +34,17 @@ public class DbUserService {
     @Autowired
     private DbPlaylistMapper dbPlaylistMapper;
 
-    public List<DbRecentPlayedTrack> fetchRecentPlayedTracks() {
+    public List<RecentPlayedTrack> fetchRecentPlayedTracks() {
         spotifyDataDbService.saveRecentPlayedTracks();
-        List<DbRecentPlayedTrack> recentPlayedTracks = spotifyRecentPlayedTrackRepository.findAll();
+        List<RecentPlayedTrack> recentPlayedTracks = spotifyRecentPlayedTrackRepository.findAll();
         Collections.sort(recentPlayedTracks, Collections.reverseOrder());
-        List<DbRecentPlayedTrack> limitedRecentPlayedTracks = recentPlayedTracks.stream()
+        List<RecentPlayedTrack> limitedRecentPlayedTracks = recentPlayedTracks.stream()
                 .limit(InitialLimitValues.LIMIT_RECENT)
                 .collect(Collectors.toList());
         return limitedRecentPlayedTracks;
     }
 
-    public List<DbUserPlaylist> fetchUserPlaylists() {
+    public List<UserPlaylist> fetchUserPlaylists() {
         spotifyDataDbService.saveUserPlaylists();
         return spotifyUserPlaylistsRepository.findAll();
     }

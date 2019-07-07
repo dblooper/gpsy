@@ -1,7 +1,7 @@
 package com.gpsy.repository.spotify;
 
-import com.gpsy.domain.DbRecentPlayedTrack;
-import com.gpsy.domain.dto.DbMostFrequentTrackDto;
+import com.gpsy.domain.spotify.RecentPlayedTrack;
+import com.gpsy.domain.spotify.DbMostFrequentTrackDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface SpotifyRecentPlayedTrackRepository extends JpaRepository<DbRecentPlayedTrack, Long> {
+public interface SpotifyRecentPlayedTrackRepository extends JpaRepository<RecentPlayedTrack, Long> {
 
     @Query
     List<DbMostFrequentTrackDto> retrieveWeekMostPopularTrack();

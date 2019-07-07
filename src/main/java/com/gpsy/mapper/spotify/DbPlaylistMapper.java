@@ -1,11 +1,11 @@
 package com.gpsy.mapper.spotify;
 
-import com.gpsy.domain.DbUserPlaylist;
-import com.gpsy.domain.PlaylistTrack;
-import com.gpsy.domain.RecommendedPlaylist;
-import com.gpsy.domain.dto.PlaylistTrackDto;
-import com.gpsy.domain.dto.RecommendedPlaylistDto;
-import com.gpsy.domain.dto.UserPlaylistDto;
+import com.gpsy.domain.spotify.UserPlaylist;
+import com.gpsy.domain.spotify.PlaylistTrack;
+import com.gpsy.domain.spotify.RecommendedPlaylist;
+import com.gpsy.domain.spotify.dto.PlaylistTrackDto;
+import com.gpsy.domain.spotify.dto.RecommendedPlaylistDto;
+import com.gpsy.domain.spotify.dto.UserPlaylistDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +24,9 @@ public class DbPlaylistMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<UserPlaylistDto> mapToUserPlaylistsDto(List<DbUserPlaylist> dbUserPlaylists) {
+    public List<UserPlaylistDto> mapToUserPlaylistsDto(List<UserPlaylist> userPlaylists) {
 
-        return dbUserPlaylists.stream()
+        return userPlaylists.stream()
                 .map(playlist -> new UserPlaylistDto(playlist.getName(), playlist.getPlaylistStringId(), mapToPlaylistTrackDtos(playlist.getTracks())))
                 .collect(Collectors.toList());
     }

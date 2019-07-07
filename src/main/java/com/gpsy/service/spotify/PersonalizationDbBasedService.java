@@ -1,11 +1,13 @@
 package com.gpsy.service.spotify;
 
 import com.gpsy.config.InitialLimitValues;
-import com.gpsy.domain.*;
-import com.gpsy.domain.dto.DbMostFrequentTrackDto;
+import com.gpsy.domain.spotify.DbMostFrequentTrackDto;
+import com.gpsy.domain.spotify.MostFrequentTrack;
+import com.gpsy.domain.spotify.RecommendedPlaylist;
+import com.gpsy.domain.spotify.RecommendedPlaylistTrack;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
 import com.gpsy.mapper.spotify.TrackMapper;
-import com.gpsy.mapper.spotify.UniversalMethods;
+import com.gpsy.mapper.spotify.UniversalMappingMethods;
 import com.gpsy.mapper.spotify.database.mapper.TrackDbMapper;
 import com.gpsy.repository.spotify.DbMostFrequentTracksRepository;
 import com.gpsy.repository.spotify.RecommendedPlaylistRepository;
@@ -42,43 +44,43 @@ public class PersonalizationDbBasedService {
     @Autowired
     private TrackMapper trackMapper;
 
-    public List<DbMostFrequentTrack> saveSpotifyByDbDataMostFrequentTracks() {
+    public List<MostFrequentTrack> saveSpotifyByDbDataMostFrequentTracks() {
         List<DbMostFrequentTrackDto> dbMostFrequentTrackDtos = spotifyRecentPlayedTrackRepository.retrieveWeekMostPopularTrack();
-        List<DbMostFrequentTrack> dbMostFrequentTracksFromDb = dbMostFrequentTracksRepository.findAll();
-        List<DbMostFrequentTrack> retireveDbMostFrequentTracksResult = new ArrayList<>();
+        List<MostFrequentTrack> dbMostFrequentTracksFrom = dbMostFrequentTracksRepository.findAll();
+        List<MostFrequentTrack> retireveMostFrequentTracksResult = new ArrayList<>();
 
-        if(dbMostFrequentTracksFromDb.size() == 0) {
+        if(dbMostFrequentTracksFrom.size() == 0) {
             for(DbMostFrequentTrackDto dbMostFrequentTrackDto : dbMostFrequentTrackDtos) {
-                retireveDbMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto)));
+                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto)));
             }
-            return retireveDbMostFrequentTracksResult;
+            return retireveMostFrequentTracksResult;
         }
 
         for(DbMostFrequentTrackDto dbMostFrequentTrackDto : dbMostFrequentTrackDtos){
 
-            if(!dbMostFrequentTracksFromDb.contains(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto))) { ;
-                retireveDbMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto)));
+            if(!dbMostFrequentTracksFrom.contains(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto))) { ;
+                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto)));
             }
 
-            for(DbMostFrequentTrack dbMostFrequentTrackFromTable: dbMostFrequentTracksFromDb) {
-                if(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto).getTrackId().equals(dbMostFrequentTrackFromTable.getTrackId())
-                        && dbMostFrequentTrackDto.getPopularity() != dbMostFrequentTrackFromTable.getPopularity()) {
-                    dbMostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto).getPopularity());
-                    retireveDbMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(dbMostFrequentTrackFromTable));
+            for(MostFrequentTrack mostFrequentTrackFromTable : dbMostFrequentTracksFrom) {
+                if(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto).getTrackId().equals(mostFrequentTrackFromTable.getTrackId())
+                        && dbMostFrequentTrackDto.getPopularity() != mostFrequentTrackFromTable.getPopularity()) {
+                    mostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto).getPopularity());
+                    retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(mostFrequentTrackFromTable));
                 }
             }
         }
 
-       return retireveDbMostFrequentTracksResult;
+       return retireveMostFrequentTracksResult;
     }
 
-    public List<DbMostFrequentTrack> fetchMostFrequentTracks() {
-        List<DbMostFrequentTrack> dbMostFrequentTracks = new ArrayList<>();
+    public List<MostFrequentTrack> fetchMostFrequentTracks() {
+        List<MostFrequentTrack> mostFrequentTracks = new ArrayList<>();
         saveSpotifyByDbDataMostFrequentTracks();
         Pageable pageable = PageRequest.of(0, InitialLimitValues.LIMIT_POPULAR);
-        dbMostFrequentTracks.addAll(dbMostFrequentTracksRepository.findAllByPopularityGreaterThanOrderByPopularityDesc(0, pageable));
-        dbMostFrequentTracks.sort(Collections.reverseOrder());
-        return dbMostFrequentTracks;
+        mostFrequentTracks.addAll(dbMostFrequentTracksRepository.findAllByPopularityGreaterThanOrderByPopularityDesc(0, pageable));
+        mostFrequentTracks.sort(Collections.reverseOrder());
+        return mostFrequentTracks;
     }
 
     public RecommendedPlaylist updateFetchRecommendedPlaylistFromDb(int numberOfTracks) {
@@ -86,7 +88,7 @@ public class PersonalizationDbBasedService {
         if(numberOfTracks > 50 || numberOfTracks < 0 ) return new RecommendedPlaylist("2ptqwasYqv1677gL4OEkIL","Tygodniowka", new ArrayList<>(),  false);
         List<RecommendedPlaylistTrack> recommendedTracks = spotifyClient.getRecommendedTracks().stream()
                 .limit(numberOfTracks)
-                .map(track -> new RecommendedPlaylistTrack(track.getId(), track.getName(), UniversalMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
+                .map(track -> new RecommendedPlaylistTrack(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
                 .collect(Collectors.toList());
         List<RecommendedPlaylist> recommendedPlaylists = recommendedPlaylistRepository.findAll();
             if(recommendedPlaylists.size() == 0) {
