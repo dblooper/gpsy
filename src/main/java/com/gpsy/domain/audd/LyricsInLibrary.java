@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "library_lyrics")
@@ -30,7 +32,7 @@ public class LyricsInLibrary {
     private String lyrics;
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "lyrics")
-    private Library library;
+    private List<Library> library = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -53,7 +55,7 @@ public class LyricsInLibrary {
         this.lyrics = lyrics;
     }
 
-    private void setLibrary(Library library) {
+    private void setLibrary(List<Library> library) {
         this.library = library;
     }
 }
