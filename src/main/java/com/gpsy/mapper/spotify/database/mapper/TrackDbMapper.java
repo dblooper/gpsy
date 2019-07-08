@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TrackDbMapper {
 
-    public MostFrequentTrack mapToDbMostFrequentTrack(DbMostFrequentTrackDto dbMostFrequentTrackDto) {
+    public MostFrequentTrack mapToMostFrequentTrack(DbMostFrequentTrackDto dbMostFrequentTrackDto) {
         return new MostFrequentTrack(dbMostFrequentTrackDto.getTrack_ids(), dbMostFrequentTrackDto.getTitles(), dbMostFrequentTrackDto.getAuthors(), dbMostFrequentTrackDto.getPopularity());
     }
 }

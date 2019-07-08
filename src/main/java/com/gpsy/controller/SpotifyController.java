@@ -58,7 +58,6 @@ public class SpotifyController {
     public List<UserPlaylistDto> fetchCurrentUserPlaylists() {
 
         return dbPlaylistMapper.mapToUserPlaylistsDto(dbUserService.fetchUserPlaylists());
-//        return dbPlaylistMapper.mapToUserPlaylistsDto(dbUserService.fetchUserPlaylists());
     }
 
     @GetMapping(value = "/tracks/frequent")
@@ -86,25 +85,25 @@ public class SpotifyController {
         return dbPlaylistMapper.mapToRecommendedPlaylistDto(personalizationDbBasedService.changeNumberOfTracks(qty));
     }
 
-    @PostMapping(value = "/playlists/addToPlaylist")
+    @PostMapping(value = "/playlists/tracks/add")
     public UserPlaylistDto updateUserPlaylist(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.updatePlaylistTracks(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
         return playlistDto;
     }
 
-    @PostMapping(value = "/playlists/addNewPlaylist")
+    @PostMapping(value = "/playlists/new")
     public UserPlaylistDto createNewPlaylist(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.createPlaylist(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
         return playlistDto;
     }
 
-    @DeleteMapping(value = "/playlists/deleteTrack")
+    @DeleteMapping(value = "/playlists/tracks/delete")
     public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
         return playlistDto;
     }
 
-    @PostMapping(value = "/playlists/updateDetails")
+    @PutMapping(value = "/playlists/update")
     public UserPlaylistDto updatePlaylistDetails(@RequestBody UserPlaylistDto userPlaylistDto) {
         spotifyHandleService.updatePlaylistName(spotifyPlaylistMapper.mapToDbUserPlaylist(userPlaylistDto));
         return userPlaylistDto;
