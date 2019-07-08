@@ -41,9 +41,6 @@ public class PersonalizationDbBasedService {
     @Autowired
     private TrackDbMapper trackDbMapper;
 
-    @Autowired
-    private TrackMapper trackMapper;
-
     public List<MostFrequentTrack> saveSpotifyByDbDataMostFrequentTracks() {
         List<DbMostFrequentTrackDto> dbMostFrequentTrackDtos = spotifyRecentPlayedTrackRepository.retrieveWeekMostPopularTrack();
         List<MostFrequentTrack> dbMostFrequentTracksFrom = dbMostFrequentTracksRepository.findAll();
@@ -51,21 +48,21 @@ public class PersonalizationDbBasedService {
 
         if(dbMostFrequentTracksFrom.size() == 0) {
             for(DbMostFrequentTrackDto dbMostFrequentTrackDto : dbMostFrequentTrackDtos) {
-                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto)));
+                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto)));
             }
             return retireveMostFrequentTracksResult;
         }
 
         for(DbMostFrequentTrackDto dbMostFrequentTrackDto : dbMostFrequentTrackDtos){
 
-            if(!dbMostFrequentTracksFrom.contains(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto))) { ;
-                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto)));
+            if(!dbMostFrequentTracksFrom.contains(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto))) { ;
+                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto)));
             }
 
             for(MostFrequentTrack mostFrequentTrackFromTable : dbMostFrequentTracksFrom) {
-                if(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto).getTrackId().equals(mostFrequentTrackFromTable.getTrackId())
+                if(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto).getTrackId().equals(mostFrequentTrackFromTable.getTrackId())
                         && dbMostFrequentTrackDto.getPopularity() != mostFrequentTrackFromTable.getPopularity()) {
-                    mostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToDbMostFrequentTrack(dbMostFrequentTrackDto).getPopularity());
+                    mostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto).getPopularity());
                     retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(mostFrequentTrackFromTable));
                 }
             }
