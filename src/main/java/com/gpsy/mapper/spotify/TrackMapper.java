@@ -68,4 +68,10 @@ public class TrackMapper {
                 .map(track -> new SearchTrackDto(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
                 .collect(Collectors.toList());
     }
+
+    public List<PlaylistTrack> mapRecommendedPlaylistTracksToUserPlaylistTracks(List<RecommendedPlaylistTrack> recommendedPlaylistTracks) {
+        return recommendedPlaylistTracks.stream()
+                .map(track -> new PlaylistTrack(track.getStringId(), track.getTitles(), track.getAuthors()))
+                .collect(Collectors.toList());
+    }
 }

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
-public class SpotifyDataDbService {
+public class SaveSpotifyDataToDbService {
 
     @Autowired
     private SpotifyPopularTrackRepository spotifyPopularTrackRepository;
@@ -43,7 +43,6 @@ public class SpotifyDataDbService {
 
     @Autowired
     private SpotifyClient spotifyClient;
-
 
     public List<PopularTrack> savePopularTracks() {
         List<PopularTrack> savedTracks = new ArrayList<>();
@@ -131,15 +130,5 @@ public class SpotifyDataDbService {
             }
         }
         return savedPlaylists;
-    }
-
-    public List<RecommendedTrack> returnRecommendedTracks() {
-        List<RecommendedTrack> recommendedTracks = new ArrayList<>();
-        List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
-        recommendedTracks = tracksSimplified.stream()
-                .limit(InitialLimitValues.LIMIT_RECOMMENDED_TRACKS_ON_BOARD)
-                .map(track -> new RecommendedTrack(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
-                .collect(Collectors.toList());
-        return recommendedTracks;
     }
 }

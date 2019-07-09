@@ -4,7 +4,6 @@ import com.gpsy.domain.lyrics.Library;
 import com.gpsy.domain.lyrics.LyricsInLibrary;
 import com.gpsy.exceptions.LibraryNotFoundException;
 import com.gpsy.repository.audd.LibraryRepository;
-import com.gpsy.service.musiXmatch.MusiXmatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +15,6 @@ public class LyricsLibraryService {
 
     @Autowired
     private LibraryRepository libraryRepository;
-
-    @Autowired
-    private MusiXmatchService musiXmatchService;
 
     public List<Library> fetchLibrariesFromDb() {
         return libraryRepository.findAll();

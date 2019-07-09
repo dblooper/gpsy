@@ -26,7 +26,6 @@ public class MusiXmatchService {
     private LyricsMapper lyricsMapper;
 
     public DbLyrics fetchLirycs(String title, String author) throws MusiXmatchServerResponseException {
-
         TrackInfoForLyricsDto trackInfoForLyricsDto = new TrackInfoForLyricsDto(title, author);
 
         List<DbLyrics> dbLyricsInDatabase = lyricsDbRepository.findAll();

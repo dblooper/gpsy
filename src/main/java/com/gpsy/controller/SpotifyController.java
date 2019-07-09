@@ -4,10 +4,9 @@ import com.gpsy.domain.spotify.dto.*;
 import com.gpsy.mapper.spotify.DbPlaylistMapper;
 import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
 import com.gpsy.mapper.spotify.TrackMapper;
-import com.gpsy.service.spotify.DbUserService;
-import com.gpsy.service.spotify.PersonalizationDbBasedService;
+import com.gpsy.service.spotify.FetchDataFromDbService;
 import com.gpsy.service.spotify.SpotifyHandleService;
-import com.gpsy.service.spotify.SpotifyDataDbService;
+import com.gpsy.service.spotify.SaveSpotifyDataToDbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +14,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/gpsy")
+@CrossOrigin("*")
 public class SpotifyController {
 
     @Autowired
-    private SpotifyDataDbService spotifyDataDbService;
+    private SaveSpotifyDataToDbService saveSpotifyDataToDbService;
 
     @Autowired
-    private PersonalizationDbBasedService personalizationDbBasedService;
-
-    @Autowired
-    private DbUserService dbUserService;
+    private FetchDataFromDbService fetchDataFromDbService;
 
     @Autowired
     private SpotifyHandleService spotifyHandleService;
@@ -46,43 +43,43 @@ public class SpotifyController {
     @GetMapping(value = "/tracks/spotify/popular")
     public List<PopularTrackDto> fetchTracks() {
 
-        return trackMapper.mapPopularTrackToPopularTrackDtoList(spotifyDataDbService.fetchPopularTracks());
+        return trackMapper.mapPopularTrackToPopularTrackDtoList(saveSpotifyDataToDbService.fetchPopularTracks());
     }
 
     @GetMapping(value = "/tracks/recent")
     public List<RecentPlayedTrackDto> fetchRecentTracks() {
-        return trackMapper.mapToRecentPlayedTrackDtos(dbUserService.fetchRecentPlayedTracks());
+        return trackMapper.mapToRecentPlayedTrackDtos(fetchDataFromDbService.fetchRecentPlayedTracks());
     }
 
     @GetMapping(value = "/playlists/current")
     public List<UserPlaylistDto> fetchCurrentUserPlaylists() {
 
-        return dbPlaylistMapper.mapToUserPlaylistsDto(dbUserService.fetchUserPlaylists());
+        return dbPlaylistMapper.mapToUserPlaylistsDto(fetchDataFromDbService.fetchUserPlaylists());
     }
 
     @GetMapping(value = "/tracks/frequent")
     public List<MostFrequentTrackDto> fetchMostFrequentTracks() {
-        return trackMapper.mapToPopularTrackDtoList(personalizationDbBasedService.fetchMostFrequentTracks());
+        return trackMapper.mapToPopularTrackDtoList(fetchDataFromDbService.fetchMostFrequentTracks());
     }
 
     @GetMapping(value = "/tracks/recommended")
     public List<RecommendedTrackDto> fetchRecommendedTracks() {
-        return trackMapper.mapToRecommendedTrackDtoList(spotifyDataDbService.returnRecommendedTracks());
+        return trackMapper.mapToRecommendedTrackDtoList(spotifyHandleService.returnRecommendedTracks());
     }
 
     @GetMapping(value = "/playlists/recommended")
     public RecommendedPlaylistDto fetchRecommendedPlaylist() {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(personalizationDbBasedService.fetchRecommendedPlaylist());
+        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.fetchRecommendedPlaylist());
     }
 
     @GetMapping(value = "/playlists/recommended/new")
     public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam int qty) {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(personalizationDbBasedService.updateFetchRecommendedPlaylistFromDb(qty));
+        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(qty));
     }
 
     @GetMapping(value = "/playlists/recommended/change")
     public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam int qty) {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(personalizationDbBasedService.changeNumberOfTracks(qty));
+        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.changeNumberOfTracks(qty));
     }
 
     @PostMapping(value = "/playlists/tracks/add")

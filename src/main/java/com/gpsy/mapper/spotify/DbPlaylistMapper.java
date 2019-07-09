@@ -35,4 +35,8 @@ public class DbPlaylistMapper {
         return new RecommendedPlaylistDto(recommendedPlaylist.getPlaylistStringId(), recommendedPlaylist.getName(), trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()), recommendedPlaylist.getNumberOfTracks(), recommendedPlaylist.isActual());
     }
 
+    public UserPlaylist mapRecommendedPlaylistToUserPlaylist(RecommendedPlaylist recommendedPlaylist) {
+        return new UserPlaylist(recommendedPlaylist.getName(), recommendedPlaylist.getPlaylistStringId(),trackMapper.mapRecommendedPlaylistTracksToUserPlaylistTracks(recommendedPlaylist.getRecommendedPlaylistTracks()));
+    }
+
 }

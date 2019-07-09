@@ -13,7 +13,7 @@ import java.util.Date;
                 "FROM recent_tracks " +
                 "GROUP BY track_ids " +
                 "order by popularity desc",
-        resultClass = DbMostFrequentTrackDto.class
+        resultClass = DbMostFrequentTrackCalc.class
 )
 
 @Entity

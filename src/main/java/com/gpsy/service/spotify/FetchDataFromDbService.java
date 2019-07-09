@@ -1,17 +1,14 @@
 package com.gpsy.service.spotify;
 
 import com.gpsy.config.InitialLimitValues;
-import com.gpsy.domain.spotify.DbMostFrequentTrackDto;
-import com.gpsy.domain.spotify.MostFrequentTrack;
-import com.gpsy.domain.spotify.RecommendedPlaylist;
-import com.gpsy.domain.spotify.RecommendedPlaylistTrack;
+import com.gpsy.domain.spotify.*;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
-import com.gpsy.mapper.spotify.TrackMapper;
 import com.gpsy.mapper.spotify.UniversalMappingMethods;
 import com.gpsy.mapper.spotify.database.mapper.TrackDbMapper;
 import com.gpsy.repository.spotify.DbMostFrequentTracksRepository;
 import com.gpsy.repository.spotify.RecommendedPlaylistRepository;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
+import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +21,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonalizationDbBasedService {
+public class FetchDataFromDbService {
 
     @Autowired
     private SpotifyRecentPlayedTrackRepository spotifyRecentPlayedTrackRepository;
+
+    @Autowired
+    private SpotifyUserPlaylistsRepository spotifyUserPlaylistsRepository;
 
     @Autowired
     private DbMostFrequentTracksRepository dbMostFrequentTracksRepository;
@@ -36,33 +36,51 @@ public class PersonalizationDbBasedService {
     private RecommendedPlaylistRepository recommendedPlaylistRepository;
 
     @Autowired
+    private SaveSpotifyDataToDbService saveSpotifyDataToDbService;
+
+    @Autowired
     private SpotifyClient spotifyClient;
 
     @Autowired
     private TrackDbMapper trackDbMapper;
 
+    public List<RecentPlayedTrack> fetchRecentPlayedTracks() {
+        saveSpotifyDataToDbService.saveRecentPlayedTracks();
+        List<RecentPlayedTrack> recentPlayedTracks = spotifyRecentPlayedTrackRepository.findAll();
+        Collections.sort(recentPlayedTracks, Collections.reverseOrder());
+        List<RecentPlayedTrack> limitedRecentPlayedTracks = recentPlayedTracks.stream()
+                .limit(InitialLimitValues.LIMIT_RECENT)
+                .collect(Collectors.toList());
+        return limitedRecentPlayedTracks;
+    }
+
+    public List<UserPlaylist> fetchUserPlaylists() {
+        saveSpotifyDataToDbService.saveUserPlaylists();
+        return spotifyUserPlaylistsRepository.findAll();
+    }
+
     public List<MostFrequentTrack> saveSpotifyByDbDataMostFrequentTracks() {
-        List<DbMostFrequentTrackDto> dbMostFrequentTrackDtos = spotifyRecentPlayedTrackRepository.retrieveWeekMostPopularTrack();
+        List<DbMostFrequentTrackCalc> dbMostFrequentTrackCalcs = spotifyRecentPlayedTrackRepository.retrieveWeekMostPopularTrack();
         List<MostFrequentTrack> dbMostFrequentTracksFrom = dbMostFrequentTracksRepository.findAll();
         List<MostFrequentTrack> retireveMostFrequentTracksResult = new ArrayList<>();
 
         if(dbMostFrequentTracksFrom.size() == 0) {
-            for(DbMostFrequentTrackDto dbMostFrequentTrackDto : dbMostFrequentTrackDtos) {
-                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto)));
+            for(DbMostFrequentTrackCalc dbMostFrequentTrackCalc : dbMostFrequentTrackCalcs) {
+                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc)));
             }
             return retireveMostFrequentTracksResult;
         }
 
-        for(DbMostFrequentTrackDto dbMostFrequentTrackDto : dbMostFrequentTrackDtos){
+        for(DbMostFrequentTrackCalc dbMostFrequentTrackCalc : dbMostFrequentTrackCalcs){
 
-            if(!dbMostFrequentTracksFrom.contains(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto))) { ;
-                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto)));
+            if(!dbMostFrequentTracksFrom.contains(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc))) { ;
+                retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc)));
             }
 
             for(MostFrequentTrack mostFrequentTrackFromTable : dbMostFrequentTracksFrom) {
-                if(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto).getTrackId().equals(mostFrequentTrackFromTable.getTrackId())
-                        && dbMostFrequentTrackDto.getPopularity() != mostFrequentTrackFromTable.getPopularity()) {
-                    mostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackDto).getPopularity());
+                if(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc).getTrackId().equals(mostFrequentTrackFromTable.getTrackId())
+                        && dbMostFrequentTrackCalc.getPopularity() != mostFrequentTrackFromTable.getPopularity()) {
+                    mostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc).getPopularity());
                     retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(mostFrequentTrackFromTable));
                 }
             }
