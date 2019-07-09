@@ -39,6 +39,7 @@ public class RecommendedPlaylistTrack {
 
     @ManyToMany(
             cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
             mappedBy = "recommendedPlaylistTracks"
     )
     private List<RecommendedPlaylist> recommendedPlaylist = new ArrayList<>();

@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/gpsy")
+@CrossOrigin("*")
 public class LyricsController {
 
     @Autowired
@@ -61,7 +62,6 @@ public class LyricsController {
     public void deleteLyricsFromLibrary(@RequestBody LibraryDto libraryDto) throws LibraryNotFoundException {
         lyricsLibraryService.deleteLyricsFromLibrary(libraryMapper.mapToLibrary(libraryDto));
     }
-
 
     @DeleteMapping(value = "/libraries/delete")
     public void deleteLibrary(@RequestParam long libraryId) {

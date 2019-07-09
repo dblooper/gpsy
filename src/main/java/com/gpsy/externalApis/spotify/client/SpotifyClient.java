@@ -5,9 +5,8 @@ import com.google.gson.JsonParser;
 import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.MostFrequentTrack;
 import com.gpsy.domain.spotify.UserPlaylist;
-import com.gpsy.domain.spotify.dto.SearchTrackDto;
 import com.gpsy.externalApis.spotify.config.SpotifyConfig;
-import com.gpsy.service.spotify.PersonalizationDbBasedService;
+import com.gpsy.service.spotify.FetchDataFromDbService;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.special.SearchResult;
@@ -36,7 +35,7 @@ public class SpotifyClient {
     private SpofyAuthorizator spotifyAuthorizator;
 
     @Autowired
-    private PersonalizationDbBasedService personalizationDbBasedService;
+    private FetchDataFromDbService fetchDataFromDbService;
 
     @Autowired
     private SpotifyConfig spotifyConfig;
@@ -151,7 +150,7 @@ public class SpotifyClient {
 
     private String popularTracksMerge(int limit) {
 
-        List<MostFrequentTrack> mostFrequentTracks = personalizationDbBasedService.fetchMostFrequentTracks();
+        List<MostFrequentTrack> mostFrequentTracks = fetchDataFromDbService.fetchMostFrequentTracks();
 
         if(mostFrequentTracks.size() > 0 ) {
             Collections.sort(mostFrequentTracks, Collections.reverseOrder());
@@ -190,7 +189,8 @@ public class SpotifyClient {
     public void deletePlaylistTrack(UserPlaylist userPlaylist) {
 
         final RemoveTracksFromPlaylistRequest removeTracksFromPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
-                .removeTracksFromPlaylist(userPlaylist.getPlaylistStringId(), jsonArrayTrackToDeleteMaker(userPlaylist)).build();
+                .removeTracksFromPlaylist(userPlaylist.getPlaylistStringId(),
+                                            jsonArrayTrackToDeleteMaker(userPlaylist)).build();
 
         try {
             final SnapshotResult snapshotResult = removeTracksFromPlaylistRequest.execute();

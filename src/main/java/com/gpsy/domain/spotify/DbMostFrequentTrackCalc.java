@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class DbMostFrequentTrackDto {
+public class DbMostFrequentTrackCalc {
 
     @Id
     @NotNull
@@ -27,7 +27,7 @@ public class DbMostFrequentTrackDto {
 
     private int popularity;
 
-    public DbMostFrequentTrackDto(String track_ids, String titles, String authors, int popularity) {
+    public DbMostFrequentTrackCalc(String track_ids, String titles, String authors, int popularity) {
         this.track_ids = track_ids;
         this.titles = titles;
         this.authors = authors;
@@ -39,7 +39,7 @@ public class DbMostFrequentTrackDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DbMostFrequentTrackDto that = (DbMostFrequentTrackDto) o;
+        DbMostFrequentTrackCalc that = (DbMostFrequentTrackCalc) o;
 
         return track_ids.equals(that.track_ids);
 

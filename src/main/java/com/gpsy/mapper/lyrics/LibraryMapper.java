@@ -30,12 +30,6 @@ public class LibraryMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<Library> mapToLibraries(List<LibraryDto> libraryDtoList) {
-        return libraryDtoList.stream()
-                .map(libraryDto -> new Library(libraryDto.getLibraryName(), mapToLyricsInLibrary(libraryDto.getLyrics()) ))
-                .collect(Collectors.toList());
-    }
-
     public Library mapToLibrary(LibraryDto libraryDto) {
         return new Library(libraryDto.getId(), libraryDto.getLibraryName(), mapToLyricsInLibrary(libraryDto.getLyrics()));
     }

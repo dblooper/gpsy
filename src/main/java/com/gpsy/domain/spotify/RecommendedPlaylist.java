@@ -36,7 +36,8 @@ public class RecommendedPlaylist {
     @Column(name = "actual")
     private boolean actual;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,
+                fetch = FetchType.EAGER)
     @JoinTable(
             name = "JOIN_PL_RECOMMENDED_TRACK",
             joinColumns = {@JoinColumn(name = "playlist_id", referencedColumnName = "playlist_id")},

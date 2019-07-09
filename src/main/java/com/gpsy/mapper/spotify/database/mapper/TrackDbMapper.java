@@ -1,13 +1,13 @@
 package com.gpsy.mapper.spotify.database.mapper;
 
 import com.gpsy.domain.spotify.MostFrequentTrack;
-import com.gpsy.domain.spotify.DbMostFrequentTrackDto;
+import com.gpsy.domain.spotify.DbMostFrequentTrackCalc;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TrackDbMapper {
 
-    public MostFrequentTrack mapToMostFrequentTrack(DbMostFrequentTrackDto dbMostFrequentTrackDto) {
-        return new MostFrequentTrack(dbMostFrequentTrackDto.getTrack_ids(), dbMostFrequentTrackDto.getTitles(), dbMostFrequentTrackDto.getAuthors(), dbMostFrequentTrackDto.getPopularity());
+    public MostFrequentTrack mapToMostFrequentTrack(DbMostFrequentTrackCalc dbMostFrequentTrackCalc) {
+        return new MostFrequentTrack(dbMostFrequentTrackCalc.getTrack_ids(), dbMostFrequentTrackCalc.getTitles(), dbMostFrequentTrackCalc.getAuthors(), dbMostFrequentTrackCalc.getPopularity());
     }
 }
