@@ -25,18 +25,13 @@ public class DbPlaylistMapper {
     }
 
     public List<UserPlaylistDto> mapToUserPlaylistsDto(List<UserPlaylist> userPlaylists) {
-
         return userPlaylists.stream()
                 .map(playlist -> new UserPlaylistDto(playlist.getName(), playlist.getPlaylistStringId(), mapToPlaylistTrackDtos(playlist.getTracks())))
                 .collect(Collectors.toList());
     }
 
     public RecommendedPlaylistDto mapToRecommendedPlaylistDto(RecommendedPlaylist recommendedPlaylist) {
-        return new RecommendedPlaylistDto(recommendedPlaylist.getStringId(), recommendedPlaylist.getName(), trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()), recommendedPlaylist.getNumberOfTracks(), recommendedPlaylist.isActual());
-    }
-
-    public UserPlaylist mapRecommendedPlaylistToUserPlaylist(RecommendedPlaylist recommendedPlaylist) {
-        return new UserPlaylist(recommendedPlaylist.getName(), recommendedPlaylist.getStringId(),trackMapper.mapRecommendedPlaylistTracksToUserPlaylistTracks(recommendedPlaylist.getRecommendedPlaylistTracks()));
+        return new RecommendedPlaylistDto(recommendedPlaylist.getPlaylistStringId(), recommendedPlaylist.getName(), trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()), recommendedPlaylist.getNumberOfTracks(), recommendedPlaylist.isActual());
     }
 
 }

@@ -17,7 +17,7 @@ public class PopularTrack implements Comparable<PopularTrack> {
     private long popularTrackId;
 
     @Column(name = "track_string_id")
-    private String track_string_id;
+    private String trackStringId;
 
     private String title;
 
@@ -25,11 +25,43 @@ public class PopularTrack implements Comparable<PopularTrack> {
 
     private Integer popularity;
 
-    public PopularTrack(String track_string_id, String title, String artists, int popularity) {
-        this.track_string_id = track_string_id;
+    private PopularTrack(String trackStringId, String title, String artists, int popularity) {
+        this.trackStringId = trackStringId;
         this.title = title;
         this.artists = artists;
         this.popularity = popularity;
+    }
+
+    public static class PopularTrackBuiilder {
+
+        private String trackStringId;
+        private String title;
+        private String artists;
+        private Integer popularity;
+
+        public PopularTrackBuiilder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public PopularTrackBuiilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public PopularTrackBuiilder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public PopularTrackBuiilder popularity(Integer popularity) {
+            this.popularity = popularity;
+            return this;
+        }
+
+        public PopularTrack build() {
+            return new PopularTrack(trackStringId, title, artists, popularity);
+        }
     }
 
     @Override
@@ -39,12 +71,12 @@ public class PopularTrack implements Comparable<PopularTrack> {
 
         PopularTrack popularTrack = (PopularTrack) o;
 
-        return track_string_id.equals(popularTrack.track_string_id);
+        return trackStringId.equals(popularTrack.trackStringId);
     }
 
     @Override
     public int hashCode() {
-        return Integer.parseInt(track_string_id);
+        return Integer.parseInt(trackStringId);
     }
 
     @Override

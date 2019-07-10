@@ -55,7 +55,7 @@ public class SaveSpotifyDataToDbService {
 
         for(PopularTrack popularTrack : storedTracks) {
             for (Track spotifyTrack : spotifyStoredTracks) {
-                    if(popularTrack.getTrack_string_id().equals(spotifyTrack.getId()) && popularTrack.getPopularity() != spotifyTrack.getPopularity()){
+                    if(popularTrack.getTrackStringId().equals(spotifyTrack.getId()) && popularTrack.getPopularity() != spotifyTrack.getPopularity()){
                         popularTrack.setPopularity(spotifyTrack.getPopularity());
                         savedTracks.add(spotifyPopularTrackRepository.save(popularTrack));
                     }else if(!storedTracks.contains(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack))) {

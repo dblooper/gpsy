@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "frequent_tracks")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class MostFrequentTrack implements Comparable<MostFrequentTrack> {
 
@@ -27,11 +26,43 @@ public class MostFrequentTrack implements Comparable<MostFrequentTrack> {
 
     private Integer popularity;
 
-    public MostFrequentTrack(String trackStringId, String title, String artists, Integer popularity) {
+    private MostFrequentTrack(String trackStringId, String title, String artists, Integer popularity) {
         this.trackStringId = trackStringId;
         this.title = title;
         this.artists = artists;
         this.popularity = popularity;
+    }
+
+    public static class MostFrequentTrackBuilder {
+
+        private String trackStringId;
+        private String title;
+        private String artists;
+        private Integer popularity;
+
+        public MostFrequentTrackBuilder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public MostFrequentTrackBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public MostFrequentTrackBuilder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public MostFrequentTrackBuilder popularity(Integer popularity) {
+            this.popularity = popularity;
+            return this;
+        }
+
+        public MostFrequentTrack build() {
+            return new MostFrequentTrack(trackStringId, title, artists, popularity);
+        }
     }
 
     @Override
