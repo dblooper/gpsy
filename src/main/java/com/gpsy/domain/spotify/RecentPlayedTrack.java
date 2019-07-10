@@ -4,14 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @NamedNativeQuery(
         name = "RecentPlayedTrack.retrieveWeekMostPopularTrack",
-        query = "SELECT id, track_ids, titles, authors, COUNT(*) AS popularity " +
+        query = "SELECT id, track_string_id, title, artists, COUNT(*) AS popularity " +
                 "FROM recent_tracks " +
-                "GROUP BY track_ids " +
+                "GROUP BY track_string_id " +
                 "order by popularity desc",
         resultClass = DbMostFrequentTrackCalc.class
 )
@@ -23,28 +22,23 @@ import java.util.Date;
 public class RecentPlayedTrack implements Comparable<RecentPlayedTrack> {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @NotNull
-    @Column(name = "track_IDs")
-    private String trackId;
+    @Column(name = "track_string_id")
+    private String trackStringId;
 
-    @NotNull
-    @Column(name = "titles")
     private String title;
 
-    @Column(name = "authors")
-    private String authors;
+    private String artists;
 
     @Column(name = "play_date")
     private Date playDate;
 
-    public RecentPlayedTrack(String trackId, String title, String authors, Date playDate) {
-        this.trackId = trackId;
+    public RecentPlayedTrack(String trackStringId, String title, String artists, Date playDate) {
+        this.trackStringId = trackStringId;
         this.title = title;
-        this.authors = authors;
+        this.artists = artists;
         this.playDate = playDate;
     }
 
@@ -60,12 +54,12 @@ public class RecentPlayedTrack implements Comparable<RecentPlayedTrack> {
 
         RecentPlayedTrack that = (RecentPlayedTrack) o;
 
-        return trackId.equals(that.trackId);
+        return trackStringId.equals(that.trackStringId);
 
     }
 
     @Override
     public int hashCode() {
-        return trackId.hashCode();
+        return trackStringId.hashCode();
     }
 }

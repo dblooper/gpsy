@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,31 +16,25 @@ import java.util.List;
 public class PlaylistTrack {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "track_id")
+    @Column(name = "id")
     private long trackId;
 
-    @NotNull
-    @Column(name = "track_ids")
+    @Column(name = "track_string_id")
     private String trackStringId;
 
-    @NotNull
-    @Column(name = "titles")
     private String title;
 
-    @Column(name = "authors")
-    private String authors;
+    private String artists;
 
-
-    @Column(name = "playlists")
+    @Column(name = "playlist")
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tracks")
     private List<UserPlaylist> playlists = new ArrayList<>();
 
-    public PlaylistTrack(String trackStringId, String title, String authors) {
+    public PlaylistTrack(String trackStringId, String title, String artists) {
         this.trackStringId = trackStringId;
         this.title = title;
-        this.authors = authors;
+        this.artists = artists;
     }
 
     private void setPlaylists(List<UserPlaylist> playlists) {

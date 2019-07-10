@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "frequent_tracks")
@@ -15,22 +14,23 @@ import javax.validation.constraints.NotNull;
 public class MostFrequentTrack implements Comparable<MostFrequentTrack> {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(name = "id")
+    private long mostFrequentTrackId;
 
-    private String trackId;
+    @Column(name = "track_string_id")
+    private String trackStringId;
 
     private String title;
 
-    private String authors;
+    private String artists;
 
     private Integer popularity;
 
-    public MostFrequentTrack(String trackId, String title, String authors, Integer popularity) {
-        this.trackId = trackId;
+    public MostFrequentTrack(String trackStringId, String title, String artists, Integer popularity) {
+        this.trackStringId = trackStringId;
         this.title = title;
-        this.authors = authors;
+        this.artists = artists;
         this.popularity = popularity;
     }
 
@@ -41,13 +41,13 @@ public class MostFrequentTrack implements Comparable<MostFrequentTrack> {
 
         MostFrequentTrack that = (MostFrequentTrack) o;
 
-        return trackId.equals(that.trackId);
+        return trackStringId.equals(that.trackStringId);
 
     }
 
     @Override
     public int hashCode() {
-        return trackId.hashCode();
+        return trackStringId.hashCode();
     }
 
     public void setPopularity(int popularity) {

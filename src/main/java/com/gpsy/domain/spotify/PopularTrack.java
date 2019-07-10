@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="popular_tracks")
@@ -13,28 +12,23 @@ import javax.validation.constraints.NotNull;
 public class PopularTrack implements Comparable<PopularTrack> {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private long id;
+    @Column(name = "id")
+    private long popularTrackId;
 
-    @NotNull
-    @Column(name = "track_IDs")
-    private String trackId;
+    @Column(name = "track_string_id")
+    private String track_string_id;
 
-    @NotNull
-    @Column(name = "titles")
     private String title;
 
-    @Column(name = "authors")
-    private String authors;
+    private String artists;
 
-    @Column(name = "popularity")
     private Integer popularity;
 
-    public PopularTrack(String trackId, String title, String authors, int popularity) {
-        this.trackId = trackId;
+    public PopularTrack(String track_string_id, String title, String artists, int popularity) {
+        this.track_string_id = track_string_id;
         this.title = title;
-        this.authors = authors;
+        this.artists = artists;
         this.popularity = popularity;
     }
 
@@ -45,12 +39,12 @@ public class PopularTrack implements Comparable<PopularTrack> {
 
         PopularTrack popularTrack = (PopularTrack) o;
 
-        return trackId.equals(popularTrack.trackId);
+        return track_string_id.equals(popularTrack.track_string_id);
     }
 
     @Override
     public int hashCode() {
-        return Integer.parseInt(trackId);
+        return Integer.parseInt(track_string_id);
     }
 
     @Override

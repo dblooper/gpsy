@@ -3,11 +3,9 @@ package com.gpsy.service.spotify;
 import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.PopularTrack;
 import com.gpsy.domain.spotify.RecentPlayedTrack;
-import com.gpsy.domain.spotify.RecommendedTrack;
 import com.gpsy.domain.spotify.UserPlaylist;
 import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
 import com.gpsy.mapper.spotify.TrackMapper;
-import com.gpsy.mapper.spotify.UniversalMappingMethods;
 import com.gpsy.repository.spotify.SpotifyPopularTrackRepository;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
 import com.gpsy.repository.spotify.SpotifyUserPlaylistsRepository;
@@ -15,7 +13,6 @@ import com.gpsy.externalApis.spotify.client.SpotifyClient;
 import com.wrapper.spotify.model_objects.specification.PlayHistory;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -58,7 +55,7 @@ public class SaveSpotifyDataToDbService {
 
         for(PopularTrack popularTrack : storedTracks) {
             for (Track spotifyTrack : spotifyStoredTracks) {
-                    if(popularTrack.getTrackId().equals(spotifyTrack.getId()) && popularTrack.getPopularity() != spotifyTrack.getPopularity()){
+                    if(popularTrack.getTrack_string_id().equals(spotifyTrack.getId()) && popularTrack.getPopularity() != spotifyTrack.getPopularity()){
                         popularTrack.setPopularity(spotifyTrack.getPopularity());
                         savedTracks.add(spotifyPopularTrackRepository.save(popularTrack));
                     }else if(!storedTracks.contains(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack))) {

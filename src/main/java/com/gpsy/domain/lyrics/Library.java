@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,18 +16,17 @@ import java.util.List;
 public class Library {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "library_id")
-    private long id;
+    @Column(name = "id")
+    private long libraryId;
 
     private String libraryName;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "JOIN_LIBRARY_LYRICS",
-            joinColumns = {@JoinColumn(name = "library_id", referencedColumnName = "library_id")},
-            inverseJoinColumns = {@JoinColumn(name = "lyrics_id", referencedColumnName = "lyrics_id")}
+            joinColumns = {@JoinColumn(name = "library_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "lyrics_id", referencedColumnName = "id")}
     )
     private List<LyricsInLibrary> lyrics = new ArrayList<>();
 
@@ -44,13 +42,13 @@ public class Library {
 
         Library library = (Library) o;
 
-        if (id != library.id) return false;
+        if (libraryId != library.libraryId) return false;
         return libraryName.equals(library.libraryName);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = (int) (libraryId ^ (libraryId >>> 32));
         result = 31 * result + libraryName.hashCode();
         return result;
     }

@@ -15,6 +15,6 @@ public class TrackInfoForLyricsDto {
     @JsonProperty(value = "title")
     private String title;
 
-    @JsonProperty(value = "authors")
-    private String authors;
+    @JsonProperty(value = "artists")
+    private String artists;
 }

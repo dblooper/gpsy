@@ -14,19 +14,19 @@ public class LibraryMapper {
 
     public List<LibraryDto> mapToLibraryDto(List<Library> libraryList) {
         return libraryList.stream()
-                .map(library -> new LibraryDto(library.getId(), library.getLibraryName(), mapToLyricsInLibraryDto(library.getLyrics())))
+                .map(library -> new LibraryDto(library.getLibraryId(), library.getLibraryName(), mapToLyricsInLibraryDto(library.getLyrics())))
                 .collect(Collectors.toList());
     }
 
     public List<LyricsInLibraryDto> mapToLyricsInLibraryDto(List<LyricsInLibrary> lyricsInLibraryList) {
         return lyricsInLibraryList.stream()
-                .map(lyrics -> new LyricsInLibraryDto(lyrics.getTitle(), lyrics.getArtist(), lyrics.getLyrics()))
+                .map(lyrics -> new LyricsInLibraryDto(lyrics.getTitle(), lyrics.getArtists(), lyrics.getLyrics()))
                 .collect(Collectors.toList());
     }
 
     public List<LyricsInLibrary> mapToLyricsInLibrary(List<LyricsInLibraryDto> lyricsInLibraryDtoList) {
         return lyricsInLibraryDtoList.stream()
-                .map(lyricsInLibraryDto -> new LyricsInLibrary(lyricsInLibraryDto.getTitle(), lyricsInLibraryDto.getArtist(), lyricsInLibraryDto.getLyrics()))
+                .map(lyricsInLibraryDto -> new LyricsInLibrary(lyricsInLibraryDto.getTitle(), lyricsInLibraryDto.getArtists(), lyricsInLibraryDto.getLyrics()))
                 .collect(Collectors.toList());
     }
 

@@ -21,6 +21,6 @@ public class PlaylistTrackDto {
     @JsonProperty("title")
     private String title;
 
-    @JsonProperty("authors")
+    @JsonProperty("artists")
     private String authors;
 }

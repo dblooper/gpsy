@@ -1,10 +1,9 @@
-package com.gpsy.domain.lyrics.dto;
+package com.gpsy.domain.lyrics;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "lyrics")
@@ -14,14 +13,12 @@ public class DbLyrics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @NotNull
-    private Long id;
+    @Column(name = "id")
+    private Long lyricsId;
 
-    @Column(name = "titles")
     private String title;
 
-    @Column(name = "artists")
-    private String artist;
+    private String artists;
 
     @Column(name = "body", columnDefinition = "TEXT")
     private String lyrics;
@@ -41,9 +38,9 @@ public class DbLyrics {
         return lyrics.hashCode();
     }
 
-    public DbLyrics(String title, String artist, String lyrics) {
+    public DbLyrics(String title, String artists, String lyrics) {
         this.title = title;
-        this.artist = artist;
+        this.artists = artists;
         this.lyrics = lyrics;
     }
 }

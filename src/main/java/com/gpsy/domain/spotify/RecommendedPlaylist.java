@@ -21,32 +21,30 @@ public class RecommendedPlaylist {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "playlist_id", unique = true)
-    private Long id;
+    @Column(name = "id")
+    private long recommendedPlaylistId;
 
-    @Column(name = "playlists_ids")
-    private String playlistStringId;
+    @Column(name = "playlist_string_id")
+    private String stringId;
 
-    @Column(name= "names")
     private String name;
 
     @Column(name = "number_of_tracks")
-    private Integer numberOfTracks;
+    private int numberOfTracks;
 
-    @Column(name = "actual")
     private boolean actual;
 
     @ManyToMany(cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER)
     @JoinTable(
             name = "JOIN_PL_RECOMMENDED_TRACK",
-            joinColumns = {@JoinColumn(name = "playlist_id", referencedColumnName = "playlist_id")},
-                    inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}
+            joinColumns = {@JoinColumn(name = "playlist_id", referencedColumnName = "id")},
+                    inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "id")}
     )
     private List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
 
-    public RecommendedPlaylist(String playlistStringId, String name, List<RecommendedPlaylistTrack> recommendedPlaylistTracks, boolean actual) {
-        this.playlistStringId = playlistStringId;
+    public RecommendedPlaylist(String stringId, String name, List<RecommendedPlaylistTrack> recommendedPlaylistTracks, boolean actual) {
+        this.stringId = stringId;
         this.name = name;
         this.recommendedPlaylistTracks = recommendedPlaylistTracks;
         this.numberOfTracks = recommendedPlaylistTracks.size();
@@ -64,11 +62,11 @@ public class RecommendedPlaylist {
 
         RecommendedPlaylist that = (RecommendedPlaylist) o;
 
-        return playlistStringId.equals(that.playlistStringId);
+        return stringId.equals(that.stringId);
     }
 
     @Override
     public int hashCode() {
-        return playlistStringId.hashCode();
+        return stringId.hashCode();
     }
 }

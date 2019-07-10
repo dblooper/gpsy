@@ -78,7 +78,7 @@ public class FetchDataFromDbService {
             }
 
             for(MostFrequentTrack mostFrequentTrackFromTable : dbMostFrequentTracksFrom) {
-                if(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc).getTrackId().equals(mostFrequentTrackFromTable.getTrackId())
+                if(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc).getTrackStringId().equals(mostFrequentTrackFromTable.getTrackStringId())
                         && dbMostFrequentTrackCalc.getPopularity() != mostFrequentTrackFromTable.getPopularity()) {
                     mostFrequentTrackFromTable.setPopularity(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc).getPopularity());
                     retireveMostFrequentTracksResult.add(dbMostFrequentTracksRepository.save(mostFrequentTrackFromTable));

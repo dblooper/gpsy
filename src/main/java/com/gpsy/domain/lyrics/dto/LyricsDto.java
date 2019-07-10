@@ -15,8 +15,8 @@ public class LyricsDto {
     @JsonProperty(value = "title")
     private String title;
 
-    @JsonProperty(value = "artist")
-    private String artist;
+    @JsonProperty(value = "artists")
+    private String artists;
 
     @JsonProperty(value = "lyrics")
     private String lyrics;
@@ -25,7 +25,7 @@ public class LyricsDto {
     public String toString() {
         return "LyricsDto{" +
                 "title='" + title + '\'' +
-                ", artist='" + artist + '\'' +
+                ", artists='" + artists + '\'' +
                 ", body='" + lyrics + '\'' +
                 '}';
     }
@@ -34,7 +34,4 @@ public class LyricsDto {
         this.title = title;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
 }

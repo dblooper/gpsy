@@ -158,9 +158,9 @@ public class SpotifyClient {
 
             for (int i = 1; i <= limit; i++) {
                 if (i == limit) {
-                    stringBuilder.append(mostFrequentTracks.get(i).getTrackId());
+                    stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
                 } else {
-                    stringBuilder.append(mostFrequentTracks.get(i).getTrackId());
+                    stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
                     stringBuilder.append(",");
                 }
             }
