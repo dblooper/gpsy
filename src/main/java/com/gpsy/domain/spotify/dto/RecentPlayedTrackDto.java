@@ -1,27 +1,35 @@
 package com.gpsy.domain.spotify.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RecentPlayedTrackDto {
 
-    private String trackId;
+    @JsonProperty(value = "trackStringId")
+    private String trackStringId;
 
+    @JsonProperty(value = "title")
     private String title;
 
-    private String authors;
+    @JsonProperty(value = "aritsts")
+    private String artists;
 
-    private LocalDateTime playDate;
+    @JsonProperty(value = "playDate")
+    private String playDate;
 
-    public RecentPlayedTrackDto(String trackId, String title, String authors, LocalDateTime playDate) {
-        this.trackId = trackId;
+    public RecentPlayedTrackDto(String trackStringId, String title, String artists, LocalDateTime playDate) {
+        this.trackStringId = trackStringId;
         this.title = title;
-        this.authors = authors;
-        this.playDate = playDate;
+        this.artists = artists;
+        this.playDate = playDate.format(DateTimeFormatter.ofPattern("HH:mm:ss MM-dd"));
     }
 
     @Override
@@ -31,12 +39,12 @@ public class RecentPlayedTrackDto {
 
         RecentPlayedTrackDto that = (RecentPlayedTrackDto) o;
 
-        return trackId.equals(that.trackId);
+        return trackStringId.equals(that.trackStringId);
 
     }
 
     @Override
     public int hashCode() {
-        return trackId.hashCode();
+        return trackStringId.hashCode();
     }
 }

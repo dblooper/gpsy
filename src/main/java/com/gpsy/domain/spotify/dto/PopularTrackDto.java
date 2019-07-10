@@ -1,5 +1,7 @@
 package com.gpsy.domain.spotify.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,13 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PopularTrackDto {
 
-    private String trackId;
+    @JsonProperty(value = "trackStringId")
+    private String trackStringId;
 
+    @JsonProperty(value = "title")
     private String title;
 
-    private String authors;
+    @JsonProperty(value = "aritsts")
+    private String artists;
 
-    private Integer popularity;
+    @JsonProperty(value = "popularity")
+    private int popularity;
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "recommended_tracks")
@@ -15,26 +14,23 @@ import javax.validation.constraints.NotNull;
 public class RecommendedTrack {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(name = "id")
+    private long recommendedTrackId;
 
-    @Column(name = "tracks_sting_id")
-    private String stringId;
+    @Column(name = "track_string_id")
+    private String trackStringId;
 
-    @Column(name = "titles")
-    private String titles;
+    private String title;
 
-    @Column(name = "authors")
     private String authors;
 
-    @Column(name = "short_plays")
-    private String url;
+    private String sample;
 
-    public RecommendedTrack(String stringId, String titles, String authors, String url) {
-        this.stringId = stringId;
-        this.titles = titles;
+    public RecommendedTrack(String trackStringId, String title, String authors, String sample) {
+        this.trackStringId = trackStringId;
+        this.title = title;
         this.authors = authors;
-        this.url = url;
+        this.sample = sample;
     }
 }

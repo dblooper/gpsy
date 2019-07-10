@@ -35,7 +35,7 @@ public class LyricsLibraryService {
     }
 
     public Library updateLibrary(Library library) throws LibraryNotFoundException{
-        Library libraryToEdit = libraryRepository.findById(library.getId()).orElseThrow(LibraryNotFoundException::new);
+        Library libraryToEdit = libraryRepository.findById(library.getLibraryId()).orElseThrow(LibraryNotFoundException::new);
         libraryToEdit.setLibraryName(library.getLibraryName());
 
            return libraryRepository.save(libraryToEdit);

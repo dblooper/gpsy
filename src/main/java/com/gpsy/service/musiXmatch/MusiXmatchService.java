@@ -1,7 +1,7 @@
 package com.gpsy.service.musiXmatch;
 
-import com.gpsy.domain.lyrics.dto.DbLyrics;
-import com.gpsy.domain.lyrics.LyricsBaseDto;
+import com.gpsy.domain.lyrics.DbLyrics;
+import com.gpsy.domain.lyrics.dto.LyricsBaseDto;
 import com.gpsy.domain.lyrics.dto.TrackInfoForLyricsDto;
 import com.gpsy.exceptions.MusiXmatchServerResponseException;
 import com.gpsy.externalApis.musiXmatchApi.client.MusiXmatchClient;
@@ -48,11 +48,11 @@ public class MusiXmatchService {
                 }
             }
 
-        return new DbLyrics(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors(), "Not found in database . Limit exceeded for searching. Try tomorrow!");
+        return lyricsMapper.mapToDbLyrics(lyricsReceived.getBody());
     }
 
     private Optional<DbLyrics> findLyrics(TrackInfoForLyricsDto trackInfoForLyricsDto) {
-        System.out.println(trackInfoForLyricsDto.getAuthors() + trackInfoForLyricsDto.getTitle());
-        return Optional.ofNullable(lyricsDbRepository.findByTitleAndArtist(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getAuthors()));
+        System.out.println(trackInfoForLyricsDto.getArtists() + trackInfoForLyricsDto.getTitle());
+        return Optional.ofNullable(lyricsDbRepository.findByTitleAndArtist(trackInfoForLyricsDto.getTitle(), trackInfoForLyricsDto.getArtists()));
     }
 }

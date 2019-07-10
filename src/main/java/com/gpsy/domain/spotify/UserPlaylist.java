@@ -19,21 +19,19 @@ public class UserPlaylist {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "playlist_id")
+    @Column(name = "id")
     private long playlistId;
 
-    @Column(name= "names")
     private String name;
 
-    @Column(name= "playlists_ids")
+    @Column(name = "playlist_string_id")
     private String playlistStringId;
 
-    @Column(name = "tracks")
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "JOIN_PLAYLIST_TRACK",
-            joinColumns = {@JoinColumn(name = "playlist_id", referencedColumnName = "playlist_id")},
-            inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}
+            joinColumns = {@JoinColumn(name = "playlist_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "id")}
     )
     private List<PlaylistTrack> tracks = new ArrayList<>();
 
@@ -55,7 +53,6 @@ public class UserPlaylist {
         UserPlaylist that = (UserPlaylist) o;
 
         return playlistStringId.equals(that.playlistStringId);
-
     }
 
     @Override

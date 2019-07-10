@@ -19,14 +19,12 @@ public class LyricsInLibrary {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
-    @Column(name = "lyrics_id")
-    private Long id;
+    @Column(name = "id")
+    private Long lyricsId;
 
-    @Column(name = "titles")
     private String title;
 
-    @Column(name = "artists")
-    private String artist;
+    private String artists;
 
     @Column(name = "body", columnDefinition = "TEXT")
     private String lyrics;
@@ -49,9 +47,9 @@ public class LyricsInLibrary {
         return lyrics.hashCode();
     }
 
-    public LyricsInLibrary(String title, String artist, String lyrics) {
+    public LyricsInLibrary(String title, String artists, String lyrics) {
         this.title = title;
-        this.artist = artist;
+        this.artists = artists;
         this.lyrics = lyrics;
     }
 

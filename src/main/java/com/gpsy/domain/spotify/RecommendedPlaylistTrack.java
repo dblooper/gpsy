@@ -22,20 +22,17 @@ public class RecommendedPlaylistTrack {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "track_id", unique = true)
-    private Long id;
+    @Column(name = "id")
+    private long recommendedPlaylistTrackId;
 
-    @Column(name = "tracks_sting_id")
-    private String stringId;
+    @Column(name = "track_string_id")
+    private String trackStringId;
 
-    @Column(name = "titles")
-    private String titles;
+    private String title;
 
-    @Column(name = "authors")
-    private String authors;
+    private String artists;
 
-    @Column(name = "short_plays")
-    private String url;
+    private String sample;
 
     @ManyToMany(
             cascade = CascadeType.ALL,
@@ -44,11 +41,11 @@ public class RecommendedPlaylistTrack {
     )
     private List<RecommendedPlaylist> recommendedPlaylist = new ArrayList<>();
 
-    public RecommendedPlaylistTrack(String stringId, String titles, String authors, String url) {
-        this.stringId = stringId;
-        this.titles = titles;
-        this.authors = authors;
-        this.url = url;
+    public RecommendedPlaylistTrack(String trackStringId, String title, String artists, String sample) {
+        this.trackStringId = trackStringId;
+        this.title = title;
+        this.artists = artists;
+        this.sample = sample;
     }
 
     @Override
@@ -58,11 +55,11 @@ public class RecommendedPlaylistTrack {
 
         RecommendedPlaylistTrack that = (RecommendedPlaylistTrack) o;
 
-        return stringId.equals(that.stringId);
+        return trackStringId.equals(that.trackStringId);
     }
 
     @Override
     public int hashCode() {
-        return stringId.hashCode();
+        return trackStringId.hashCode();
     }
 }

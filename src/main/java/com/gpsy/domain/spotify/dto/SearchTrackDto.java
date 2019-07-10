@@ -9,7 +9,7 @@ import javax.persistence.Column;
 @Getter
 public class SearchTrackDto extends RecommendedTrackDto {
 
-    public SearchTrackDto(String stringId, String titles, String authors, String sample) {
-        super(stringId, titles, authors, sample);
+    public SearchTrackDto(String trackStringId, String title, String artists, String sample) {
+        super(trackStringId, title, artists, sample);
     }
 }

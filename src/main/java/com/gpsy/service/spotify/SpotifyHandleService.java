@@ -86,17 +86,16 @@ public class SpotifyHandleService {
     }
 
 //    @Scheduled(cron = MailMessageConfiguration.SCHEDULING_CRON)//every monday at 7:00
-    @Scheduled(fixedRate = 60000)
-    public void saveRecommendedPlaylistToSpotify() {
-        RecommendedPlaylist recommendedPlaylistToSave = fetchDataFromDbService.fetchRecommendedPlaylist();
-        List<PlaylistTrack> playlistToDeleteTracks = spotifyPlaylistMapper.mapToPlaylistTracks(recommendedPlaylistToSave.getPlaylistStringId());
-        spotifyClient.deletePlaylistTrack(new UserPlaylist(recommendedPlaylistToSave.getName(), recommendedPlaylistToSave.getPlaylistStringId(), playlistToDeleteTracks));
-        spotifyClient.updatePlaylistTracks(dbPlaylistMapper.mapRecommendedPlaylistToUserPlaylist(recommendedPlaylistToSave));
-
-        emailService.send(new Mail(MailMessageConfiguration.EMAIL_ADDRESS_TO_SEND,
-                                    MailMessageConfiguration.SUBJECT,
-                                        "A new set of tracks based on your last moves on spotify has been saved!\n" +
-                                                "Total quantity of tracks: " + recommendedPlaylistToSave.getRecommendedPlaylistTracks().size() +
-                                                "\nENJOY!"));
-    }
+//    @Scheduled(fixedRate = 60000)
+//    public void saveRecommendedPlaylistToSpotify() {
+//        RecommendedPlaylist recommendedPlaylistToSave = fetchDataFromDbService.fetchRecommendedPlaylist();
+//        List<PlaylistTrack> playlistToDeleteTracks = spotifyPlaylistMapper.mapToPlaylistTracks(recommendedPlaylistToSave.getStringId());
+//        spotifyClient.deletePlaylistTrack(new UserPlaylist(recommendedPlaylistToSave.getName(), recommendedPlaylistToSave.getStringId(), playlistToDeleteTracks));
+//        spotifyClient.updatePlaylistTracks(dbPlaylistMapper.mapRecommendedPlaylistToUserPlaylist(recommendedPlaylistToSave));
+//
+//        emailService.send(new Mail(MailMessageConfiguration.EMAIL_ADDRESS_TO_SEND,
+//                                    MailMessageConfiguration.SUBJECT,
+//                                        "A new set of tracks based on your frequent tracks has been saved!\n" +
+//                                                "Total quantity of tracks: " + recommendedPlaylistToSave.getRecommendedPlaylistTracks().size()));
+//    }
 }

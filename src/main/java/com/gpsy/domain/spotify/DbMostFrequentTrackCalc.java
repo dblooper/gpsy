@@ -15,22 +15,23 @@ import javax.validation.constraints.NotNull;
 public class DbMostFrequentTrackCalc {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(name = "id")
+    private long mostFrequentTracksCalcId;
 
-    private String track_ids;
+    @Column(name = "track_string_id")
+    private String trackStringId;
 
-    private String titles;
+    private String title;
 
-    private String authors;
+    private String artists;
 
     private int popularity;
 
-    public DbMostFrequentTrackCalc(String track_ids, String titles, String authors, int popularity) {
-        this.track_ids = track_ids;
-        this.titles = titles;
-        this.authors = authors;
+    public DbMostFrequentTrackCalc(String trackStringId, String title, String artists, int popularity) {
+        this.trackStringId = trackStringId;
+        this.title = title;
+        this.artists = artists;
         this.popularity = popularity;
     }
 
@@ -41,13 +42,13 @@ public class DbMostFrequentTrackCalc {
 
         DbMostFrequentTrackCalc that = (DbMostFrequentTrackCalc) o;
 
-        return track_ids.equals(that.track_ids);
+        return trackStringId.equals(that.trackStringId);
 
     }
 
     @Override
     public int hashCode() {
-        return track_ids.hashCode();
+        return trackStringId.hashCode();
     }
 
 }

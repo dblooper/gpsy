@@ -20,6 +20,7 @@ public class MailCreatorService {
         context.setVariable("message", message);
         context.setVariable("goodByeMessage", MailMessageConfiguration.GOODBYE_MESSAGE);
         context.setVariable("companyName", MailMessageConfiguration.COMPANY_NAME);
+        context.setVariable("buttonLink", MailMessageConfiguration.ANCHOR_BUTTON_LINK);
         return templateEngine.process("mail/new-composition-of-playlist-mail", context);
     }
 }
