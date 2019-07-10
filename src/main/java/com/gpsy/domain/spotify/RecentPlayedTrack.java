@@ -23,7 +23,8 @@ public class RecentPlayedTrack implements Comparable<RecentPlayedTrack> {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private long id;
+    @Column(name = "id")
+    private long recentTrackId;
 
     @Column(name = "track_string_id")
     private String trackStringId;
@@ -35,11 +36,43 @@ public class RecentPlayedTrack implements Comparable<RecentPlayedTrack> {
     @Column(name = "play_date")
     private Date playDate;
 
-    public RecentPlayedTrack(String trackStringId, String title, String artists, Date playDate) {
+    private RecentPlayedTrack(String trackStringId, String title, String artists, Date playDate) {
         this.trackStringId = trackStringId;
         this.title = title;
         this.artists = artists;
         this.playDate = playDate;
+    }
+
+    public static class RecentPlayedTrackBuilder {
+
+        private String trackStringId;
+        private String title;
+        private String artists;
+        private Date playDate;
+
+        public RecentPlayedTrackBuilder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public RecentPlayedTrackBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public RecentPlayedTrackBuilder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public RecentPlayedTrackBuilder playDate(Date playDate) {
+            this.playDate = playDate;
+            return this;
+        }
+
+        public RecentPlayedTrack build() {
+            return new RecentPlayedTrack(trackStringId, title, artists, playDate);
+        }
     }
 
     @Override

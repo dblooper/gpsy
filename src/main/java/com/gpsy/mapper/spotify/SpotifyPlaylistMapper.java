@@ -28,7 +28,11 @@ public class SpotifyPlaylistMapper {
     public List<PlaylistTrack> mapToPlaylistTracks (String playlistId) {
 
         return spotifyClient.getPlaylistTracks(playlistId).stream()
-                .map(track -> new PlaylistTrack(track.getTrack().getId(),track.getTrack().getName(), UniversalMappingMethods.simplifyArtist(track.getTrack().getArtists()).toString()))
+                .map(track -> new PlaylistTrack.PlaylistTrackBuilder()
+                                                .title(track.getTrack().getName())
+                                                .artists(UniversalMappingMethods.simplifyArtist(track.getTrack().getArtists()))
+                                                .stringId(track.getTrack().getId())
+                                                .build())
                 .collect(Collectors.toList());
     }
 

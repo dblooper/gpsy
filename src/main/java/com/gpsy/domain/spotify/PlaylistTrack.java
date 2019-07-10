@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "playlist_tracks")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class PlaylistTrack {
 
@@ -31,10 +30,36 @@ public class PlaylistTrack {
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tracks")
     private List<UserPlaylist> playlists = new ArrayList<>();
 
-    public PlaylistTrack(String trackStringId, String title, String artists) {
+    private PlaylistTrack(String trackStringId, String title, String artists) {
         this.trackStringId = trackStringId;
         this.title = title;
         this.artists = artists;
+    }
+
+    public static class PlaylistTrackBuilder {
+
+        private String trackStringId;
+        private String title;
+        private String artists;
+
+        public PlaylistTrackBuilder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public PlaylistTrackBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public PlaylistTrackBuilder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public PlaylistTrack build() {
+            return new PlaylistTrack(trackStringId, title, artists);
+        }
     }
 
     private void setPlaylists(List<UserPlaylist> playlists) {

@@ -4,7 +4,7 @@ import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 
 public class UniversalMappingMethods {
 
-    public static StringBuilder simplifyArtist(ArtistSimplified[] artistSimplifieds) {
+    public static String simplifyArtist(ArtistSimplified[] artistSimplifieds) {
         StringBuilder authors = new StringBuilder();
         for(int i = 0; i < artistSimplifieds.length; i++) {
             if(artistSimplifieds.length == 1 || i == artistSimplifieds.length - 1) {
@@ -14,6 +14,6 @@ public class UniversalMappingMethods {
                 authors.append(", ");
             }
         }
-        return authors;
+        return authors.toString();
     }
 }

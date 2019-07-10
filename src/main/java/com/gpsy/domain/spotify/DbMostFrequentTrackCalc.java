@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "temp")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class DbMostFrequentTrackCalc {
 
@@ -27,13 +26,6 @@ public class DbMostFrequentTrackCalc {
     private String artists;
 
     private int popularity;
-
-    public DbMostFrequentTrackCalc(String trackStringId, String title, String artists, int popularity) {
-        this.trackStringId = trackStringId;
-        this.title = title;
-        this.artists = artists;
-        this.popularity = popularity;
-    }
 
     @Override
     public boolean equals(Object o) {

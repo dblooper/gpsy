@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 public class TrackDbMapper {
 
     public MostFrequentTrack mapToMostFrequentTrack(DbMostFrequentTrackCalc dbMostFrequentTrackCalc) {
-        return new MostFrequentTrack(dbMostFrequentTrackCalc.getTrackStringId(), dbMostFrequentTrackCalc.getTitle(), dbMostFrequentTrackCalc.getArtists(), dbMostFrequentTrackCalc.getPopularity());
+        return new MostFrequentTrack.MostFrequentTrackBuilder().stringId(dbMostFrequentTrackCalc.getTrackStringId())
+                                                                .title(dbMostFrequentTrackCalc.getTitle())
+                                                                .artists(dbMostFrequentTrackCalc.getArtists())
+                                                                .popularity(dbMostFrequentTrackCalc.getPopularity())
+                                                                .build();
     }
 }

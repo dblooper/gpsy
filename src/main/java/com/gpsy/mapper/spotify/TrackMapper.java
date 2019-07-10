@@ -14,15 +14,22 @@ import java.util.stream.Collectors;
 public class TrackMapper {
 
     public PopularTrack mapSpotifyTrackToDbPopularTrack(Track spotifyDbTrack) {
-        ArtistSimplified[] artists = spotifyDbTrack.getArtists();
-        return new PopularTrack(spotifyDbTrack.getId(), spotifyDbTrack.getName(), UniversalMappingMethods.simplifyArtist(artists).toString(), spotifyDbTrack.getPopularity());
+        return new PopularTrack.PopularTrackBuiilder()
+                                .stringId(spotifyDbTrack.getId())
+                                .title(spotifyDbTrack.getName())
+                                .artists(UniversalMappingMethods.simplifyArtist(spotifyDbTrack.getArtists()))
+                                .popularity(spotifyDbTrack.getPopularity())
+                                .build();
     }
 
     public RecentPlayedTrack mapSpotifyTrackToDbRecentPlayedTrack(PlayHistory playHistory) {
         TrackSimplified recentTrack = playHistory.getTrack();
-        ArtistSimplified[] artistSimplifieds = recentTrack.getArtists();
-
-        return new RecentPlayedTrack(recentTrack.getId(), recentTrack.getName(), UniversalMappingMethods.simplifyArtist(artistSimplifieds).toString() , playHistory.getPlayedAt());
+        return new RecentPlayedTrack.RecentPlayedTrackBuilder()
+                                      .stringId(recentTrack.getId())
+                                      .title(recentTrack.getName())
+                                      .artists(UniversalMappingMethods.simplifyArtist(recentTrack.getArtists()))
+                                      .playDate(playHistory.getPlayedAt())
+                                      .build();
     }
 
     public List<RecentPlayedTrackDto> mapToRecentPlayedTrackDtos(List<RecentPlayedTrack> recentPlayedTracks) {
@@ -46,7 +53,12 @@ public class TrackMapper {
 
     public List<PlaylistTrack> mapToPlaylistTrack(List<PlaylistTrackDto> playlistTrackDtoList) {
         return playlistTrackDtoList.stream()
-                .map(playlistTrackDto -> new PlaylistTrack(playlistTrackDto.getTrackStringId(), playlistTrackDto.getTitle(), playlistTrackDto.getAuthors()))
+                .map(playlistTrackDto -> new PlaylistTrack.PlaylistTrackBuilder()
+                                                            .stringId(playlistTrackDto.getTrackStringId())
+                                                            .artists(playlistTrackDto.getArtists())
+                                                            .title(playlistTrackDto.getTitle())
+                                                            .build()
+                )
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +70,7 @@ public class TrackMapper {
 
     public List<PopularTrackDto> mapPopularTrackToPopularTrackDtoList(List<PopularTrack> popularTracks) {
         return popularTracks.stream()
-                .map(track -> new PopularTrackDto(track.getTrack_string_id(), track.getTitle(), track.getArtists(), track.getPopularity()))
+                .map(track -> new PopularTrackDto(track.getTrackStringId(), track.getTitle(), track.getArtists(), track.getPopularity()))
                 .collect(Collectors.toList());
     }
 
@@ -66,12 +78,6 @@ public class TrackMapper {
 
         return tracks.stream()
                 .map(track -> new SearchTrackDto(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
-                .collect(Collectors.toList());
-    }
-
-    public List<PlaylistTrack> mapRecommendedPlaylistTracksToUserPlaylistTracks(List<RecommendedPlaylistTrack> recommendedPlaylistTracks) {
-        return recommendedPlaylistTracks.stream()
-                .map(track -> new PlaylistTrack(track.getTrackStringId(), track.getTitle(), track.getArtists()))
                 .collect(Collectors.toList());
     }
 }

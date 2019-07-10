@@ -100,18 +100,37 @@ public class FetchDataFromDbService {
 
     public RecommendedPlaylist updateFetchRecommendedPlaylistFromDb(int numberOfTracks) {
 
-        if(numberOfTracks > 50 || numberOfTracks < 0 ) return new RecommendedPlaylist("2ptqwasYqv1677gL4OEkIL","Tygodniowka", new ArrayList<>(),  false);
+        if(numberOfTracks > 50 || numberOfTracks < 0 ) return new RecommendedPlaylist.RecommendedPlaylistBuilder()
+                                                                                     .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
+                                                                                     .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME)
+                                                                                     .actual(false)
+                                                                                     .playlistTracks(new ArrayList<>())
+                                                                                     .build();
+
         List<RecommendedPlaylistTrack> recommendedTracks = spotifyClient.getRecommendedTracks().stream()
                 .limit(numberOfTracks)
                 .map(track -> new RecommendedPlaylistTrack(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
                 .collect(Collectors.toList());
+
         List<RecommendedPlaylist> recommendedPlaylists = recommendedPlaylistRepository.findAll();
+
             if(recommendedPlaylists.size() == 0) {
-                return recommendedPlaylistRepository.save(new RecommendedPlaylist("2ptqwasYqv1677gL4OEkIL","Tygodniowka", recommendedTracks,  true));
+                return recommendedPlaylistRepository.save(new RecommendedPlaylist.RecommendedPlaylistBuilder()
+                                                                                 .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
+                                                                                 .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME)
+                                                                                 .actual(true)
+                                                                                 .playlistTracks(recommendedTracks)
+                                                                                 .build());
             } else {
                 RecommendedPlaylist playlistToEdit = recommendedPlaylistRepository.findByActualTrue();
                 playlistToEdit.setActual(false);
-                return recommendedPlaylistRepository.save(new RecommendedPlaylist("2ptqwasYqv1677gL4OEkIL","Tygodniowka", recommendedTracks,  true));
+
+                return recommendedPlaylistRepository.save(new RecommendedPlaylist.RecommendedPlaylistBuilder()
+                        .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
+                        .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME)
+                        .actual(true)
+                        .playlistTracks(recommendedTracks)
+                        .build());
             }
     }
 
@@ -126,7 +145,11 @@ public class FetchDataFromDbService {
     }
 
     public RecommendedPlaylist fetchRecommendedPlaylist() {
-
-        return Optional.ofNullable(recommendedPlaylistRepository.findByActualTrue()).orElse(new RecommendedPlaylist("n/a","n/a",new ArrayList<>(),false));
+        return Optional.ofNullable(recommendedPlaylistRepository.findByActualTrue()).orElse(new RecommendedPlaylist.RecommendedPlaylistBuilder()
+                                                                                                                    .stringId("n/a")
+                                                                                                                    .name("n/a")
+                                                                                                                    .actual(false)
+                                                                                                                    .playlistTracks(new ArrayList<>())
+                                                                                                                    .build());
     }
 }
