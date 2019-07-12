@@ -22,7 +22,11 @@ public class SpotifyPlaylistMapper {
 
     public UserPlaylist mapSpotifyPlaylistToDbUserPlaylist(PlaylistSimplified playlistSimplified) {
 
-        return new UserPlaylist(playlistSimplified.getName(), playlistSimplified.getId(), mapToPlaylistTracks(playlistSimplified.getId()));
+        return new UserPlaylist.UserPlaylistBuilder()
+                                .name(playlistSimplified.getName())
+                                .stringId(playlistSimplified.getId())
+                                .tracks(mapToPlaylistTracks(playlistSimplified.getId()))
+                                .build();
     }
 
     public List<PlaylistTrack> mapToPlaylistTracks (String playlistId) {
@@ -37,7 +41,11 @@ public class SpotifyPlaylistMapper {
     }
 
     public UserPlaylist mapToDbUserPlaylist(UserPlaylistDto userPlaylistDto) {
-        return new UserPlaylist(userPlaylistDto.getName(), userPlaylistDto.getPlaylistStringId(),trackMapper.mapToPlaylistTrack(userPlaylistDto.getTracks()));
+        return new UserPlaylist.UserPlaylistBuilder()
+                                .stringId(userPlaylistDto.getPlaylistStringId())
+                                .name(userPlaylistDto.getName())
+                                .tracks(trackMapper.mapToPlaylistTrack(userPlaylistDto.getTracks()))
+                                .build();
     }
 
 }

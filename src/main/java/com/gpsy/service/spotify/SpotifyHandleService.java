@@ -50,13 +50,9 @@ public class SpotifyHandleService {
     private EmailService emailService;
 
     public List<RecommendedTrack> returnRecommendedTracks() {
-        List<RecommendedTrack> recommendedTracks = new ArrayList<>();
         List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
-        recommendedTracks = tracksSimplified.stream()
-                .limit(InitialLimitValues.LIMIT_RECOMMENDED_TRACKS_ON_BOARD)
-                .map(track -> new RecommendedTrack(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
-                .collect(Collectors.toList());
-        return recommendedTracks;
+        return trackMapper.mapToRecommendedTracks(tracksSimplified,
+                                                    InitialLimitValues.LIMIT_RECOMMENDED_TRACKS_ON_BOARD);
     }
 
     public UserPlaylist updatePlaylistTracks(UserPlaylist userPlaylist) {
@@ -86,13 +82,16 @@ public class SpotifyHandleService {
     }
 
 //    @Scheduled(cron = MailMessageConfiguration.SCHEDULING_CRON)//every monday at 7:00
-//    @Scheduled(fixedRate = 60000)
+//    //@Scheduled(fixedRate = 60000)
 //    public void saveRecommendedPlaylistToSpotify() {
 //        RecommendedPlaylist recommendedPlaylistToSave = fetchDataFromDbService.fetchRecommendedPlaylist();
-//        List<PlaylistTrack> playlistToDeleteTracks = spotifyPlaylistMapper.mapToPlaylistTracks(recommendedPlaylistToSave.getPlaylistStringId());
-//        spotifyClient.deletePlaylistTrack(new UserPlaylist(recommendedPlaylistToSave.getName(), recommendedPlaylistToSave.getPlaylistStringId(), playlistToDeleteTracks));
+//        List<PlaylistTrack> tracksToDelete = spotifyPlaylistMapper.mapToPlaylistTracks(recommendedPlaylistToSave.getPlaylistStringId());
+//        spotifyClient.deletePlaylistTrack(new UserPlaylist.UserPlaylistBuilder()
+//                                                            .name(recommendedPlaylistToSave.getName())
+//                                                            .stringId(recommendedPlaylistToSave.getPlaylistStringId())
+//                                                            .tracks(tracksToDelete)
+//                                                            .build());
 //        spotifyClient.updatePlaylistTracks(dbPlaylistMapper.mapRecommendedPlaylistToUserPlaylist(recommendedPlaylistToSave));
-//
 //        emailService.send(new Mail(MailMessageConfiguration.EMAIL_ADDRESS_TO_SEND,
 //                                    MailMessageConfiguration.SUBJECT,
 //                                        "A new set of tracks based on your frequent tracks has been saved!\n" +

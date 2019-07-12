@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserPlaylistDto {
@@ -23,4 +22,35 @@ public class UserPlaylistDto {
     @JsonProperty("tracks")
     private List<PlaylistTrackDto> tracks;
 
+
+    private UserPlaylistDto(String name, String playlistStringId, List<PlaylistTrackDto> tracks) {
+        this.name = name;
+        this.playlistStringId = playlistStringId;
+        this.tracks = tracks;
+    }
+
+    public static class UserPlaylistDtoBuilder {
+        private String name;
+        private String playlistStringId;
+        private List<PlaylistTrackDto> tracks;
+
+        public UserPlaylistDtoBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UserPlaylistDtoBuilder stringId(String playlistStringId) {
+            this.playlistStringId = playlistStringId;
+            return this;
+        }
+
+        public UserPlaylistDtoBuilder tracks(List<PlaylistTrackDto> tracks) {
+            this.tracks = tracks;
+            return this;
+        }
+
+        public UserPlaylistDto build() {
+            return new UserPlaylistDto(name, playlistStringId, tracks);
+        }
+    }
 }

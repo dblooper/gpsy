@@ -20,18 +20,40 @@ public class DbPlaylistMapper {
 
     public List<PlaylistTrackDto> mapToPlaylistTrackDtos(List<PlaylistTrack> userPlaylistTracks) {
         return userPlaylistTracks.stream()
-                .map(track -> new PlaylistTrackDto(track.getTrackStringId(), track.getTitle(), track.getArtists()))
+                .map(track -> new PlaylistTrackDto.PlaylistTrackDtoBuilder()
+                                                .stringId(track.getTrackStringId())
+                                                .title(track.getTitle())
+                                                .artists(track.getArtists())
+                                                .build())
                 .collect(Collectors.toList());
     }
 
     public List<UserPlaylistDto> mapToUserPlaylistsDto(List<UserPlaylist> userPlaylists) {
         return userPlaylists.stream()
-                .map(playlist -> new UserPlaylistDto(playlist.getName(), playlist.getPlaylistStringId(), mapToPlaylistTrackDtos(playlist.getTracks())))
+                .map(playlist -> new UserPlaylistDto.UserPlaylistDtoBuilder()
+                                                    .name(playlist.getName())
+                                                    .stringId(playlist.getPlaylistStringId())
+                                                    .tracks( mapToPlaylistTrackDtos(playlist.getTracks()))
+                                                    .build())
                 .collect(Collectors.toList());
     }
 
     public RecommendedPlaylistDto mapToRecommendedPlaylistDto(RecommendedPlaylist recommendedPlaylist) {
-        return new RecommendedPlaylistDto(recommendedPlaylist.getPlaylistStringId(), recommendedPlaylist.getName(), trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()), recommendedPlaylist.getNumberOfTracks(), recommendedPlaylist.isActual());
+        return new RecommendedPlaylistDto.RecommendedPlaylistDtoBuilder()
+                .name(recommendedPlaylist.getName())
+                .stringId(recommendedPlaylist.getPlaylistStringId())
+                .playlistTracks(trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()))
+                .isActual(recommendedPlaylist.isActual())
+                .numberOfTracks(recommendedPlaylist.getNumberOfTracks())
+                .build();
+    }
+
+    public UserPlaylist mapRecommendedPlaylistToUserPlaylist(RecommendedPlaylist recommendedPlaylist) {
+        return new UserPlaylist.UserPlaylistBuilder()
+                                .name(recommendedPlaylist.getName())
+                                .stringId(recommendedPlaylist.getPlaylistStringId())
+                                .tracks(trackMapper.mapRecommendedPlaylistTracksToPlaylistTracks(recommendedPlaylist.getRecommendedPlaylistTracks()))
+                                .build();
     }
 
 }

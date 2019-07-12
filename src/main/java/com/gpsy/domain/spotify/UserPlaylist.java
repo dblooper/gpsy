@@ -12,12 +12,10 @@ import java.util.List;
 @Entity
 @Table(name = "user_playlists")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class UserPlaylist {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long playlistId;
@@ -35,10 +33,35 @@ public class UserPlaylist {
     )
     private List<PlaylistTrack> tracks = new ArrayList<>();
 
-    public UserPlaylist(String name, String playlistStringId, List<PlaylistTrack> playlistTracks) {
+    private UserPlaylist(String name, String playlistStringId, List<PlaylistTrack> playlistTracks) {
         this.name = name;
         this.playlistStringId = playlistStringId;
         this.tracks = playlistTracks;
+    }
+
+    public static class UserPlaylistBuilder {
+        private String name;
+        private String playlistStringId;
+        private List<PlaylistTrack> playlistTracks;
+
+        public UserPlaylistBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UserPlaylistBuilder stringId(String playlistStringId) {
+            this.playlistStringId = playlistStringId;
+            return this;
+        }
+
+        public UserPlaylistBuilder tracks(List<PlaylistTrack> playlistTracks) {
+            this.playlistTracks = playlistTracks;
+            return this;
+        }
+
+        public UserPlaylist build() {
+            return new UserPlaylist(name, playlistStringId, playlistTracks);
+        }
     }
 
     private void setPlaylistTracks(List<PlaylistTrack> playlistTracks) {
