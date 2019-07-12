@@ -18,6 +18,8 @@ import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTra
 import com.wrapper.spotify.requests.data.playlists.*;
 import com.wrapper.spotify.requests.data.search.SearchItemRequest;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +32,8 @@ import java.util.List;
 @Component
 @Getter
 public class SpotifyClient {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpotifyClient.class);
 
     @Autowired
     private SpofyAuthorizator spotifyAuthorizator;
@@ -58,7 +62,7 @@ public class SpotifyClient {
             searchedTracks.addAll(Arrays.asList(receivedPaging.getItems()));
             return searchedTracks;
         } catch(IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
             return searchedTracks;
         }
 
@@ -74,7 +78,7 @@ public class SpotifyClient {
             final Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
             tracks.addAll(Arrays.asList(trackPaging.getItems()));
         } catch (IOException | SpotifyWebApiException e) {
-            System.out.println("Spotify Client exception: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
 
         return tracks;
@@ -91,7 +95,7 @@ public class SpotifyClient {
             PlayHistory[] tracksArray = historyOfPlays.getItems();
             recentTracks.addAll(Arrays.asList(tracksArray));
         } catch (IOException | SpotifyWebApiException e) {
-            System.out.println("Spotify Client exception: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
         return recentTracks;
     }
@@ -106,7 +110,7 @@ public class SpotifyClient {
             playlistsSimplified.addAll(Arrays.asList(playlistSimplifiedPaging.getItems()));
 
         } catch (IOException | SpotifyWebApiException e) {
-            System.out.println("Spotify Client exception: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
 
         return playlistsSimplified;
@@ -124,7 +128,7 @@ public class SpotifyClient {
             playlistTracks.addAll(Arrays.asList(playlistTracksSpotify));
 
         } catch (IOException | SpotifyWebApiException e) {
-            System.out.println("Spotify Client exception: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
         return playlistTracks;
     }
@@ -142,33 +146,10 @@ public class SpotifyClient {
             recommendedTracks.addAll(Arrays.asList(recommendations.getTracks()));
 
         } catch ( IOException | SpotifyWebApiException e) {
-            System.out.println("Spotify Client exception: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
 
         return recommendedTracks;
-    }
-
-    private String popularTracksMerge(int limit) {
-
-        List<MostFrequentTrack> mostFrequentTracks = fetchDataFromDbService.fetchMostFrequentTracks();
-
-        if(mostFrequentTracks.size() > 0 ) {
-            Collections.sort(mostFrequentTracks, Collections.reverseOrder());
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 1; i <= limit; i++) {
-                if (i == limit) {
-                    stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
-                } else {
-                    stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
-                    stringBuilder.append(",");
-                }
-            }
-
-            return stringBuilder.toString();
-        } else {
-            return "";
-        }
     }
 
     public UserPlaylist updatePlaylistTracks(UserPlaylist userPlaylist) {
@@ -180,7 +161,7 @@ public class SpotifyClient {
         try {
             final SnapshotResult snapshotResult = addTracksToPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
 
         return userPlaylist;
@@ -195,7 +176,7 @@ public class SpotifyClient {
         try {
             final SnapshotResult snapshotResult = removeTracksFromPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -209,7 +190,7 @@ public class SpotifyClient {
         try {
             final String changePlaylistName = changePlaylistsDetailsRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -222,7 +203,7 @@ public class SpotifyClient {
         try {
             final Playlist playlist = createPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -243,5 +224,26 @@ public class SpotifyClient {
         return new JsonParser().parse(trackToRemove).getAsJsonArray();
     }
 
+    private String popularTracksMerge(int limit) {
+
+        List<MostFrequentTrack> mostFrequentTracks = fetchDataFromDbService.fetchMostFrequentTracks();
+
+        if(mostFrequentTracks.size() > 0 ) {
+            Collections.sort(mostFrequentTracks, Collections.reverseOrder());
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 1; i <= limit; i++) {
+                if (i == limit) {
+                    stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
+                } else {
+                    stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
+                    stringBuilder.append(",");
+                }
+            }
+            return stringBuilder.toString();
+        } else {
+            return "";
+        }
+    }
 
 }

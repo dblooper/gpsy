@@ -38,7 +38,6 @@ public class MusiXmatchService {
         System.out.println(lyricsReceived);
 
         DbLyrics lyricsToFetch = lyricsMapper.mapToDbLyrics(lyricsReceived.getBody());
-        System.out.println(lyricsToFetch);
 
             if(lyricsReceived.getStatusCode() == 200) {
                 if(!dbLyricsInDatabase.contains(lyricsToFetch)) {
