@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MostFrequentTrackDto {
 
@@ -27,4 +26,42 @@ public class MostFrequentTrackDto {
 
     @JsonProperty(value = "popularity")
     private Integer popularity;
+
+    private MostFrequentTrackDto(String trackStringId, String title, String artists, Integer popularity) {
+        this.trackStringId = trackStringId;
+        this.title = title;
+        this.artists = artists;
+        this.popularity = popularity;
+    }
+
+    public static class MostFrequentTrackDtoBuilder {
+        private String trackStringId;
+        private String title;
+        private String artists;
+        private Integer popularity;
+
+        public MostFrequentTrackDtoBuilder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public MostFrequentTrackDtoBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public MostFrequentTrackDtoBuilder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public MostFrequentTrackDtoBuilder popularity(int popularity) {
+            this.popularity = popularity;
+            return this;
+        }
+
+        public MostFrequentTrackDto build() {
+            return new MostFrequentTrackDto(trackStringId, title, artists, popularity);
+        }
+    }
 }

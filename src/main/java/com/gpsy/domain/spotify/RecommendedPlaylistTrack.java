@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "recommended_for_playlist")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class RecommendedPlaylistTrack {
@@ -41,11 +40,43 @@ public class RecommendedPlaylistTrack {
     )
     private List<RecommendedPlaylist> recommendedPlaylist = new ArrayList<>();
 
-    public RecommendedPlaylistTrack(String trackStringId, String title, String artists, String sample) {
+    private RecommendedPlaylistTrack(String trackStringId, String title, String artists, String sample) {
         this.trackStringId = trackStringId;
         this.title = title;
         this.artists = artists;
         this.sample = sample;
+    }
+
+    public static class RecommendedPlaylistTrackBuilder {
+
+        private String trackStringId;
+        private String title;
+        private String artists;
+        private String sample;
+
+        public RecommendedPlaylistTrackBuilder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public RecommendedPlaylistTrackBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public RecommendedPlaylistTrackBuilder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public RecommendedPlaylistTrackBuilder sample(String sample) {
+            this.sample = sample;
+            return this;
+        }
+
+        public RecommendedPlaylistTrack build() {
+            return new RecommendedPlaylistTrack(trackStringId, title, artists, sample);
+        }
     }
 
     @Override

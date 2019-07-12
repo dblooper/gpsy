@@ -25,12 +25,44 @@ public class RecentPlayedTrackDto {
     @JsonProperty(value = "playDate")
     private String playDate;
 
-    public RecentPlayedTrackDto(String trackStringId, String title, String artists, LocalDateTime playDate) {
+    private RecentPlayedTrackDto(String trackStringId, String title, String artists, LocalDateTime playDate) {
         this.trackStringId = trackStringId;
         this.title = title;
         this.artists = artists;
         this.playDate = playDate.format(DateTimeFormatter.ofPattern("HH:mm:ss MM-dd"));
     }
+
+    public static class RecentPlaylistTrackDtoBulder {
+        String trackStringId;
+        String title;
+        String artists;
+        LocalDateTime playDate;
+
+        public RecentPlaylistTrackDtoBulder stringId(String trackStringId) {
+            this.trackStringId = trackStringId;
+            return this;
+        }
+
+        public RecentPlaylistTrackDtoBulder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public RecentPlaylistTrackDtoBulder artists(String artists) {
+            this.artists = artists;
+            return this;
+        }
+
+        public RecentPlaylistTrackDtoBulder playDate(LocalDateTime playDate) {
+            this.playDate = playDate;
+            return this;
+        }
+
+        public RecentPlayedTrackDto build() {
+            return new RecentPlayedTrackDto(trackStringId, title, artists, playDate);
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {

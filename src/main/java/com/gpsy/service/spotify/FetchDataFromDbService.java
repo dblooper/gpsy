@@ -3,6 +3,7 @@ package com.gpsy.service.spotify;
 import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.*;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
+import com.gpsy.mapper.spotify.TrackMapper;
 import com.gpsy.mapper.spotify.UniversalMappingMethods;
 import com.gpsy.mapper.spotify.database.mapper.TrackDbMapper;
 import com.gpsy.repository.spotify.DbMostFrequentTracksRepository;
@@ -43,6 +44,9 @@ public class FetchDataFromDbService {
 
     @Autowired
     private TrackDbMapper trackDbMapper;
+
+    @Autowired
+    private TrackMapper trackMapper;
 
     public List<RecentPlayedTrack> fetchRecentPlayedTracks() {
         saveSpotifyDataToDbService.saveRecentPlayedTracks();
@@ -107,10 +111,7 @@ public class FetchDataFromDbService {
                                                                                      .playlistTracks(new ArrayList<>())
                                                                                      .build();
 
-        List<RecommendedPlaylistTrack> recommendedTracks = spotifyClient.getRecommendedTracks().stream()
-                .limit(numberOfTracks)
-                .map(track -> new RecommendedPlaylistTrack(track.getId(), track.getName(), UniversalMappingMethods.simplifyArtist(track.getArtists()).toString(), track.getPreviewUrl()))
-                .collect(Collectors.toList());
+        List<RecommendedPlaylistTrack> recommendedTracks = trackMapper.mapToRecommendedPlaylistTracks(spotifyClient.getRecommendedTracks(), numberOfTracks);
 
         List<RecommendedPlaylist> recommendedPlaylists = recommendedPlaylistRepository.findAll();
 
@@ -136,9 +137,10 @@ public class FetchDataFromDbService {
 
     public RecommendedPlaylist changeNumberOfTracks(int numberOfTracks) {
         RecommendedPlaylist recommendedPlaylistsToEdit = recommendedPlaylistRepository.findByActualTrue();
-        List<RecommendedPlaylistTrack> recommendedTracksToLimit = recommendedPlaylistRepository.findByActualTrue().getRecommendedPlaylistTracks().stream()
-                .limit(numberOfTracks)
-                .collect(Collectors.toList());
+        List<RecommendedPlaylistTrack> recommendedTracksToLimit = recommendedPlaylistRepository.findByActualTrue()
+                                                                                                .getRecommendedPlaylistTracks().stream()
+                                                                                                .limit(numberOfTracks)
+                                                                                                .collect(Collectors.toList());
         recommendedPlaylistsToEdit.setRecommendedPlaylistTracks(recommendedTracksToLimit);
         recommendedPlaylistsToEdit.setNumberOfTracks();
         return recommendedPlaylistRepository.save(recommendedPlaylistsToEdit);
