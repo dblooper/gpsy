@@ -72,16 +72,6 @@ public class SpotifyController {
         return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.fetchRecommendedPlaylist());
     }
 
-    @GetMapping(value = "/playlists/recommended/new")
-    public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam int qty) {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(qty));
-    }
-
-    @GetMapping(value = "/playlists/recommended/change")
-    public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam int qty) {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.changeNumberOfTracks(qty));
-    }
-
     @PostMapping(value = "/playlists/tracks/add")
     public UserPlaylistDto updateUserPlaylist(@RequestBody UserPlaylistDto playlistDto) {
         spotifyHandleService.updatePlaylistTracks(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
@@ -94,10 +84,14 @@ public class SpotifyController {
         return playlistDto;
     }
 
-    @DeleteMapping(value = "/playlists/tracks/delete")
-    public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
-        spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
-        return playlistDto;
+    @PutMapping(value = "/playlists/recommended/new")
+    public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam int qty) {
+        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(qty));
+    }
+
+    @PutMapping(value = "/playlists/recommended/change")
+    public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam int qty) {
+        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.changeNumberOfTracks(qty));
     }
 
     @PutMapping(value = "/playlists/update")
@@ -105,4 +99,12 @@ public class SpotifyController {
         spotifyHandleService.updatePlaylistName(spotifyPlaylistMapper.mapToDbUserPlaylist(userPlaylistDto));
         return userPlaylistDto;
     }
+
+    @DeleteMapping(value = "/playlists/tracks/delete")
+    public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
+        spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
+        return playlistDto;
+    }
+
+
 }

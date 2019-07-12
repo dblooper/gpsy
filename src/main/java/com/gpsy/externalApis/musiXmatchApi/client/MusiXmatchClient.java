@@ -8,6 +8,8 @@ import com.gpsy.domain.lyrics.dto.TrackInfoForLyricsDto;
 import com.gpsy.exceptions.MusiXmatchServerResponseException;
 import com.gpsy.externalApis.musiXmatchApi.config.MusiXmatchConfig;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -21,7 +23,9 @@ import java.util.Optional;
 @Getter
 public class MusiXmatchClient {
 
-    private final static String RESPONSE_NULL_STATUS = "error-no object retrieved";
+    private final static String RESPONSE_NULL_STATUS = "Lyrics not found, sorry :(";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MusiXmatchClient.class);
 
     @Autowired
     private MusiXmatchConfig musiXmatchConfig;
@@ -37,30 +41,30 @@ public class MusiXmatchClient {
                 .queryParam("q_artist", trackInfoForLyricsDto.getArtists())
                 .queryParam("apikey", musiXmatchConfig.getApiKey())
                 .build().encode().toUri();
-        System.out.println(uri);
 
-        String responseValue = Optional.ofNullable(restTemplate.getForObject(uri, String.class)).orElseThrow(MusiXmatchServerResponseException::new);
-        System.out.println(responseValue);
 
         try {
+            String responseValue = Optional.ofNullable(restTemplate.getForObject(uri, String.class)).orElseThrow(MusiXmatchServerResponseException::new);
             JsonNode lyricsBaseNode = new ObjectMapper().readTree(responseValue);
-            if(lyricsBaseNode.get("message").get("body").size() != 0) {
+            int serverResponse = lyricsBaseNode.get("message").get("header").get("status_code").asInt();
+            if(lyricsBaseNode.get("message").get("body").size() != 0 && serverResponse == 200) {
                 String lyricsBodyResponse = Optional.ofNullable(lyricsBaseNode.get("message").get("body").get("lyrics").get("lyrics_body").textValue())
-                        .orElse("Lyrics not found, sorry :(");
-                return new LyricsBaseDto(lyricsBaseNode.get("message").get("header").get("status_code").asInt(),
+                        .orElse(RESPONSE_NULL_STATUS);
+                return new LyricsBaseDto(serverResponse,
                                          new LyricsDto(trackInfoForLyricsDto.getTitle(),
                                                         trackInfoForLyricsDto.getArtists(),
                                                          lyricsBodyResponse));
+            } else {
+                return new LyricsBaseDto(serverResponse, new LyricsDto(trackInfoForLyricsDto.getTitle(),
+                        trackInfoForLyricsDto.getArtists(),
+                        RESPONSE_NULL_STATUS));
             }
-            return new LyricsBaseDto(404 ,new LyricsDto(trackInfoForLyricsDto.getTitle(),
-                                                                     trackInfoForLyricsDto.getArtists(),
-                                                                     "Lyrics not found, sorry :("));
 
         } catch(IOException e) {
             System.out.println(e.getMessage());
             return new LyricsBaseDto(404 ,new LyricsDto(trackInfoForLyricsDto.getTitle(),
                                                                      trackInfoForLyricsDto.getArtists(),
-                                                                  "Lyrics not found, sorry :("));
+                                                                  RESPONSE_NULL_STATUS));
         }
     }
 }
