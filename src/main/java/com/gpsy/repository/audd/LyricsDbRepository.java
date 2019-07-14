@@ -7,13 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 @Transactional
 public interface LyricsDbRepository extends JpaRepository<DbLyrics, Long> {
 
-    @Query(value = "SELECT * FROM lyrics L " +
+    @Query(value = "SELECT * FROM gpsy.lyrics L " +
             "WHERE L.title LIKE CONCAT(:TITLE, '%') AND L.artists LIKE CONCAT(:ARTIST, '%')",
             nativeQuery = true)
-    DbLyrics findByTitleAndArtist(@Param("TITLE") String title, @Param("ARTIST") String artist);
+    Optional<DbLyrics> findByTitleAndArtist(@Param("TITLE") String title, @Param("ARTIST") String artist);
 
 }

@@ -17,4 +17,22 @@ public class TrackInfoForLyricsDto {
 
     @JsonProperty(value = "artists")
     private String artists;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TrackInfoForLyricsDto that = (TrackInfoForLyricsDto) o;
+
+        if (!title.equals(that.title)) return false;
+        return artists.equals(that.artists);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title.hashCode();
+        result = 31 * result + artists.hashCode();
+        return result;
+    }
 }

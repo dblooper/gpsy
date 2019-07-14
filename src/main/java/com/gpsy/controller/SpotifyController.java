@@ -1,15 +1,12 @@
 package com.gpsy.controller;
 
 import com.gpsy.domain.spotify.dto.*;
-import com.gpsy.mapper.spotify.DbPlaylistMapper;
-import com.gpsy.mapper.spotify.SpotifyPlaylistMapper;
-import com.gpsy.mapper.spotify.TrackMapper;
-import com.gpsy.service.spotify.FetchDataFromDbService;
-import com.gpsy.service.spotify.SpotifyHandleService;
-import com.gpsy.service.spotify.SaveSpotifyDataToDbService;
+import com.gpsy.facade.SpotifyFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -18,92 +15,71 @@ import java.util.List;
 public class SpotifyController {
 
     @Autowired
-    private SaveSpotifyDataToDbService saveSpotifyDataToDbService;
-
-    @Autowired
-    private FetchDataFromDbService fetchDataFromDbService;
-
-    @Autowired
-    private SpotifyHandleService spotifyHandleService;
-
-    @Autowired
-    private TrackMapper trackMapper;
-
-    @Autowired
-    private SpotifyPlaylistMapper spotifyPlaylistMapper;
-
-    @Autowired
-    private DbPlaylistMapper dbPlaylistMapper;
+    private SpotifyFacade spotifyFacade;
 
     @GetMapping(value = "/tracks/search")
     public List<SearchTrackDto> fetchSearchedTracks(@RequestParam String searchedItem) {
-        return spotifyHandleService.searchForTracks(searchedItem);
+        return spotifyFacade.fetchSearchedTracks(searchedItem);
     }
 
     @GetMapping(value = "/tracks/spotify/popular")
-    public List<PopularTrackDto> fetchTracks() {
-
-        return trackMapper.mapPopularTrackToPopularTrackDtoList(saveSpotifyDataToDbService.fetchPopularTracks());
+    public List<PopularTrackDto> fetchPopularTracks() {
+        return spotifyFacade.fetchPopularTracks();
     }
 
     @GetMapping(value = "/tracks/recent")
     public List<RecentPlayedTrackDto> fetchRecentTracks() {
-        return trackMapper.mapToRecentPlayedTrackDtos(fetchDataFromDbService.fetchRecentPlayedTracks());
+        return spotifyFacade.fetchRecentTracks();
     }
 
     @GetMapping(value = "/playlists/current")
     public List<UserPlaylistDto> fetchCurrentUserPlaylists() {
-
-        return dbPlaylistMapper.mapToUserPlaylistsDto(fetchDataFromDbService.fetchUserPlaylists());
+        return spotifyFacade.fetchCurrentUserPlaylists();
     }
 
     @GetMapping(value = "/tracks/frequent")
     public List<MostFrequentTrackDto> fetchMostFrequentTracks() {
-        return trackMapper.mapToPopularTrackDtoList(fetchDataFromDbService.fetchMostFrequentTracks());
+        return spotifyFacade.fetchMostFrequentTracks();
     }
 
     @GetMapping(value = "/tracks/recommended")
     public List<RecommendedTrackDto> fetchRecommendedTracks() {
-        return trackMapper.mapToRecommendedTrackDtoList(spotifyHandleService.returnRecommendedTracks());
+        return spotifyFacade.fetchRecommendedTracks();
     }
 
     @GetMapping(value = "/playlists/recommended")
     public RecommendedPlaylistDto fetchRecommendedPlaylist() {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.fetchRecommendedPlaylist());
+        return spotifyFacade.fetchRecommendedPlaylist();
     }
 
     @PostMapping(value = "/playlists/tracks/add")
-    public UserPlaylistDto updateUserPlaylist(@RequestBody UserPlaylistDto playlistDto) {
-        spotifyHandleService.updatePlaylistTracks(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
-        return playlistDto;
+    public void addTracksToUserPlaylist(@RequestBody UserPlaylistDto playlistDto) {
+        spotifyFacade.addTracksToUserPlaylist(playlistDto);
     }
 
     @PostMapping(value = "/playlists/new")
-    public UserPlaylistDto createNewPlaylist(@RequestBody UserPlaylistDto playlistDto) {
-        spotifyHandleService.createPlaylist(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
-        return playlistDto;
+    public void createNewPlaylist(@RequestBody UserPlaylistDto playlistDto) {
+        spotifyFacade.createNewPlaylist(playlistDto);
     }
 
     @PutMapping(value = "/playlists/recommended/new")
-    public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam int qty) {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(qty));
+    public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam @Min(1) @Max(50) int qty) {
+        return spotifyFacade.updateFetchRecommendedPlaylist(qty);
     }
 
     @PutMapping(value = "/playlists/recommended/change")
-    public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam int qty) {
-        return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.changeNumberOfTracks(qty));
+    public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam @Min(1) @Max(50) int qty) {
+       return spotifyFacade.changeQuantityOfRecommendedTracks(qty);
     }
 
     @PutMapping(value = "/playlists/update")
     public UserPlaylistDto updatePlaylistDetails(@RequestBody UserPlaylistDto userPlaylistDto) {
-        spotifyHandleService.updatePlaylistName(spotifyPlaylistMapper.mapToDbUserPlaylist(userPlaylistDto));
-        return userPlaylistDto;
+        return spotifyFacade.updatePlaylistDetails(userPlaylistDto);
     }
 
     @DeleteMapping(value = "/playlists/tracks/delete")
-    public UserPlaylistDto deleteUserTrack(@RequestBody UserPlaylistDto playlistDto) {
-        spotifyHandleService.deletePlaylistTrack(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
-        return playlistDto;
+    public void deleteUserPlaylistTrack(@RequestBody UserPlaylistDto playlistDto) {
+        spotifyFacade.deleteUserPlaylistTrack(playlistDto);
     }
 
 

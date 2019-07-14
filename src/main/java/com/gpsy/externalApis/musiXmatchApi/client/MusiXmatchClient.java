@@ -23,7 +23,7 @@ import java.util.Optional;
 @Getter
 public class MusiXmatchClient {
 
-    private final static String RESPONSE_NULL_STATUS = "Lyrics not found, sorry :(";
+    public final static String RESPONSE_NULL_STATUS = "Lyrics not found, sorry :(";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MusiXmatchClient.class);
 
@@ -33,7 +33,7 @@ public class MusiXmatchClient {
     @Autowired
     private RestTemplate restTemplate;
 
-    public LyricsBaseDto fetchLyrics(final TrackInfoForLyricsDto trackInfoForLyricsDto) throws MusiXmatchServerResponseException {
+    public LyricsBaseDto fetchLyrics(final TrackInfoForLyricsDto trackInfoForLyricsDto) {
 
         URI uri = UriComponentsBuilder.fromHttpUrl(musiXmatchConfig.getApiEndpointRoot() + "matcher.lyrics.get")
                 .queryParam("format", "json" )
@@ -50,6 +50,7 @@ public class MusiXmatchClient {
             if(lyricsBaseNode.get("message").get("body").size() != 0 && serverResponse == 200) {
                 String lyricsBodyResponse = Optional.ofNullable(lyricsBaseNode.get("message").get("body").get("lyrics").get("lyrics_body").textValue())
                         .orElse(RESPONSE_NULL_STATUS);
+
                 return new LyricsBaseDto(serverResponse,
                                          new LyricsDto(trackInfoForLyricsDto.getTitle(),
                                                         trackInfoForLyricsDto.getArtists(),
@@ -60,8 +61,8 @@ public class MusiXmatchClient {
                         RESPONSE_NULL_STATUS));
             }
 
-        } catch(IOException e) {
-            System.out.println(e.getMessage());
+        } catch(IOException | MusiXmatchServerResponseException e) {
+            LOGGER.error(e.getMessage(), e);
             return new LyricsBaseDto(404 ,new LyricsDto(trackInfoForLyricsDto.getTitle(),
                                                                      trackInfoForLyricsDto.getArtists(),
                                                                   RESPONSE_NULL_STATUS));

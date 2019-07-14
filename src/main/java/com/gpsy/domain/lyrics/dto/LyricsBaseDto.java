@@ -32,5 +32,21 @@ public class LyricsBaseDto {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        LyricsBaseDto that = (LyricsBaseDto) o;
+
+        if (statusCode != that.statusCode) return false;
+        return body.equals(that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = statusCode;
+        result = 31 * result + body.hashCode();
+        return result;
+    }
 }
