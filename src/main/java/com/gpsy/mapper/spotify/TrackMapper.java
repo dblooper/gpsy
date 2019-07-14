@@ -32,7 +32,7 @@ public class TrackMapper {
                                       .build();
     }
 
-    public List<RecentPlayedTrackDto> mapToRecentPlayedTrackDtos(List<RecentPlayedTrack> recentPlayedTracks) {
+    public List<RecentPlayedTrackDto> mapToRecentPlayedTrackDtoList(List<RecentPlayedTrack> recentPlayedTracks) {
         return recentPlayedTracks.stream()
                 .map(track -> new RecentPlayedTrackDto.RecentPlaylistTrackDtoBulder()
                                                     .stringId(track.getTrackStringId())

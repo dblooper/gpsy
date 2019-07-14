@@ -1,4 +1,4 @@
-package com.gpsy.service.spotify;
+package com.gpsy.service.dbApiServices.spotify;
 
 import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.PopularTrack;
@@ -41,7 +41,7 @@ public class SaveSpotifyDataToDbService {
     @Autowired
     private SpotifyClient spotifyClient;
 
-    public List<PopularTrack> savePopularTracks() {
+    public void savePopularTracks() {
         List<PopularTrack> savedTracks = new ArrayList<>();
         List<PopularTrack> storedTracks = spotifyPopularTrackRepository.findAll();
         List<Track> spotifyStoredTracks = spotifyClient.getSpotifyPopularTracks();
@@ -50,7 +50,6 @@ public class SaveSpotifyDataToDbService {
                 savedTracks.add(spotifyPopularTrackRepository.save(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack)));
             }
             Collections.sort(savedTracks, Collections.reverseOrder());
-            return savedTracks;
         }
 
         for(PopularTrack popularTrack : storedTracks) {
@@ -64,15 +63,6 @@ public class SaveSpotifyDataToDbService {
             }
         }
         Collections.sort(savedTracks, Collections.reverseOrder());
-        return savedTracks;
-    }
-
-    public List<PopularTrack> fetchPopularTracks() {
-        savePopularTracks();
-        return spotifyPopularTrackRepository.findAll().stream()
-                .limit(InitialLimitValues.LIMIT_POPULAR)
-                .sorted(Collections.reverseOrder())
-                .collect(Collectors.toList());
     }
 
     public List<RecentPlayedTrack> saveRecentPlayedTracks() {

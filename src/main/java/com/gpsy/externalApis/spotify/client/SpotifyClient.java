@@ -6,7 +6,7 @@ import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.MostFrequentTrack;
 import com.gpsy.domain.spotify.UserPlaylist;
 import com.gpsy.externalApis.spotify.config.SpotifyConfig;
-import com.gpsy.service.spotify.FetchDataFromDbService;
+import com.gpsy.service.dbApiServices.spotify.FetchDataFromDbService;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.special.SearchResult;
@@ -17,7 +17,6 @@ import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopT
 import com.wrapper.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import com.wrapper.spotify.requests.data.playlists.*;
 import com.wrapper.spotify.requests.data.search.SearchItemRequest;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,25 +29,18 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-@Getter
 public class SpotifyClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpotifyClient.class);
 
     @Autowired
-    private SpofyAuthorizator spotifyAuthorizator;
+    private SpotifyAuthorizator spotifyAuthorizator;
 
     @Autowired
     private FetchDataFromDbService fetchDataFromDbService;
 
     @Autowired
     private SpotifyConfig spotifyConfig;
-
-    private String[] getTrackUrisForSpotifyRequest(UserPlaylist userPlaylist) {
-        return userPlaylist.getTracks().stream()
-                .map(track -> track.getStringNameForAddingToPlaylist())
-                .toArray(String[]::new);
-    }
 
     public List<Track> searchForTrack(String searchedItem) {
         List<Track> searchedTracks = new ArrayList<>();
@@ -126,7 +118,6 @@ public class SpotifyClient {
             final Paging<PlaylistTrack> playlistTracksPaging = playlistsTracksRequest.execute();
             PlaylistTrack[] playlistTracksSpotify = playlistTracksPaging.getItems();
             playlistTracks.addAll(Arrays.asList(playlistTracksSpotify));
-
         } catch (IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -142,9 +133,7 @@ public class SpotifyClient {
                     .seed_tracks(popularTracksMerge(InitialLimitValues.LIMIT_TOP_TRACK_SIMILAR_TO_RECOMMEND))
                     .build();
             final Recommendations recommendations = getRecommendationsRequest.execute();
-
             recommendedTracks.addAll(Arrays.asList(recommendations.getTracks()));
-
         } catch ( IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -157,9 +146,8 @@ public class SpotifyClient {
         final AddTracksToPlaylistRequest addTracksToPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
                 .addTracksToPlaylist(userPlaylist.getPlaylistStringId(), getTrackUrisForSpotifyRequest(userPlaylist))
                 .build();
-
         try {
-            final SnapshotResult snapshotResult = addTracksToPlaylistRequest.execute();
+            addTracksToPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -172,9 +160,8 @@ public class SpotifyClient {
         final RemoveTracksFromPlaylistRequest removeTracksFromPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
                 .removeTracksFromPlaylist(userPlaylist.getPlaylistStringId(),
                                             jsonArrayTrackToDeleteMaker(userPlaylist)).build();
-
         try {
-            final SnapshotResult snapshotResult = removeTracksFromPlaylistRequest.execute();
+            removeTracksFromPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -186,9 +173,8 @@ public class SpotifyClient {
                 .changePlaylistsDetails(updatedPlaylist.getPlaylistStringId())
                 .name(updatedPlaylist.getName())
                 .build();
-
         try {
-            final String changePlaylistName = changePlaylistsDetailsRequest.execute();
+            changePlaylistsDetailsRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -199,15 +185,20 @@ public class SpotifyClient {
         final CreatePlaylistRequest createPlaylistRequest = spotifyAuthorizator.getSpotifyApi()
                 .createPlaylist(spotifyConfig.getUserId(), newPlaylist.getName())
                 .build();
-
         try {
-            final Playlist playlist = createPlaylistRequest.execute();
+            createPlaylistRequest.execute();
         } catch(IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
 
-    private JsonArray jsonArrayTrackToDeleteMaker(UserPlaylist userPlaylist) {
+    protected String[] getTrackUrisForSpotifyRequest(UserPlaylist userPlaylist) {
+        return userPlaylist.getTracks().stream()
+                .map(track -> track.getStringNameForAddingToPlaylist())
+                .toArray(String[]::new);
+    }
+
+    protected JsonArray jsonArrayTrackToDeleteMaker(UserPlaylist userPlaylist) {
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -224,16 +215,16 @@ public class SpotifyClient {
         return new JsonParser().parse(trackToRemove).getAsJsonArray();
     }
 
-    private String popularTracksMerge(int limit) {
+    protected String popularTracksMerge(int limit) {
 
         List<MostFrequentTrack> mostFrequentTracks = fetchDataFromDbService.fetchMostFrequentTracks();
 
         if(mostFrequentTracks.size() > 0 ) {
-            Collections.sort(mostFrequentTracks, Collections.reverseOrder());
+//            Collections.sort(mostFrequentTracks, Collections.reverseOrder());
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (int i = 1; i <= limit; i++) {
-                if (i == limit) {
+            for (int i = 0; i < limit; i++) {
+                if (i == limit - 1) {
                     stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());
                 } else {
                     stringBuilder.append(mostFrequentTracks.get(i).getTrackStringId());

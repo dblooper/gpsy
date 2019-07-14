@@ -24,4 +24,21 @@ public class LibraryDto {
 
     private List<LyricsInLibraryDto> lyrics;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LibraryDto that = (LibraryDto) o;
+
+        if (id != that.id) return false;
+        return libraryName.equals(that.libraryName);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + libraryName.hashCode();
+        return result;
+    }
 }

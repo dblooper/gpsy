@@ -1,4 +1,4 @@
-package com.gpsy.service.lyrics;
+package com.gpsy.service.dbApiServices.lyrics;
 
 import com.gpsy.domain.lyrics.Library;
 import com.gpsy.domain.lyrics.LyricsInLibrary;
@@ -25,7 +25,7 @@ public class LyricsLibraryService {
     }
 
     public LyricsInLibrary saveLyricsInLibrary(Library library) throws LibraryNotFoundException {
-        Optional<Library> libraryToModify = Optional.ofNullable(libraryRepository.findByLibraryName(library.getLibraryName())).orElseThrow(LibraryNotFoundException::new);
+        Optional<Library> libraryToModify = Optional.ofNullable(libraryRepository.findById(library.getLibraryId())).orElseThrow(LibraryNotFoundException::new);
         libraryToModify.ifPresent(libraryToAdd -> {
             if(library.getLyrics().size() > 0) {
                 libraryToAdd.getLyrics().add(library.getLyrics().get(0));
@@ -46,7 +46,7 @@ public class LyricsLibraryService {
     }
 
     public void deleteLyricsFromLibrary(Library library) throws LibraryNotFoundException {
-        Optional<Library> libraryToModify = Optional.ofNullable(libraryRepository.findByLibraryName(library.getLibraryName())).orElseThrow(LibraryNotFoundException::new);
+        Optional<Library> libraryToModify = Optional.ofNullable(libraryRepository.findById(library.getLibraryId())).orElseThrow(LibraryNotFoundException::new);
         libraryToModify.ifPresent(libraryPresent -> {
             libraryPresent.getLyrics().remove(library.getLyrics().get(0));
             libraryRepository.save(libraryPresent);

@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "recommended_tracks")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class RecommendedTrack {
 
