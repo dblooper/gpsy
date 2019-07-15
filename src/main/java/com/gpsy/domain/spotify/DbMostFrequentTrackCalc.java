@@ -43,4 +43,11 @@ public class DbMostFrequentTrackCalc {
         return trackStringId.hashCode();
     }
 
+    //Na potrzeeby testow konstruktor, nie tworzono buildera
+    public DbMostFrequentTrackCalc(String trackStringId, String title, String artists, int popularity) {
+        this.trackStringId = trackStringId;
+        this.title = title;
+        this.artists = artists;
+        this.popularity = popularity;
+    }
 }
