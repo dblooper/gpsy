@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class SpotifyPlaylistMapper {
 
     @Autowired
-    SpotifyClient spotifyClient;
+    private SpotifyClient spotifyClient;
 
     @Autowired
-    TrackMapper trackMapper;
+    private TrackMapper trackMapper;
 
     public UserPlaylist mapSpotifyPlaylistToDbUserPlaylist(PlaylistSimplified playlistSimplified) {
 

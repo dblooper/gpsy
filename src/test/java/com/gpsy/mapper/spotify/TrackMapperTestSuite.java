@@ -1,11 +1,11 @@
 package com.gpsy.mapper.spotify;
 
-import com.gpsy.domain.spotify.PopularTrack;
-import com.gpsy.domain.spotify.RecentPlayedTrack;
-import com.gpsy.domain.spotify.RecommendedTrack;
+import com.gpsy.domain.spotify.*;
+import com.gpsy.domain.spotify.dto.PlaylistTrackDto;
 import com.gpsy.domain.spotify.dto.PopularTrackDto;
 import com.gpsy.domain.spotify.dto.RecentPlayedTrackDto;
 import com.gpsy.domain.spotify.dto.RecommendedTrackDto;
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Track;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +25,26 @@ public class TrackMapperTestSuite {
 
     @Autowired
     private TrackMapper trackMapper;
+
+    @Test
+    public void mapSpotifyTrackToDbPopoularTrackTest() {
+        //Given
+        Track spotifyTrack = new Track.Builder()
+                .setArtists(new ArtistSimplified.Builder().setName("Test Bob").build())
+                .setId("test_track_id")
+                .setName("test_name")
+                .setPopularity(25).build();
+
+        //When
+        PopularTrack popularTrack = trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack);
+
+        //Then
+        assertEquals("Test Bob", popularTrack.getArtists());
+        assertEquals("test_track_id", popularTrack.getTrackStringId());
+        assertEquals("test_name", popularTrack.getTitle());
+        assertEquals(25, popularTrack.getPopularity().intValue());
+
+    }
 
     @Test
     public void mapToRecentPlayedTrackDtoListTest() {
@@ -114,6 +134,26 @@ public class TrackMapperTestSuite {
 
     @Test
     public void mapToPlaylistTrack() {
+
+        //Given
+        List<PlaylistTrackDto> playlistTracksDtoList = new ArrayList<>();
+        PlaylistTrackDto testPlaylistTrackDto1 = new PlaylistTrackDto.PlaylistTrackDtoBuilder().title("Test_title1")
+                                                                    .artists("Test_artist1")
+                                                                    .stringId("12345@").build();
+        PlaylistTrackDto testPlaylistTrackDto2 = new PlaylistTrackDto.PlaylistTrackDtoBuilder().title("Test_title2")
+                .artists("Test_artist2")
+                .stringId("6789@").build();
+
+        playlistTracksDtoList.add(testPlaylistTrackDto1);
+        playlistTracksDtoList.add(testPlaylistTrackDto2);
+
+        //When
+        List<PlaylistTrack> playlistTracks = trackMapper.mapToPlaylistTrack(playlistTracksDtoList);
+
+        //Then
+        assertEquals("Test_title1", playlistTracks.get(0).getTitle());
+        assertEquals("6789@", playlistTracks.get(1).getTrackStringId());
+        assertEquals("Test_artist2", playlistTracks.get(1).getArtists());
     }
 
     @Test
@@ -142,5 +182,7 @@ public class TrackMapperTestSuite {
 
     @Test
     public void mapRecommendedPlaylistToUserPlaylist() {
+
+
     }
 }

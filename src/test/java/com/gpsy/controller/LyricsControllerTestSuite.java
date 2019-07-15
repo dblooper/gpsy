@@ -6,6 +6,7 @@ import com.gpsy.domain.lyrics.LyricsInLibrary;
 import com.gpsy.domain.lyrics.dto.LibraryDto;
 import com.gpsy.domain.lyrics.dto.LyricsDto;
 import com.gpsy.domain.lyrics.dto.LyricsInLibraryDto;
+import com.gpsy.exceptions.LibraryNotFoundException;
 import com.gpsy.facade.LyricsFacade;
 
 import org.junit.Test;
@@ -17,14 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -92,6 +93,106 @@ public class LyricsControllerTestSuite {
                 .andExpect(status().isOk());
 
         verify(lyricsFacade, times(1)).addLibrary(libraryDto);
+    }
+
+    @Test
+    public void shouldAddLyricsToLibrary() throws Exception {
+        //Given
+        List<LyricsInLibraryDto> lyrics = new ArrayList<>();
+        LyricsInLibraryDto lyricsInLibraryDto = new LyricsInLibraryDto("Title1", "Artist1", "Lyrics1");
+        lyrics.add(lyricsInLibraryDto);
+        LibraryDto libraryDto = new LibraryDto(122L, "Test_library", lyrics);
+        Gson gson = new Gson();
+        String lyricsToAdd = gson.toJson(libraryDto);
+
+        //When/Then
+        mockMvc.perform(post("/v1/gpsy/libraries/lyrics/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(lyricsToAdd))
+                .andExpect(status().isOk());
+
+        verify(lyricsFacade, times(1)).addLyricsToLibrary(libraryDto);
+
+    }
+
+    @Test
+    public void shouldNotAddLyricsToLibrary() throws Exception {
+        //Given
+        List<LyricsInLibraryDto> lyrics = new ArrayList<>();
+        LyricsInLibraryDto lyricsInLibraryDto = new LyricsInLibraryDto("Title1", "Artist1", "Lyrics1");
+        lyrics.add(lyricsInLibraryDto);
+        LibraryDto libraryDto = null;
+        Gson gson = new Gson();
+        String lyricsToAdd = gson.toJson(libraryDto);
+
+        //When/Then
+        mockMvc.perform(post("/v1/gpsy/libraries/lyrics/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(lyricsToAdd))
+                .andExpect(status().is(400));
+
+        verify(lyricsFacade, times(0)).addLyricsToLibrary(libraryDto);
+    }
+
+    @Test
+    public void shouldUpdateLibraryName() throws Exception {
+        //Given
+        LibraryDto libraryDto = new LibraryDto(122L, "Test_library", new ArrayList<>());
+        Gson gson = new Gson();
+        String lyricsToAdd = gson.toJson(libraryDto);
+        when(lyricsFacade.updateLibraryName(libraryDto)).thenReturn(libraryDto);
+
+        //When/Then
+        mockMvc.perform(put("/v1/gpsy/libraries/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(lyricsToAdd))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.libraryName", is("Test_library")))
+                .andExpect(jsonPath("$.id", is(122)));
+
+    }
+
+    @Test
+    public void shouldDeleteLyricsFromLibrary() throws Exception{
+        //Given
+        List<LyricsInLibraryDto> lyrics = new ArrayList<>();
+        LyricsInLibraryDto lyricsInLibraryDto = new LyricsInLibraryDto("Title1", "Artist1", "Lyrics1");
+        lyrics.add(lyricsInLibraryDto);
+        LibraryDto libraryDto = new LibraryDto(122L, "Test_library", lyrics);
+        Gson gson = new Gson();
+        String lyricsToAdd = gson.toJson(libraryDto);
+
+        //When/Then
+        mockMvc.perform(delete("/v1/gpsy/libraries/lyrics/delete")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(lyricsToAdd))
+                .andExpect(status().isOk());
+
+        verify(lyricsFacade, times(1)).deleteLyricsFromLibrary(libraryDto);
+    }
+
+    @Test
+    public void shouldDeleteLibrary() throws Exception {
+        //Given
+
+        //When/Then
+        mockMvc.perform(delete("/v1/gpsy/libraries/delete?libraryId=2"))
+                .andExpect(status().isOk());
+
+        verify(lyricsFacade, times(1)).deleteLibrary(2);
+    }
+
+    @Test
+    public void shouldNotDeleteLibrary() throws Exception {
+        //Given
+
+        //When/Then
+        mockMvc.perform(delete("/v1/gpsy/libraries/delete"))
+                .andExpect(status().is(400));
     }
 
 }

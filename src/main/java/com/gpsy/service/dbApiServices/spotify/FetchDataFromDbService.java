@@ -106,13 +106,6 @@ public class FetchDataFromDbService {
 
     public RecommendedPlaylist updateFetchRecommendedPlaylistFromDb(int numberOfTracks) {
 
-        if(numberOfTracks > 50 || numberOfTracks < 0 ) return new RecommendedPlaylist.RecommendedPlaylistBuilder()
-                                                                                     .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
-                                                                                     .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME)
-                                                                                     .actual(false)
-                                                                                     .playlistTracks(new ArrayList<>())
-                                                                                     .build();
-
         List<RecommendedPlaylistTrack> recommendedTracks = trackMapper.mapToRecommendedPlaylistTracks(spotifyClient.getRecommendedTracks(), numberOfTracks);
 
         List<RecommendedPlaylist> recommendedPlaylists = recommendedPlaylistRepository.findAll();

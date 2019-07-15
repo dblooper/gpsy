@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -62,7 +61,6 @@ public class SaveSpotifyDataToDbService {
                     }
             }
         }
-        Collections.sort(savedTracks, Collections.reverseOrder());
     }
 
     public List<RecentPlayedTrack> saveRecentPlayedTracks() {
@@ -89,7 +87,7 @@ public class SaveSpotifyDataToDbService {
         return savedTracks;
     }
 
-    public List<UserPlaylist> saveUserPlaylists() {
+    List<UserPlaylist> saveUserPlaylists() {
         List<UserPlaylist> savedPlaylists = new ArrayList<>();
         List<UserPlaylist> userPlaylists = spotifyUserPlaylistsRepository.findAll();
         List<PlaylistSimplified> spotifyUserPlaylists = spotifyClient.getUserPlaylists();

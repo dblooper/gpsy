@@ -47,6 +47,20 @@ public class LibraryMapperTestSuite {
 
     @Test
     public void mapToLyricsInLibraryDto() {
+        //Given
+        List<LyricsInLibrary> lyrics = new ArrayList<>();
+        for(int i = 1; i < 10; i++) {
+            lyrics.add(new LyricsInLibrary("Test_title"+i, "Test_artist"+i, "Test_lyrics"+i));
+        }
+
+        //When
+        List<LyricsInLibraryDto> lyricsInLibraryDtoList = libraryMapper.mapToLyricsInLibraryDto(lyrics);
+
+        //Then
+        assertEquals(9, lyricsInLibraryDtoList.size());
+        assertEquals("Test_title5", lyricsInLibraryDtoList.get(4).getTitle());
+        assertEquals("Test_title8", lyricsInLibraryDtoList.get(7).getTitle());
+        assertEquals("Test_lyrics2", lyricsInLibraryDtoList.get(1).getLyrics());
     }
 
     @Test
