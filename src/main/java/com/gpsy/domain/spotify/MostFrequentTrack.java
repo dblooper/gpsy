@@ -1,6 +1,5 @@
 package com.gpsy.domain.spotify;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,29 +32,29 @@ public class MostFrequentTrack implements Comparable<MostFrequentTrack> {
         this.popularity = popularity;
     }
 
-    public static class MostFrequentTrackBuilder {
+    public static class Builder {
 
         private String trackStringId;
         private String title;
         private String artists;
         private Integer popularity;
 
-        public MostFrequentTrackBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public MostFrequentTrackBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public MostFrequentTrackBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public MostFrequentTrackBuilder popularity(Integer popularity) {
+        public Builder popularity(Integer popularity) {
             this.popularity = popularity;
             return this;
         }

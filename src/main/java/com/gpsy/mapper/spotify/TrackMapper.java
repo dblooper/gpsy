@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class TrackMapper {
 
     public PopularTrack mapSpotifyTrackToDbPopularTrack(Track spotifyDbTrack) {
-        return new PopularTrack.PopularTrackBuiilder()
+        return new PopularTrack.Buiilder()
                                 .stringId(spotifyDbTrack.getId())
                                 .title(spotifyDbTrack.getName())
                                 .artists(UniversalMappingMethods.simplifyArtist(spotifyDbTrack.getArtists()))
@@ -24,7 +24,7 @@ public class TrackMapper {
 
     public RecentPlayedTrack mapSpotifyTrackToDbRecentPlayedTrack(PlayHistory playHistory) {
         TrackSimplified recentTrack = playHistory.getTrack();
-        return new RecentPlayedTrack.RecentPlayedTrackBuilder()
+        return new RecentPlayedTrack.Builder()
                                       .stringId(recentTrack.getId())
                                       .title(recentTrack.getName())
                                       .artists(UniversalMappingMethods.simplifyArtist(recentTrack.getArtists()))
@@ -34,7 +34,7 @@ public class TrackMapper {
 
     public List<RecentPlayedTrackDto> mapToRecentPlayedTrackDtoList(List<RecentPlayedTrack> recentPlayedTracks) {
         return recentPlayedTracks.stream()
-                .map(track -> new RecentPlayedTrackDto.RecentPlaylistTrackDtoBulder()
+                .map(track -> new RecentPlayedTrackDto.Builder()
                                                     .stringId(track.getTrackStringId())
                                                     .artists(track.getArtists())
                                                     .title(track.getTitle())
@@ -45,7 +45,7 @@ public class TrackMapper {
 
     public List<MostFrequentTrackDto> mapToPopularTrackDtoList(List<MostFrequentTrack> dbPopularTracks) {
         return dbPopularTracks.stream()
-                .map(track -> new MostFrequentTrackDto.MostFrequentTrackDtoBuilder()
+                .map(track -> new MostFrequentTrackDto.Builder()
                                                         .stringId(track.getTrackStringId())
                                                         .artists(track.getArtists())
                                                         .title(track.getTitle())
@@ -56,7 +56,7 @@ public class TrackMapper {
 
     public List<RecommendedTrackDto> mapToRecommendedTrackDtoList(List<RecommendedTrack> recommendedTracks) {
         return recommendedTracks.stream()
-                .map(track -> new RecommendedTrackDto.RecommendedTrackDtoBuilder()
+                .map(track -> new RecommendedTrackDto.Builder()
                                                         .stringId(track.getTrackStringId())
                                                         .title(track.getTitle())
                                                         .aritsts(track.getAuthors())
@@ -67,7 +67,7 @@ public class TrackMapper {
 
     public List<PlaylistTrack> mapToPlaylistTrack(List<PlaylistTrackDto> playlistTrackDtoList) {
         return playlistTrackDtoList.stream()
-                .map(playlistTrackDto -> new PlaylistTrack.PlaylistTrackBuilder()
+                .map(playlistTrackDto -> new PlaylistTrack.Builder()
                                                             .stringId(playlistTrackDto.getTrackStringId())
                                                             .artists(playlistTrackDto.getArtists())
                                                             .title(playlistTrackDto.getTitle())
@@ -78,10 +78,10 @@ public class TrackMapper {
 
     public List<RecommendedTrackForPlaylistDto> mapToRecommendedTrackForPlaylistDto(List<RecommendedPlaylistTrack> recommendedPlaylistTrack) {
         return recommendedPlaylistTrack.stream()
-                .map(track -> new RecommendedTrackForPlaylistDto.RecommendedTrackForPlaylistDtoBuilder()
+                .map(track -> new RecommendedTrackForPlaylistDto.Builder()
                                                                 .stringId(track.getTrackStringId())
                                                                 .title(track.getTitle())
-                                                                .aritsts(track.getArtists())
+                                                                .artists(track.getArtists())
                                                                 .sample(track.getSample())
                                                                 .build())
                 .collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class TrackMapper {
 
     public List<PopularTrackDto> mapPopularTrackToPopularTrackDtoList(List<PopularTrack> popularTracks) {
         return popularTracks.stream()
-                .map(track -> new PopularTrackDto.PopularTrackDtoBuilder()
+                .map(track -> new PopularTrackDto.Builder()
                                                     .stirngId(track.getTrackStringId())
                                                     .artists(track.getArtists())
                                                     .title(track.getTitle())
@@ -100,7 +100,7 @@ public class TrackMapper {
 
     public List<SearchTrackDto> mapToSearchTrackDto(List<Track> tracks) {
         return tracks.stream()
-                .map(track -> new SearchTrackDto.SearchTrackDtoBuilder()
+                .map(track -> new SearchTrackDto.Builder()
                                     .stringId(track.getId())
                                     .aritsts(UniversalMappingMethods.simplifyArtist(track.getArtists()))
                                     .title(track.getName())
@@ -112,7 +112,7 @@ public class TrackMapper {
     public List<RecommendedPlaylistTrack> mapToRecommendedPlaylistTracks(List<TrackSimplified> simplifiedTracks, int numberOfTracks) {
         return simplifiedTracks.stream()
                 .limit(numberOfTracks)
-                .map(track -> new RecommendedPlaylistTrack.RecommendedPlaylistTrackBuilder()
+                .map(track -> new RecommendedPlaylistTrack.Builder()
                                                             .stringId(track.getId())
                                                             .title(track.getName())
                                                             .artists(UniversalMappingMethods.simplifyArtist(track.getArtists()))
@@ -123,7 +123,7 @@ public class TrackMapper {
 
     public List<PlaylistTrack> mapRecommendedPlaylistTracksToPlaylistTracks(List<RecommendedPlaylistTrack> recommendedPlaylistTracks) {
         return recommendedPlaylistTracks.stream()
-                .map(track -> new PlaylistTrack.PlaylistTrackBuilder()
+                .map(track -> new PlaylistTrack.Builder()
                                                 .title(track.getTitle())
                                                 .stringId(track.getTrackStringId())
                                                 .artists(track.getArtists())
@@ -134,7 +134,7 @@ public class TrackMapper {
     public List<RecommendedTrack> mapToRecommendedTracks(List<TrackSimplified> recommendedTracks, int numberOfTracks) {
         return recommendedTracks.stream()
                 .limit(numberOfTracks)
-                .map(track -> new RecommendedTrack.RecommendedTrackBuilder()
+                .map(track -> new RecommendedTrack.Builder()
                 .stringId(track.getId())
                                 .artists(UniversalMappingMethods.simplifyArtist(track.getArtists()))
                                 .title(track.getName())
@@ -144,7 +144,7 @@ public class TrackMapper {
     }
 
     public UserPlaylist mapRecommendedPlaylistToUserPlaylist(RecommendedPlaylist recommendedPlaylist) {
-        return new UserPlaylist.UserPlaylistBuilder()
+        return new UserPlaylist.Builder()
                                 .stringId(recommendedPlaylist.getPlaylistStringId())
                                 .name(recommendedPlaylist.getName())
                                 .tracks(mapRecommendedPlaylistTracksToPlaylistTracks(recommendedPlaylist.getRecommendedPlaylistTracks()))

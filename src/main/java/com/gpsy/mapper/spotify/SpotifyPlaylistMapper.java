@@ -22,7 +22,7 @@ public class SpotifyPlaylistMapper {
 
     public UserPlaylist mapSpotifyPlaylistToDbUserPlaylist(PlaylistSimplified playlistSimplified) {
 
-        return new UserPlaylist.UserPlaylistBuilder()
+        return new UserPlaylist.Builder()
                                 .name(playlistSimplified.getName())
                                 .stringId(playlistSimplified.getId())
                                 .tracks(mapToPlaylistTracks(playlistSimplified.getId()))
@@ -32,7 +32,7 @@ public class SpotifyPlaylistMapper {
     public List<PlaylistTrack> mapToPlaylistTracks (String playlistId) {
 
         return spotifyClient.getPlaylistTracks(playlistId).stream()
-                .map(track -> new PlaylistTrack.PlaylistTrackBuilder()
+                .map(track -> new PlaylistTrack.Builder()
                                                 .title(track.getTrack().getName())
                                                 .artists(UniversalMappingMethods.simplifyArtist(track.getTrack().getArtists()))
                                                 .stringId(track.getTrack().getId())
@@ -41,7 +41,7 @@ public class SpotifyPlaylistMapper {
     }
 
     public UserPlaylist mapToDbUserPlaylist(UserPlaylistDto userPlaylistDto) {
-        return new UserPlaylist.UserPlaylistBuilder()
+        return new UserPlaylist.Builder()
                                 .stringId(userPlaylistDto.getPlaylistStringId())
                                 .name(userPlaylistDto.getName())
                                 .tracks(trackMapper.mapToPlaylistTrack(userPlaylistDto.getTracks()))

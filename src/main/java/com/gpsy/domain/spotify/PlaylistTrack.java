@@ -1,6 +1,5 @@
 package com.gpsy.domain.spotify;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,23 +35,23 @@ public class PlaylistTrack {
         this.artists = artists;
     }
 
-    public static class PlaylistTrackBuilder {
+    public static class Builder {
 
         private String trackStringId;
         private String title;
         private String artists;
 
-        public PlaylistTrackBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public PlaylistTrackBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public PlaylistTrackBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }

@@ -36,19 +36,19 @@ public class DbPlaylistMapperTestSuite {
     public void mapToRecommendedPlaylistDto() {
         //Given
         List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
-        RecommendedPlaylistTrack recommendedPlaylistTrack1 = new RecommendedPlaylistTrack.RecommendedPlaylistTrackBuilder()
+        RecommendedPlaylistTrack recommendedPlaylistTrack1 = new RecommendedPlaylistTrack.Builder()
                 .title("TrackTested1")
                 .artists("ArtistTested1")
                 .stringId("0987")
                 .sample("https://testTrack1.com").build();
-        RecommendedPlaylistTrack recommendedPlaylistTrack2 = new RecommendedPlaylistTrack.RecommendedPlaylistTrackBuilder()
+        RecommendedPlaylistTrack recommendedPlaylistTrack2 = new RecommendedPlaylistTrack.Builder()
                 .title("TrackTested2")
                 .artists("ArtistTested2")
                 .stringId("6543")
                 .sample("https://testTrack2.com").build();
         recommendedPlaylistTracks.add(recommendedPlaylistTrack1);
         recommendedPlaylistTracks.add(recommendedPlaylistTrack2);
-        RecommendedPlaylist recommendedPlaylist = new RecommendedPlaylist.RecommendedPlaylistBuilder()
+        RecommendedPlaylist recommendedPlaylist = new RecommendedPlaylist.Builder()
                 .name("Recommended_playlist1")
                 .playlistTracks(recommendedPlaylistTracks)
                 .stringId("123")
@@ -70,12 +70,12 @@ public class DbPlaylistMapperTestSuite {
     public void mapRecommendedPlaylistToUserPlaylist() {
         //Given
         List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
-        RecommendedPlaylistTrack recommendedPlaylistTrack1 = new RecommendedPlaylistTrack.RecommendedPlaylistTrackBuilder()
+        RecommendedPlaylistTrack recommendedPlaylistTrack1 = new RecommendedPlaylistTrack.Builder()
                 .title("TrackTested1")
                 .artists("ArtistTested1")
                 .stringId("0987")
                 .sample("https://testTrack1.com").build();
-        RecommendedPlaylistTrack recommendedPlaylistTrack2 = new RecommendedPlaylistTrack.RecommendedPlaylistTrackBuilder()
+        RecommendedPlaylistTrack recommendedPlaylistTrack2 = new RecommendedPlaylistTrack.Builder()
                 .title("TrackTested2")
                 .artists("ArtistTested2")
                 .stringId("6543")
@@ -83,7 +83,7 @@ public class DbPlaylistMapperTestSuite {
         recommendedPlaylistTracks.add(recommendedPlaylistTrack1);
         recommendedPlaylistTracks.add(recommendedPlaylistTrack2);
 
-        RecommendedPlaylist recommendedPlaylist = new RecommendedPlaylist.RecommendedPlaylistBuilder()
+        RecommendedPlaylist recommendedPlaylist = new RecommendedPlaylist.Builder()
                 .playlistTracks(recommendedPlaylistTracks)
                 .name("Playlist_recommended_test")
                 .actual(false)

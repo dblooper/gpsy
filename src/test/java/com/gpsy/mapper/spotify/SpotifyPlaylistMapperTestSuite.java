@@ -10,7 +10,6 @@ import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import com.wrapper.spotify.model_objects.specification.Track;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -75,19 +74,19 @@ public class SpotifyPlaylistMapperTestSuite {
     public void mapToDbUserPlaylist() {
         //Given
         List<PlaylistTrackDto> playlistTrackDtoList = new ArrayList<>();
-        PlaylistTrackDto playlistTrackDto1 = new PlaylistTrackDto.PlaylistTrackDtoBuilder()
+        PlaylistTrackDto playlistTrackDto1 = new PlaylistTrackDto.Builder()
                                                                 .title("Test_track1")
                                                                 .artists("Artist1")
                                                                 .stringId("123").build();
 
-        PlaylistTrackDto playlistTrackDto2 = new PlaylistTrackDto.PlaylistTrackDtoBuilder()
+        PlaylistTrackDto playlistTrackDto2 = new PlaylistTrackDto.Builder()
                 .title("Test_track2")
                 .artists("Artist2")
                 .stringId("456").build();
         playlistTrackDtoList.add(playlistTrackDto1);
         playlistTrackDtoList.add(playlistTrackDto2);
 
-        UserPlaylistDto userPlaylistDto = new UserPlaylistDto.UserPlaylistDtoBuilder()
+        UserPlaylistDto userPlaylistDto = new UserPlaylistDto.Builder()
                 .name("Test_Playlist")
                 .stringId("123")
                 .tracks(playlistTrackDtoList).build();

@@ -2,12 +2,8 @@ package com.gpsy.domain.spotify.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -29,22 +25,22 @@ public class PlaylistTrackDto {
         this.artists = artists;
     }
 
-    public static class PlaylistTrackDtoBuilder {
+    public static class Builder {
         private String trackStringId;
         private String title;
         private String artists;
 
-        public PlaylistTrackDtoBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public PlaylistTrackDtoBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public PlaylistTrackDtoBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }
@@ -52,5 +48,20 @@ public class PlaylistTrackDto {
         public PlaylistTrackDto build() {
             return new  PlaylistTrackDto(trackStringId, title, artists);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlaylistTrackDto that = (PlaylistTrackDto) o;
+
+        return trackStringId.equals(that.trackStringId);
+    }
+
+    @Override
+    public int hashCode() {
+        return trackStringId.hashCode();
     }
 }

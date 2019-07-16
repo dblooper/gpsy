@@ -32,29 +32,29 @@ public class PopularTrack implements Comparable<PopularTrack> {
         this.popularity = popularity;
     }
 
-    public static class PopularTrackBuiilder {
+    public static class Buiilder {
 
         private String trackStringId;
         private String title;
         private String artists;
         private Integer popularity;
 
-        public PopularTrackBuiilder stringId(String trackStringId) {
+        public Buiilder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public PopularTrackBuiilder title(String title) {
+        public Buiilder title(String title) {
             this.title = title;
             return this;
         }
 
-        public PopularTrackBuiilder artists(String artists) {
+        public Buiilder artists(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public PopularTrackBuiilder popularity(Integer popularity) {
+        public Buiilder popularity(Integer popularity) {
             this.popularity = popularity;
             return this;
         }

@@ -1,8 +1,6 @@
 package com.gpsy.domain.spotify.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gpsy.domain.spotify.RecommendedPlaylist;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
@@ -33,34 +31,34 @@ public class RecommendedPlaylistDto {
         this.actual = actual;
     }
 
-    public static class RecommendedPlaylistDtoBuilder {
+    public static class Builder {
         private String playlistStringId;
         private String name;
         private List<RecommendedTrackForPlaylistDto> playlistTracks;
         private Integer numberOfTracks;
         private boolean actual;
 
-        public RecommendedPlaylistDtoBuilder stringId(String playlistStringId) {
+        public Builder stringId(String playlistStringId) {
             this.playlistStringId = playlistStringId;
             return this;
         }
 
-        public RecommendedPlaylistDtoBuilder name(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public RecommendedPlaylistDtoBuilder playlistTracks(List<RecommendedTrackForPlaylistDto> playlistTracks) {
+        public Builder playlistTracks(List<RecommendedTrackForPlaylistDto> playlistTracks) {
             this.playlistTracks = playlistTracks;
             return this;
         }
 
-        public RecommendedPlaylistDtoBuilder numberOfTracks(int numberOfTracks) {
+        public Builder numberOfTracks(int numberOfTracks) {
             this.numberOfTracks = numberOfTracks;
             return this;
         }
 
-        public RecommendedPlaylistDtoBuilder isActual(boolean actual) {
+        public Builder isActual(boolean actual) {
             this.actual = actual;
             return this;
         }

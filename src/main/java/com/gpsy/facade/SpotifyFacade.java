@@ -30,16 +30,16 @@ public class SpotifyFacade {
     @Autowired
     private DbPlaylistMapper dbPlaylistMapper;
 
-    public List<SearchTrackDto> fetchSearchedTracks(@RequestParam String searchedItem) {
+    public List<SearchTrackDto> fetchSearchedTracks(String searchedItem) {
         return spotifyHandleService.searchForTracks(searchedItem);
     }
 
-    public List<PopularTrackDto> fetchPopularTracks() {
-        return trackMapper.mapPopularTrackToPopularTrackDtoList(fetchDataFromDbService.fetchPopularTracks());
+    public List<PopularTrackDto> fetchPopularTracks(int qty) {
+        return trackMapper.mapPopularTrackToPopularTrackDtoList(fetchDataFromDbService.fetchPopularTracks(qty));
     }
 
-    public List<RecentPlayedTrackDto> fetchRecentTracks() {
-        return trackMapper.mapToRecentPlayedTrackDtoList(fetchDataFromDbService.fetchRecentPlayedTracks());
+    public List<RecentPlayedTrackDto> fetchRecentTracks(int qty) {
+        return trackMapper.mapToRecentPlayedTrackDtoList(fetchDataFromDbService.fetchRecentPlayedTracks(qty));
     }
 
     public List<UserPlaylistDto> fetchCurrentUserPlaylists() {
@@ -47,12 +47,12 @@ public class SpotifyFacade {
         return dbPlaylistMapper.mapToUserPlaylistsDto(fetchDataFromDbService.fetchUserPlaylists());
     }
 
-    public List<MostFrequentTrackDto> fetchMostFrequentTracks() {
-        return trackMapper.mapToPopularTrackDtoList(fetchDataFromDbService.fetchMostFrequentTracks());
+    public List<MostFrequentTrackDto> fetchMostFrequentTracks(int qty) {
+        return trackMapper.mapToPopularTrackDtoList(fetchDataFromDbService.fetchMostFrequentTracks(qty));
     }
 
-    public List<RecommendedTrackDto> fetchRecommendedTracks() {
-        return trackMapper.mapToRecommendedTrackDtoList(spotifyHandleService.returnRecommendedTracks());
+    public List<RecommendedTrackDto> fetchRecommendedTracks(int qty) {
+        return trackMapper.mapToRecommendedTrackDtoList(spotifyHandleService.returnRecommendedTracks(qty));
     }
 
     public RecommendedPlaylistDto fetchRecommendedPlaylist() {

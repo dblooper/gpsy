@@ -1,11 +1,9 @@
 package com.gpsy.domain.spotify;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,22 +37,22 @@ public class UserPlaylist {
         this.tracks = playlistTracks;
     }
 
-    public static class UserPlaylistBuilder {
+    public static class Builder {
         private String name;
         private String playlistStringId;
         private List<PlaylistTrack> playlistTracks;
 
-        public UserPlaylistBuilder name(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public UserPlaylistBuilder stringId(String playlistStringId) {
+        public Builder stringId(String playlistStringId) {
             this.playlistStringId = playlistStringId;
             return this;
         }
 
-        public UserPlaylistBuilder tracks(List<PlaylistTrack> playlistTracks) {
+        public Builder tracks(List<PlaylistTrack> playlistTracks) {
             this.playlistTracks = playlistTracks;
             return this;
         }

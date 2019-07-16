@@ -1,11 +1,9 @@
 package com.gpsy.externalApis.spotify.client;
 
-import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.MostFrequentTrack;
 import com.gpsy.domain.spotify.PlaylistTrack;
 import com.gpsy.domain.spotify.UserPlaylist;
 import com.gpsy.service.dbApiServices.spotify.FetchDataFromDbService;
-import com.wrapper.spotify.enums.ModelObjectType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -46,13 +44,13 @@ public class SpotifyClientTestSuite {
         //Given
         List<PlaylistTrack> playlistTrackList = new ArrayList<>();
         for(int i = 1; i < 4; i++ ) {
-            playlistTrackList.add(new PlaylistTrack.PlaylistTrackBuilder()
+            playlistTrackList.add(new PlaylistTrack.Builder()
                                                     .title("title" + i)
                                                     .artists("artist" + i)
                                                     .stringId("string" + i).build());
         }
 
-        UserPlaylist userPlaylist = new UserPlaylist.UserPlaylistBuilder()
+        UserPlaylist userPlaylist = new UserPlaylist.Builder()
                                                     .name("testName")
                                                     .stringId("test123")
                                                     .tracks(playlistTrackList).build();
@@ -69,13 +67,13 @@ public class SpotifyClientTestSuite {
         //Given
         List<PlaylistTrack> playlistTrackList = new ArrayList<>();
         for(int i = 1; i < 3; i++ ) {
-            playlistTrackList.add(new PlaylistTrack.PlaylistTrackBuilder()
+            playlistTrackList.add(new PlaylistTrack.Builder()
                                                     .title("title" + i)
                                                     .artists("artist" + i)
                                                     .stringId("string" + i).build());
         }
 
-        UserPlaylist userPlaylist = new UserPlaylist.UserPlaylistBuilder()
+        UserPlaylist userPlaylist = new UserPlaylist.Builder()
                                                     .name("testName")
                                                     .stringId("test123")
                                                     .tracks(playlistTrackList).build();
@@ -83,11 +81,11 @@ public class SpotifyClientTestSuite {
         String expectedArray = "[{\"uri\":\"spotify:track:string1\"},{\"uri\":\"spotify:track:string2\"}]";
 
         List<PlaylistTrack> playlistTrackList2 = new ArrayList<>();
-            playlistTrackList2.add(new PlaylistTrack.PlaylistTrackBuilder()
+            playlistTrackList2.add(new PlaylistTrack.Builder()
                                                      .title("title1")
                                                      .artists("artist1")
                                                      .stringId("string1").build());
-        UserPlaylist userPlaylist2 = new UserPlaylist.UserPlaylistBuilder()
+        UserPlaylist userPlaylist2 = new UserPlaylist.Builder()
                                                         .name("testName")
                                                         .stringId("test123")
                                                         .tracks(playlistTrackList2).build();
@@ -107,14 +105,16 @@ public class SpotifyClientTestSuite {
         //Given
         List<MostFrequentTrack> mostFrequentTracks = new ArrayList<>();
         for(int i = 1; i < 4; i++ ) {
-            mostFrequentTracks.add(new MostFrequentTrack.MostFrequentTrackBuilder()
+            mostFrequentTracks.add(new MostFrequentTrack.Builder()
                                                         .title("title" + i)
                                                         .artists("artist" + i)
                                                         .stringId("string" + i)
                                                         .popularity(i)
                                                         .build());
         }
-        when(fetchDataFromDbService.fetchMostFrequentTracks()).thenReturn(mostFrequentTracks);
+        when(fetchDataFromDbService.fetchMostFrequentTracks(0)).thenReturn(mostFrequentTracks);
+        when(fetchDataFromDbService.fetchMostFrequentTracks(1)).thenReturn(mostFrequentTracks);
+        when(fetchDataFromDbService.fetchMostFrequentTracks(2)).thenReturn(mostFrequentTracks);
 
         String expectedResponse = "";
         String expectedResponse1 = "string1";
