@@ -50,13 +50,13 @@ public class TrackMapperTestSuite {
     public void mapToRecentPlayedTrackDtoListTest() {
         //Given
         List<RecentPlayedTrack> recentPlayedTrackList = new ArrayList<>();
-        RecentPlayedTrack recentPlayedTrack1 = new RecentPlayedTrack.RecentPlayedTrackBuilder()
+        RecentPlayedTrack recentPlayedTrack1 = new RecentPlayedTrack.Builder()
                 .stringId("1234")
                 .title("Test_Title")
                 .artists("John")
                 .playDate(new Date(2019))
                 .build();
-        RecentPlayedTrack recentPlayedTrack2 = new RecentPlayedTrack.RecentPlayedTrackBuilder()
+        RecentPlayedTrack recentPlayedTrack2 = new RecentPlayedTrack.Builder()
                 .stringId("12343")
                 .title("Test_Title2")
                 .artists("John2")
@@ -79,13 +79,13 @@ public class TrackMapperTestSuite {
     public void mapToPopularTrackDtoList() {
         //Given
         List<PopularTrack> popularTracks = new ArrayList<>();
-        PopularTrack popularTrack1 = new PopularTrack.PopularTrackBuiilder()
+        PopularTrack popularTrack1 = new PopularTrack.Buiilder()
                 .stringId("123")
                 .title("Title1")
                 .artists("Artist1")
                 .popularity(124)
                 .build();
-        PopularTrack popularTrack2 = new PopularTrack.PopularTrackBuiilder()
+        PopularTrack popularTrack2 = new PopularTrack.Buiilder()
                 .stringId("122")
                 .title("Title2")
                 .artists("Artist2")
@@ -107,13 +107,13 @@ public class TrackMapperTestSuite {
     public void mapToRecommendedTrackDtoList() {
         //Given
         List<RecommendedTrack> recommendedTracks = new ArrayList<>();
-        RecommendedTrack recommendedTrack1 = new RecommendedTrack.RecommendedTrackBuilder()
+        RecommendedTrack recommendedTrack1 = new RecommendedTrack.Builder()
                 .stringId("123")
                 .title("TitleT1")
                 .artists("ArtistT1")
                 .sample("https://test.com")
                 .build();
-        RecommendedTrack recommendedTrack2 = new RecommendedTrack.RecommendedTrackBuilder()
+        RecommendedTrack recommendedTrack2 = new RecommendedTrack.Builder()
                 .stringId("124")
                 .title("TitleT2")
                 .artists("ArtistT2")
@@ -137,10 +137,10 @@ public class TrackMapperTestSuite {
 
         //Given
         List<PlaylistTrackDto> playlistTracksDtoList = new ArrayList<>();
-        PlaylistTrackDto testPlaylistTrackDto1 = new PlaylistTrackDto.PlaylistTrackDtoBuilder().title("Test_title1")
+        PlaylistTrackDto testPlaylistTrackDto1 = new PlaylistTrackDto.Builder().title("Test_title1")
                                                                     .artists("Test_artist1")
                                                                     .stringId("12345@").build();
-        PlaylistTrackDto testPlaylistTrackDto2 = new PlaylistTrackDto.PlaylistTrackDtoBuilder().title("Test_title2")
+        PlaylistTrackDto testPlaylistTrackDto2 = new PlaylistTrackDto.Builder().title("Test_title2")
                 .artists("Test_artist2")
                 .stringId("6789@").build();
 

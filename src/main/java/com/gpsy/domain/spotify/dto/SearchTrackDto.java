@@ -1,11 +1,7 @@
 package com.gpsy.domain.spotify.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
 
 @Getter
 public class SearchTrackDto {
@@ -29,28 +25,28 @@ public class SearchTrackDto {
         this.sample = sample;
     }
 
-    public static class SearchTrackDtoBuilder {
+    public static class Builder {
         private String trackStringId;
         private String title;
         private String artists;
         private String sample;
 
-        public SearchTrackDtoBuilder  stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public SearchTrackDtoBuilder  title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public SearchTrackDtoBuilder  aritsts(String artists) {
+        public Builder aritsts(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public SearchTrackDtoBuilder  sample(String sample) {
+        public Builder sample(String sample) {
             this.sample = sample;
             return this;
         }

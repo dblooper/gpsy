@@ -2,7 +2,6 @@ package com.gpsy.domain.spotify.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +16,7 @@ public class PopularTrackDto {
     @JsonProperty(value = "title")
     private String title;
 
-    @JsonProperty(value = "aritsts")
+    @JsonProperty(value = "artists")
     private String artists;
 
     @JsonProperty(value = "popularity")
@@ -30,28 +29,28 @@ public class PopularTrackDto {
         this.popularity = popularity;
     }
 
-    public static class PopularTrackDtoBuilder {
+    public static class Builder {
         private String trackStringId;
         private String title;
         private String artists;
         private int popularity;
 
-        public PopularTrackDtoBuilder stirngId(String trackStringId) {
+        public Builder stirngId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public PopularTrackDtoBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public PopularTrackDtoBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public PopularTrackDtoBuilder popularity(int popularity) {
+        public Builder popularity(int popularity) {
             this.popularity = popularity;
             return this;
         }

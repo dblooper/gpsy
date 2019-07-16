@@ -43,29 +43,29 @@ public class RecentPlayedTrack implements Comparable<RecentPlayedTrack> {
         this.playDate = playDate;
     }
 
-    public static class RecentPlayedTrackBuilder {
+    public static class Builder {
 
         private String trackStringId;
         private String title;
         private String artists;
         private Date playDate;
 
-        public RecentPlayedTrackBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public RecentPlayedTrackBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public RecentPlayedTrackBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public RecentPlayedTrackBuilder playDate(Date playDate) {
+        public Builder playDate(Date playDate) {
             this.playDate = playDate;
             return this;
         }

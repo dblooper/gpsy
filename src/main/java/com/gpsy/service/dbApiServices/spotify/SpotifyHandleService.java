@@ -15,8 +15,6 @@ import com.gpsy.service.mailService.EmailService;
 import com.gpsy.service.mailService.Mail;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,10 +43,10 @@ public class SpotifyHandleService {
     @Autowired
     private EmailService emailService;
 
-    public List<RecommendedTrack> returnRecommendedTracks() {
+    public List<RecommendedTrack> returnRecommendedTracks(int qty) {
         List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
         return trackMapper.mapToRecommendedTracks(tracksSimplified,
-                                                    InitialLimitValues.LIMIT_RECOMMENDED_TRACKS_ON_BOARD);
+                                                    qty);
     }
 
     public UserPlaylist updatePlaylistTracks(UserPlaylist userPlaylist) {
@@ -80,7 +78,7 @@ public class SpotifyHandleService {
     public void saveRecommendedPlaylistToSpotify() {
         RecommendedPlaylist recommendedPlaylistToSave = fetchDataFromDbService.fetchRecommendedPlaylist();
         List<PlaylistTrack> tracksToDelete = spotifyPlaylistMapper.mapToPlaylistTracks(recommendedPlaylistToSave.getPlaylistStringId());
-        spotifyClient.deletePlaylistTrack(new UserPlaylist.UserPlaylistBuilder()
+        spotifyClient.deletePlaylistTrack(new UserPlaylist.Builder()
                                                             .name(recommendedPlaylistToSave.getName())
                                                             .stringId(recommendedPlaylistToSave.getPlaylistStringId())
                                                             .tracks(tracksToDelete)

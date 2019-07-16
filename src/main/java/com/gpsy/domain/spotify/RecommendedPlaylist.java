@@ -49,28 +49,28 @@ public class RecommendedPlaylist {
         this.actual = actual;
     }
 
-    public static class RecommendedPlaylistBuilder {
+    public static class Builder {
         private String playlistStringId;
         private String name;
         private boolean actual;
         private List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
 
-        public RecommendedPlaylistBuilder stringId(String playlistStringId) {
+        public Builder stringId(String playlistStringId) {
             this.playlistStringId = playlistStringId;
             return this;
         }
 
-        public RecommendedPlaylistBuilder name(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public RecommendedPlaylistBuilder actual(boolean actual) {
+        public Builder actual(boolean actual) {
             this.actual = actual;
             return this;
         }
 
-        public RecommendedPlaylistBuilder playlistTracks(List<RecommendedPlaylistTrack> recommendedPlaylistTracks) {
+        public Builder playlistTracks(List<RecommendedPlaylistTrack> recommendedPlaylistTracks) {
             this.recommendedPlaylistTracks = recommendedPlaylistTracks;
             return this;
         }

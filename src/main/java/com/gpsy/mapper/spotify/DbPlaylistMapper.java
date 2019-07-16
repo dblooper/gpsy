@@ -20,7 +20,7 @@ public class DbPlaylistMapper {
 
     public List<PlaylistTrackDto> mapToPlaylistTrackDtos(List<PlaylistTrack> userPlaylistTracks) {
         return userPlaylistTracks.stream()
-                .map(track -> new PlaylistTrackDto.PlaylistTrackDtoBuilder()
+                .map(track -> new PlaylistTrackDto.Builder()
                                                 .stringId(track.getTrackStringId())
                                                 .title(track.getTitle())
                                                 .artists(track.getArtists())
@@ -30,7 +30,7 @@ public class DbPlaylistMapper {
 
     public List<UserPlaylistDto> mapToUserPlaylistsDto(List<UserPlaylist> userPlaylists) {
         return userPlaylists.stream()
-                .map(playlist -> new UserPlaylistDto.UserPlaylistDtoBuilder()
+                .map(playlist -> new UserPlaylistDto.Builder()
                                                     .name(playlist.getName())
                                                     .stringId(playlist.getPlaylistStringId())
                                                     .tracks( mapToPlaylistTrackDtos(playlist.getTracks()))
@@ -39,7 +39,7 @@ public class DbPlaylistMapper {
     }
 
     public RecommendedPlaylistDto mapToRecommendedPlaylistDto(RecommendedPlaylist recommendedPlaylist) {
-        return new RecommendedPlaylistDto.RecommendedPlaylistDtoBuilder()
+        return new RecommendedPlaylistDto.Builder()
                 .name(recommendedPlaylist.getName())
                 .stringId(recommendedPlaylist.getPlaylistStringId())
                 .playlistTracks(trackMapper.mapToRecommendedTrackForPlaylistDto(recommendedPlaylist.getRecommendedPlaylistTracks()))
@@ -49,7 +49,7 @@ public class DbPlaylistMapper {
     }
 
     public UserPlaylist mapRecommendedPlaylistToUserPlaylist(RecommendedPlaylist recommendedPlaylist) {
-        return new UserPlaylist.UserPlaylistBuilder()
+        return new UserPlaylist.Builder()
                                 .name(recommendedPlaylist.getName())
                                 .stringId(recommendedPlaylist.getPlaylistStringId())
                                 .tracks(trackMapper.mapRecommendedPlaylistTracksToPlaylistTracks(recommendedPlaylist.getRecommendedPlaylistTracks()))

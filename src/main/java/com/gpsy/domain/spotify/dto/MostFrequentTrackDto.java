@@ -2,13 +2,8 @@ package com.gpsy.domain.spotify.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Getter
@@ -34,28 +29,28 @@ public class MostFrequentTrackDto {
         this.popularity = popularity;
     }
 
-    public static class MostFrequentTrackDtoBuilder {
+    public static class Builder {
         private String trackStringId;
         private String title;
         private String artists;
         private Integer popularity;
 
-        public MostFrequentTrackDtoBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public MostFrequentTrackDtoBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public MostFrequentTrackDtoBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public MostFrequentTrackDtoBuilder popularity(int popularity) {
+        public Builder popularity(int popularity) {
             this.popularity = popularity;
             return this;
         }

@@ -3,13 +3,16 @@ package com.gpsy.controller;
 import com.gpsy.domain.spotify.dto.*;
 import com.gpsy.facade.SpotifyFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/v1/gpsy")
 @CrossOrigin("*")
 public class SpotifyController {
@@ -18,33 +21,33 @@ public class SpotifyController {
     private SpotifyFacade spotifyFacade;
 
     @GetMapping(value = "/tracks/search")
-    public List<SearchTrackDto> fetchSearchedTracks(@RequestParam String searchedItem) {
+    public List<SearchTrackDto> fetchSearchedTracks(@RequestParam @Size(min = 1, max = 20) String searchedItem) {
         return spotifyFacade.fetchSearchedTracks(searchedItem);
     }
 
     @GetMapping(value = "/tracks/spotify/popular")
-    public List<PopularTrackDto> fetchPopularTracks() {
-        return spotifyFacade.fetchPopularTracks();
+    public List<PopularTrackDto> fetchPopularTracks(@RequestParam @Max(20) @Min(1) int qty) {
+        return spotifyFacade.fetchPopularTracks(qty);
     }
 
     @GetMapping(value = "/tracks/recent")
-    public List<RecentPlayedTrackDto> fetchRecentTracks() {
-        return spotifyFacade.fetchRecentTracks();
+    public List<RecentPlayedTrackDto> fetchRecentTracks(@RequestParam @Max(50) @Min(1) int qty) {
+        return spotifyFacade.fetchRecentTracks(qty);
+    }
+
+    @GetMapping(value = "/tracks/frequent")
+    public List<MostFrequentTrackDto> fetchMostFrequentTracks(@RequestParam @Max(20) @Min(1) int qty) {
+        return spotifyFacade.fetchMostFrequentTracks(qty);
+    }
+
+    @GetMapping(value = "/tracks/recommended")
+    public List<RecommendedTrackDto> fetchRecommendedTracks(@RequestParam @Max(20) @Min(1) int qty) {
+        return spotifyFacade.fetchRecommendedTracks(qty);
     }
 
     @GetMapping(value = "/playlists/current")
     public List<UserPlaylistDto> fetchCurrentUserPlaylists() {
         return spotifyFacade.fetchCurrentUserPlaylists();
-    }
-
-    @GetMapping(value = "/tracks/frequent")
-    public List<MostFrequentTrackDto> fetchMostFrequentTracks() {
-        return spotifyFacade.fetchMostFrequentTracks();
-    }
-
-    @GetMapping(value = "/tracks/recommended")
-    public List<RecommendedTrackDto> fetchRecommendedTracks() {
-        return spotifyFacade.fetchRecommendedTracks();
     }
 
     @GetMapping(value = "/playlists/recommended")
@@ -62,13 +65,13 @@ public class SpotifyController {
         spotifyFacade.createNewPlaylist(playlistDto);
     }
 
-    @PutMapping(value = "/playlists/recommended/new")
-    public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam @Min(1) @Max(50) int qty) {
+    @PostMapping(value = "/playlists/recommended/new")
+    public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam @Min(1) @Max(50) Integer qty) {
         return spotifyFacade.updateFetchRecommendedPlaylist(qty);
     }
 
     @PutMapping(value = "/playlists/recommended/change")
-    public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam @Min(1) @Max(50) int qty) {
+    public RecommendedPlaylistDto changeQuantityOfRecommendedTracks(@RequestParam @Min(1) @Max(50) Integer qty) {
        return spotifyFacade.changeQuantityOfRecommendedTracks(qty);
     }
 

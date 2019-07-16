@@ -2,9 +2,7 @@ package com.gpsy.domain.spotify.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -29,28 +27,28 @@ public class RecommendedTrackDto {
         this.sample = sample;
     }
 
-    public static class RecommendedTrackDtoBuilder {
+    public static class Builder {
         private String trackStringId;
         private String title;
         private String artists;
         private String sample;
 
-        public RecommendedTrackDtoBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public RecommendedTrackDtoBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
 
-        public RecommendedTrackDtoBuilder aritsts(String artists) {
+        public Builder aritsts(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public RecommendedTrackDtoBuilder sample(String sample) {
+        public Builder sample(String sample) {
             this.sample = sample;
             return this;
         }

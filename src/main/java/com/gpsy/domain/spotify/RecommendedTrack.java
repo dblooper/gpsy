@@ -1,6 +1,5 @@
 package com.gpsy.domain.spotify;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +32,7 @@ public class RecommendedTrack {
         this.sample = sample;
     }
 
-    public static class RecommendedTrackBuilder {
+    public static class Builder {
 
         private String trackStringId;
 
@@ -44,23 +43,23 @@ public class RecommendedTrack {
         private String sample;
 
 
-        public RecommendedTrackBuilder stringId(String trackStringId) {
+        public Builder stringId(String trackStringId) {
             this.trackStringId = trackStringId;
             return this;
         }
 
-        public RecommendedTrackBuilder title(String title) {
+        public Builder title(String title) {
             this.title = title;
             return this;
 
         }
 
-        public RecommendedTrackBuilder artists(String artists) {
+        public Builder artists(String artists) {
             this.artists = artists;
             return this;
         }
 
-        public RecommendedTrackBuilder sample(String sample) {
+        public Builder sample(String sample) {
             this.sample = sample;
             return this;
         }

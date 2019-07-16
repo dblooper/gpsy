@@ -10,7 +10,6 @@ import com.gpsy.service.dbApiServices.spotify.FetchDataFromDbService;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.special.SearchResult;
-import com.wrapper.spotify.model_objects.special.SnapshotResult;
 import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.browse.GetRecommendationsRequest;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
@@ -22,10 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -81,7 +80,7 @@ public class SpotifyClient {
 
         try {
             GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest = spotifyAuthorizator.getSpotifyApi().getCurrentUsersRecentlyPlayedTracks()
-                    .limit(InitialLimitValues.LIMIT_RECENT)
+                    .limit(InitialLimitValues.LIMIT_RECENT_FROM_SPOTIFY)
                     .build();
             final PagingCursorbased<PlayHistory> historyOfPlays = getCurrentUsersRecentlyPlayedTracksRequest.execute();
             PlayHistory[] tracksArray = historyOfPlays.getItems();
@@ -217,10 +216,9 @@ public class SpotifyClient {
 
     protected String popularTracksMerge(int limit) {
 
-        List<MostFrequentTrack> mostFrequentTracks = fetchDataFromDbService.fetchMostFrequentTracks();
+        List<MostFrequentTrack> mostFrequentTracks = fetchDataFromDbService.fetchMostFrequentTracks(limit);
 
         if(mostFrequentTracks.size() > 0 ) {
-//            Collections.sort(mostFrequentTracks, Collections.reverseOrder());
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0; i < limit; i++) {

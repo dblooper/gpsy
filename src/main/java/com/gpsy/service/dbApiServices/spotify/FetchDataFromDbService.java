@@ -47,20 +47,20 @@ public class FetchDataFromDbService {
     @Autowired
     private TrackMapper trackMapper;
 
-    public List<PopularTrack> fetchPopularTracks() {
+    public List<PopularTrack> fetchPopularTracks(int qty) {
         saveSpotifyDataToDbService.savePopularTracks();
         return spotifyPopularTrackRepository.findAll().stream()
-                .limit(InitialLimitValues.LIMIT_POPULAR)
+                .limit(qty)
                 .sorted(Collections.reverseOrder())
                 .collect(Collectors.toList());
     }
 
-    public List<RecentPlayedTrack> fetchRecentPlayedTracks() {
+    public List<RecentPlayedTrack> fetchRecentPlayedTracks(int qty) {
         saveSpotifyDataToDbService.saveRecentPlayedTracks();
         List<RecentPlayedTrack> recentPlayedTracks = spotifyRecentPlayedTrackRepository.findAll();
         Collections.sort(recentPlayedTracks, Collections.reverseOrder());
         return recentPlayedTracks.stream()
-                .limit(InitialLimitValues.LIMIT_RECENT_FROM_DB)
+                .limit(qty)
                 .collect(Collectors.toList());
     }
 
@@ -95,10 +95,10 @@ public class FetchDataFromDbService {
         }
     }
 
-    public List<MostFrequentTrack> fetchMostFrequentTracks() {
+    public List<MostFrequentTrack> fetchMostFrequentTracks(int qty) {
         List<MostFrequentTrack> mostFrequentTracks = new ArrayList<>();
         saveSpotifyByDbDataMostFrequentTracks();
-        Pageable pageable = PageRequest.of(0, InitialLimitValues.LIMIT_POPULAR);
+        Pageable pageable = PageRequest.of(0, qty);
         mostFrequentTracks.addAll(dbMostFrequentTracksRepository.findAllByPopularityGreaterThanOrderByPopularityDesc(0, pageable));
         mostFrequentTracks.sort(Collections.reverseOrder());
         return mostFrequentTracks;
@@ -111,7 +111,7 @@ public class FetchDataFromDbService {
         List<RecommendedPlaylist> recommendedPlaylists = recommendedPlaylistRepository.findAll();
 
             if(recommendedPlaylists.size() == 0) {
-                return recommendedPlaylistRepository.save(new RecommendedPlaylist.RecommendedPlaylistBuilder()
+                return recommendedPlaylistRepository.save(new RecommendedPlaylist.Builder()
                                                                                  .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
                                                                                  .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME)
                                                                                  .actual(true)
@@ -121,7 +121,7 @@ public class FetchDataFromDbService {
                 RecommendedPlaylist playlistToEdit = recommendedPlaylistRepository.findByActualTrue();
                 playlistToEdit.setActual(false);
 
-                return recommendedPlaylistRepository.save(new RecommendedPlaylist.RecommendedPlaylistBuilder()
+                return recommendedPlaylistRepository.save(new RecommendedPlaylist.Builder()
                         .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
                         .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME)
                         .actual(true)
@@ -142,7 +142,7 @@ public class FetchDataFromDbService {
     }
 
     public RecommendedPlaylist fetchRecommendedPlaylist() {
-        return Optional.ofNullable(recommendedPlaylistRepository.findByActualTrue()).orElse(new RecommendedPlaylist.RecommendedPlaylistBuilder()
+        return Optional.ofNullable(recommendedPlaylistRepository.findByActualTrue()).orElse(new RecommendedPlaylist.Builder()
                                                                                                                     .stringId("n/a")
                                                                                                                     .name("n/a")
                                                                                                                     .actual(false)

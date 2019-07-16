@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,7 +33,7 @@ public class SaveSpotifyDataToDbServiceTestSuite {
     @Test
     public void saveOnePopularTrackTest() {
         //Given
-        PopularTrack popularTrack = new PopularTrack.PopularTrackBuiilder()
+        PopularTrack popularTrack = new PopularTrack.Buiilder()
                 .artists("artist")
                 .popularity(1)
                 .stringId("123")
@@ -66,7 +65,7 @@ public class SaveSpotifyDataToDbServiceTestSuite {
         List<Track> spotifyTracks = new ArrayList<>();
         List<PopularTrack> popularTracks = new ArrayList<>();
         for(int i = 1; i <=10; i++) {
-            popularTracks.add(new PopularTrack.PopularTrackBuiilder()
+            popularTracks.add(new PopularTrack.Buiilder()
                     .artists("artist")
                     .popularity(1+i)
                     .stringId("123" + i)
@@ -95,13 +94,13 @@ public class SaveSpotifyDataToDbServiceTestSuite {
         saveSpotifyDataToDbService.savePopularTracks();
 
         //Then
-        verify(spotifyPopularTrackRepository, times(0)).save(new PopularTrack.PopularTrackBuiilder()
+        verify(spotifyPopularTrackRepository, times(0)).save(new PopularTrack.Buiilder()
                 .artists("artist")
                 .popularity(3)
                 .stringId("1232")
                 .title("test")
                 .build());
-        verify(spotifyPopularTrackRepository, times(0)).save(new PopularTrack.PopularTrackBuiilder()
+        verify(spotifyPopularTrackRepository, times(0)).save(new PopularTrack.Buiilder()
                 .artists("artist")
                 .popularity(4)
                 .stringId("1233")
@@ -110,11 +109,4 @@ public class SaveSpotifyDataToDbServiceTestSuite {
 
     }
 
-    @Test
-    public void saveRecentPlayedTracks() {
-    }
-
-    @Test
-    public void saveUserPlaylists() {
-    }
 }
