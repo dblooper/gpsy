@@ -3,7 +3,7 @@ package com.gpsy.service.dbApiServices.lyrics;
 import com.gpsy.domain.lyrics.Library;
 import com.gpsy.domain.lyrics.LyricsInLibrary;
 import com.gpsy.exceptions.LibraryNotFoundException;
-import com.gpsy.repository.audd.LibraryRepository;
+import com.gpsy.repository.lyrics.LibraryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

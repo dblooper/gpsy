@@ -4,19 +4,15 @@ import com.gpsy.domain.lyrics.DbLyrics;
 import com.gpsy.domain.lyrics.dto.LyricsBaseDto;
 import com.gpsy.domain.lyrics.dto.LyricsDto;
 import com.gpsy.domain.lyrics.dto.TrackInfoForLyricsDto;
-import com.gpsy.exceptions.MusiXmatchServerResponseException;
 import com.gpsy.externalApis.musiXmatchApi.client.MusiXmatchClient;
 import com.gpsy.mapper.lyrics.LyricsMapper;
-import com.gpsy.mapper.spotify.TrackMapper;
-import com.gpsy.repository.audd.LyricsDbRepository;
+import com.gpsy.repository.lyrics.LyricsDbRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;

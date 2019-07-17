@@ -1,11 +1,9 @@
 package com.gpsy.domain.spotify;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "frequent_tracks_calculated")

@@ -1,6 +1,5 @@
 package com.gpsy.service.dbApiServices.spotify;
 
-import com.gpsy.config.InitialLimitValues;
 import com.gpsy.domain.spotify.PopularTrack;
 import com.gpsy.domain.spotify.RecentPlayedTrack;
 import com.gpsy.domain.spotify.UserPlaylist;

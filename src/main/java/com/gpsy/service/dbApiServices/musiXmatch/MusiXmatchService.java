@@ -2,12 +2,10 @@ package com.gpsy.service.dbApiServices.musiXmatch;
 
 import com.gpsy.domain.lyrics.DbLyrics;
 import com.gpsy.domain.lyrics.dto.LyricsBaseDto;
-import com.gpsy.domain.lyrics.dto.LyricsDto;
 import com.gpsy.domain.lyrics.dto.TrackInfoForLyricsDto;
-import com.gpsy.exceptions.MusiXmatchServerResponseException;
 import com.gpsy.externalApis.musiXmatchApi.client.MusiXmatchClient;
 import com.gpsy.mapper.lyrics.LyricsMapper;
-import com.gpsy.repository.audd.LyricsDbRepository;
+import com.gpsy.repository.lyrics.LyricsDbRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
