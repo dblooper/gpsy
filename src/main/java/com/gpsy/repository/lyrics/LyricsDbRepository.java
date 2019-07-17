@@ -1,4 +1,4 @@
-package com.gpsy.repository.audd;
+package com.gpsy.repository.lyrics;
 
 import com.gpsy.domain.lyrics.DbLyrics;
 import org.springframework.data.jpa.repository.JpaRepository;

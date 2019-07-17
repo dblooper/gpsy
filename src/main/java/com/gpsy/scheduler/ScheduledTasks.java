@@ -1,7 +1,6 @@
 package com.gpsy.scheduler;
 
 import com.gpsy.config.MailMessageConfiguration;
-import com.gpsy.externalApis.spotify.client.SpotifyAuthorizator;
 import com.gpsy.service.dbApiServices.spotify.SaveSpotifyDataToDbService;
 import com.gpsy.service.dbApiServices.spotify.SpotifyHandleService;
 import org.springframework.beans.factory.annotation.Autowired;
