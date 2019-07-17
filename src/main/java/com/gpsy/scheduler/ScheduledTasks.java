@@ -25,7 +25,8 @@ public class ScheduledTasks {
         spotifyHandleService.saveRecommendedPlaylistToSpotify();
     }
 
-    @Scheduled(fixedRate = 9000000) //save to db recently played tracks every 2,5 h(1 track 3 min, max tracks 50 -> 150min)
+    //save to db recently played tracks every 2,5 h(1 track 3 min, max tracks 50 -> 150min)
+    @Scheduled(fixedRate = 9000000)
     private void saveToDbRecentTracks() {
         saveSpotifyDataToDbService.saveRecentPlayedTracks();
     }
