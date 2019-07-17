@@ -123,12 +123,12 @@ public class SpotifyClient {
         return playlistTracks;
     }
 
-    public List<TrackSimplified> getRecommendedTracks() {
+    public List<TrackSimplified> getRecommendedTracks(int qty) {
         List<TrackSimplified> recommendedTracks = new ArrayList<>();
 
         try {
             final GetRecommendationsRequest getRecommendationsRequest = spotifyAuthorizator.getSpotifyApi().getRecommendations()
-                    .limit(InitialLimitValues.LIMIT_FETCHING_RECOMMENDED_FROM_SPOTIFY)
+                    .limit(qty)
                     .seed_tracks(popularTracksMerge(InitialLimitValues.LIMIT_TOP_TRACK_SIMILAR_TO_RECOMMEND))
                     .build();
             final Recommendations recommendations = getRecommendationsRequest.execute();
@@ -166,7 +166,7 @@ public class SpotifyClient {
         }
     }
 
-    public void updatePlaylistDetails(UserPlaylist updatedPlaylist) {
+    public UserPlaylist updatePlaylistDetails(UserPlaylist updatedPlaylist) {
 
         final ChangePlaylistsDetailsRequest changePlaylistsDetailsRequest = spotifyAuthorizator.getSpotifyApi()
                 .changePlaylistsDetails(updatedPlaylist.getPlaylistStringId())
@@ -174,9 +174,11 @@ public class SpotifyClient {
                 .build();
         try {
             changePlaylistsDetailsRequest.execute();
+            return updatedPlaylist;
         } catch(IOException | SpotifyWebApiException e) {
             LOGGER.error(e.getMessage(), e);
         }
+        return new UserPlaylist.Builder().name("Not changed, spotify api error").stringId(updatedPlaylist.getPlaylistStringId()).tracks(new ArrayList<>()).build();
     }
 
     public void createPlaylist(UserPlaylist newPlaylist) {

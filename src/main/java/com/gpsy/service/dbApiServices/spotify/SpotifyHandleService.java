@@ -17,6 +17,7 @@ import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,31 +45,28 @@ public class SpotifyHandleService {
     private EmailService emailService;
 
     public List<RecommendedTrack> returnRecommendedTracks(int qty) {
-        List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks();
-        return trackMapper.mapToRecommendedTracks(tracksSimplified,
-                                                    qty);
+        List<TrackSimplified> tracksSimplified = spotifyClient.getRecommendedTracks(qty);
+        return trackMapper.mapToRecommendedTracks(tracksSimplified);
     }
 
-    public UserPlaylist updatePlaylistTracks(UserPlaylist userPlaylist) {
+    public void updatePlaylistTracks(UserPlaylist userPlaylist) {
         spotifyClient.updatePlaylistTracks(userPlaylist);
-        return userPlaylist;
     }
 
-    public UserPlaylist deletePlaylistTrack(UserPlaylist userPlaylist) {
+    public void deletePlaylistTrack(UserPlaylist userPlaylist) {
         spotifyClient.deletePlaylistTrack(userPlaylist);
-        return userPlaylist;
     }
 
     public UserPlaylist updatePlaylistName(UserPlaylist newUserPlaylist) {
-        if(!newUserPlaylist.getPlaylistStringId().equals("2ptqwasYqv1677gL4OEkIL")) {
-            spotifyClient.updatePlaylistDetails(newUserPlaylist);
+        if(!newUserPlaylist.getPlaylistStringId().equals(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)) {
+            return spotifyClient.updatePlaylistDetails(newUserPlaylist);
         }
-        return newUserPlaylist;
+        return new UserPlaylist.Builder().tracks(new ArrayList<>()).name("Not changed, not allowed id").stringId(newUserPlaylist.getPlaylistStringId()).build();
     }
 
-    public UserPlaylist createPlaylist(UserPlaylist userPlaylist) {
+    public void createPlaylist(UserPlaylist userPlaylist) {
         spotifyClient.createPlaylist(userPlaylist);
-        return saveSpotifyDataToDbService.saveUserPlaylists().get(0);
+        saveSpotifyDataToDbService.saveUserPlaylists();
     }
 
     public List<SearchTrackDto> searchForTracks(String searchedItem) {

@@ -106,7 +106,7 @@ public class FetchDataFromDbService {
 
     public RecommendedPlaylist updateFetchRecommendedPlaylistFromDb(int numberOfTracks) {
 
-        List<RecommendedPlaylistTrack> recommendedTracks = trackMapper.mapToRecommendedPlaylistTracks(spotifyClient.getRecommendedTracks(), numberOfTracks);
+        List<RecommendedPlaylistTrack> recommendedTracks = trackMapper.mapToRecommendedPlaylistTracks(spotifyClient.getRecommendedTracks(numberOfTracks), numberOfTracks);
 
         List<RecommendedPlaylist> recommendedPlaylists = recommendedPlaylistRepository.findAll();
 
@@ -138,7 +138,8 @@ public class FetchDataFromDbService {
                                                                                                 .collect(Collectors.toList());
         recommendedPlaylistsToEdit.setRecommendedPlaylistTracks(recommendedTracksToLimit);
         recommendedPlaylistsToEdit.setNumberOfTracks();
-        return recommendedPlaylistRepository.save(recommendedPlaylistsToEdit);
+        recommendedPlaylistRepository.save(recommendedPlaylistsToEdit);
+        return recommendedPlaylistsToEdit;
     }
 
     public RecommendedPlaylist fetchRecommendedPlaylist() {

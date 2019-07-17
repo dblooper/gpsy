@@ -20,25 +20,10 @@ import static org.mockito.Mockito.when;
 public class SpotifyClientTestSuite {
 
     @Mock
-    private SpotifyAuthorizator spotifyAuthorizator;
-
-    @Mock
     private FetchDataFromDbService fetchDataFromDbService;
 
     @InjectMocks
     private SpotifyClient spotifyClient;
-
-    @Test
-//    public void shouldReturnTrack() {
-//        //Given
-//        String searchedItem = "Test";
-//        when(spotifyAuthorizator.getSpotifyApi().searchItem(searchedItem, ModelObjectType.TRACK.getType())
-//                .limit(InitialLimitValues.LIMIT_FREE_SEARCH_TRACKS)
-//                .build()).thenReturn()
-//        //When
-//        //Then
-//
-//    }
 
     public void shouldReturnTrackUrisForSpotifyRequest() {
         //Given

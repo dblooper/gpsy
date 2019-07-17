@@ -76,7 +76,7 @@ public class TrackMapperTestSuite {
     }
 
     @Test
-    public void mapToPopularTrackDtoList() {
+    public void mapToPopularTrackDtoListTest() {
         //Given
         List<PopularTrack> popularTracks = new ArrayList<>();
         PopularTrack popularTrack1 = new PopularTrack.Buiilder()
@@ -104,7 +104,7 @@ public class TrackMapperTestSuite {
     }
 
     @Test
-    public void mapToRecommendedTrackDtoList() {
+    public void mapToRecommendedTrackDtoListTest() {
         //Given
         List<RecommendedTrack> recommendedTracks = new ArrayList<>();
         RecommendedTrack recommendedTrack1 = new RecommendedTrack.Builder()
@@ -133,7 +133,7 @@ public class TrackMapperTestSuite {
     }
 
     @Test
-    public void mapToPlaylistTrack() {
+    public void mapToPlaylistTrackTest() {
 
         //Given
         List<PlaylistTrackDto> playlistTracksDtoList = new ArrayList<>();
@@ -154,35 +154,5 @@ public class TrackMapperTestSuite {
         assertEquals("Test_title1", playlistTracks.get(0).getTitle());
         assertEquals("6789@", playlistTracks.get(1).getTrackStringId());
         assertEquals("Test_artist2", playlistTracks.get(1).getArtists());
-    }
-
-    @Test
-    public void mapToRecommendedTrackForPlaylistDto() {
-    }
-
-    @Test
-    public void mapPopularTrackToPopularTrackDtoList() {
-    }
-
-    @Test
-    public void mapToSearchTrackDto() {
-    }
-
-    @Test
-    public void mapToRecommendedPlaylistTracks() {
-    }
-
-    @Test
-    public void mapRecommendedPlaylistTracksToPlaylistTracks() {
-    }
-
-    @Test
-    public void mapToRecommendedTracks() {
-    }
-
-    @Test
-    public void mapRecommendedPlaylistToUserPlaylist() {
-
-
     }
 }

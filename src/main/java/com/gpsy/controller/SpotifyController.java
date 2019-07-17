@@ -65,7 +65,7 @@ public class SpotifyController {
         spotifyFacade.createNewPlaylist(playlistDto);
     }
 
-    @PostMapping(value = "/playlists/recommended/new")
+    @PutMapping(value = "/playlists/recommended/new")
     public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam @Min(1) @Max(50) Integer qty) {
         return spotifyFacade.updateFetchRecommendedPlaylist(qty);
     }
