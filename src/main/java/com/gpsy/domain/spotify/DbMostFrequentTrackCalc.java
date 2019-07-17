@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "temp")
+@Table(name = "frequent_tracks_calculated")
 @NoArgsConstructor
 @Getter
 public class DbMostFrequentTrackCalc {
@@ -43,7 +43,7 @@ public class DbMostFrequentTrackCalc {
         return trackStringId.hashCode();
     }
 
-    //Na potrzeeby testow konstruktor, nie tworzono buildera
+    //Na potrzeby testow konstruktor, nie tworzono buildera
     public DbMostFrequentTrackCalc(String trackStringId, String title, String artists, int popularity) {
         this.trackStringId = trackStringId;
         this.title = title;

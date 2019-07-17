@@ -1,7 +1,7 @@
 package com.gpsy.config;
 
 public class InitialLimitValues {
-    public static final int LIMIT_RECENT_FROM_SPOTIFY = 20;
+    public static final int LIMIT_RECENT_FROM_SPOTIFY = 10;
     public static final int LIMIT_POPULAR = 20;
     public static final int LIMIT_FETCHING_RECOMMENDED_FROM_SPOTIFY = 20;
     public static final int LIMIT_FETCHING_PLAYLIST_TRACKS_FROM_SPOTIFY = 50;

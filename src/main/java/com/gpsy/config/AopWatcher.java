@@ -37,7 +37,7 @@ public class AopWatcher {
         LOGGER.info("A new authorization token has been successfully set!");
     }
 
-    @AfterReturning("execution(public * com.gpsy.service.dbApiServices.spotify.SpotifyHandleService.saveRecommendedPlaylistToSpotify())")
+    @AfterReturning("execution(public * com.gpsy.externalApis.spotify.client.SpotifyClient.updatePlaylistTracks(..))")
     public void announceSettingNewPlaylist() {
         LocalDateTime dateTime = LocalDateTime.now();
         String dateTimeFotmatted = dateTime.format(DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss"));
