@@ -48,7 +48,7 @@ public class SaveSpotifyDataToDbService {
             for (Track spotifyTrack : spotifyClient.getSpotifyPopularTracks()) {
                 savedTracks.add(spotifyPopularTrackRepository.save(trackMapper.mapSpotifyTrackToDbPopularTrack(spotifyTrack)));
             }
-            Collections.sort(savedTracks, Collections.reverseOrder());
+            return;
         }
 
         for(PopularTrack popularTrack : storedTracks) {
@@ -72,6 +72,7 @@ public class SaveSpotifyDataToDbService {
             for (PlayHistory recentTrack : recentTracks) {
                 spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(recentTrack));
             }
+            return;
         }
 
         for (PlayHistory spotifyTrack : recentTracks) {
@@ -82,13 +83,12 @@ public class SaveSpotifyDataToDbService {
     }
 
     void saveUserPlaylists() {
-        List<UserPlaylist> savedPlaylists = new ArrayList<>();
         List<UserPlaylist> userPlaylists = spotifyUserPlaylistsRepository.findAll();
         List<PlaylistSimplified> spotifyUserPlaylists = spotifyClient.getUserPlaylists();
 
         for (PlaylistSimplified playlistSimplified : spotifyUserPlaylists) {
                 if(!userPlaylists.contains(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified))) {
-                    savedPlaylists.add(spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
+                    spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified));
             }
         }
 
@@ -97,13 +97,13 @@ public class SaveSpotifyDataToDbService {
                 for (UserPlaylist userPlaylist : userPlaylists) {
                     if (userPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && userPlaylist.getTracks().size() != playlistSimplified.getTracks().getTotal()) {
                         spotifyUserPlaylistsRepository.delete(userPlaylist);
-                        savedPlaylists.add(spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified)));
+                        spotifyUserPlaylistsRepository.save(spotifyPlaylistMapper.mapSpotifyPlaylistToDbUserPlaylist(playlistSimplified));
                     }
 
                     if(userPlaylist.getPlaylistStringId().equals(playlistSimplified.getId()) && !userPlaylist.getName().equals(playlistSimplified.getName())) {
                             UserPlaylist playlistToUpdate = spotifyUserPlaylistsRepository.findByPlaylistStringId(userPlaylist.getPlaylistStringId());
                             userPlaylist.setName(playlistSimplified.getName());
-                            savedPlaylists.add(spotifyUserPlaylistsRepository.save(playlistToUpdate));
+                            spotifyUserPlaylistsRepository.save(playlistToUpdate);
                     }
                 }
             }

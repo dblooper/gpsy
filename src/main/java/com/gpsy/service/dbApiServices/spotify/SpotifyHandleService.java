@@ -14,6 +14,8 @@ import com.gpsy.mapper.spotify.TrackMapper;
 import com.gpsy.service.mailService.EmailService;
 import com.gpsy.service.mailService.Mail;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import java.util.List;
 
 @Service
 public class SpotifyHandleService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpotifyHandleService.class);
 
     @Autowired
     private SpotifyClient spotifyClient;
@@ -75,6 +79,10 @@ public class SpotifyHandleService {
 
     public void saveRecommendedPlaylistToSpotify() {
         RecommendedPlaylist recommendedPlaylistToSave = fetchDataFromDbService.fetchRecommendedPlaylist();
+        if(recommendedPlaylistToSave.getPlaylistStringId().equals("n/a")) {
+            LOGGER.info("The playlist not generated. Too few data in database");
+            return;
+        }
         List<PlaylistTrack> tracksToDelete = spotifyPlaylistMapper.mapToPlaylistTracks(recommendedPlaylistToSave.getPlaylistStringId());
         spotifyClient.deletePlaylistTrack(new UserPlaylist.Builder()
                                                             .name(recommendedPlaylistToSave.getName())

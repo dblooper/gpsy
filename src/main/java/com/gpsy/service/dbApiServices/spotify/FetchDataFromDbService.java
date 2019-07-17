@@ -77,6 +77,7 @@ public class FetchDataFromDbService {
             for(DbMostFrequentTrackCalc dbMostFrequentTrackCalc : dbMostFrequentTrackCalcs) {
                 dbMostFrequentTracksRepository.save(trackDbMapper.mapToMostFrequentTrack(dbMostFrequentTrackCalc));
             }
+            return;
         }
 
         for(DbMostFrequentTrackCalc dbMostFrequentTrackCalc : dbMostFrequentTrackCalcs){

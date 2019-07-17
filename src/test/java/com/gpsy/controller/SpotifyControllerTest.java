@@ -299,7 +299,7 @@ public class SpotifyControllerTest {
         when(spotifyFacade.updateFetchRecommendedPlaylist(15)).thenReturn(recommendedPlaylistDto);
 
         //When/Then
-        mockMvc.perform(post("/v1/gpsy/playlists/recommended/new")
+        mockMvc.perform(put("/v1/gpsy/playlists/recommended/new")
                 .param("qty", "15"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Same_playlist")))

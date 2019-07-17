@@ -1,5 +1,6 @@
 package com.gpsy.scheduler;
 
+import com.gpsy.config.MailMessageConfiguration;
 import com.gpsy.externalApis.spotify.client.SpotifyAuthorizator;
 import com.gpsy.service.dbApiServices.spotify.SaveSpotifyDataToDbService;
 import com.gpsy.service.dbApiServices.spotify.SpotifyHandleService;
@@ -19,7 +20,7 @@ public class ScheduledTasks {
     private SaveSpotifyDataToDbService saveSpotifyDataToDbService;
 
 //    @Scheduled(fixedRate = 60000)
-    //    @Scheduled(cron = MailMessageConfiguration.SCHEDULING_CRON)//every monday at 7:00
+    @Scheduled(cron = MailMessageConfiguration.SCHEDULING_CRON)
     private void sendNewPlaylistToSpotifyWithEmail() {
         spotifyHandleService.saveRecommendedPlaylistToSpotify();
     }
