@@ -71,7 +71,7 @@ public class SpotifyPlaylistMapperTestSuite {
     }
 
     @Test
-    public void mapToDbUserPlaylist() {
+    public void mapToDbUserPlaylistTest() {
         //Given
         List<PlaylistTrackDto> playlistTrackDtoList = new ArrayList<>();
         PlaylistTrackDto playlistTrackDto1 = new PlaylistTrackDto.Builder()

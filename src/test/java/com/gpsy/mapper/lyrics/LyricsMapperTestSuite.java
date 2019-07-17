@@ -31,7 +31,7 @@ public class LyricsMapperTestSuite {
     }
 
     @Test
-    public void mapToLyricsDto() {
+    public void mapToLyricsDtoTest() {
         //Given
         DbLyrics dbLyrics = new DbLyrics("Test_title", "Test_artist", "Test_lyrics");
 

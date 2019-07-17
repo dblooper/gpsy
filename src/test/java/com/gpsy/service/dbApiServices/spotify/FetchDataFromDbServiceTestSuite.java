@@ -1,18 +1,13 @@
 package com.gpsy.service.dbApiServices.spotify;
 
 import com.gpsy.config.InitialLimitValues;
-import com.gpsy.domain.spotify.DbMostFrequentTrackCalc;
-import com.gpsy.domain.spotify.MostFrequentTrack;
-import com.gpsy.domain.spotify.RecentPlayedTrack;
-import com.gpsy.domain.spotify.RecommendedPlaylist;
+import com.gpsy.domain.spotify.*;
 import com.gpsy.externalApis.spotify.client.SpotifyClient;
 import com.gpsy.mapper.spotify.TrackMapper;
 import com.gpsy.mapper.spotify.database.TrackDbMapper;
 import com.gpsy.repository.spotify.DbMostFrequentTracksRepository;
 import com.gpsy.repository.spotify.RecommendedPlaylistRepository;
 import com.gpsy.repository.spotify.SpotifyRecentPlayedTrackRepository;
-import javafx.beans.binding.When;
-import net.bytebuddy.matcher.MethodParametersMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -50,11 +45,7 @@ public class FetchDataFromDbServiceTestSuite {
     FetchDataFromDbService fetchDataFromDbService;
 
     @Test
-    public void fetchPopularTracks() {
-    }
-
-    @Test
-    public void fetchRecentPlayedTracks() {
+    public void shouldFetchRecentPlayedTracks() {
         //Given
         List<RecentPlayedTrack> recentPlayedTrackList = new ArrayList<>();
         for(int i = 1; i<=15; i++) {
@@ -67,7 +58,6 @@ public class FetchDataFromDbServiceTestSuite {
             );
         }
 
-        when(saveSpotifyDataToDbService.saveRecentPlayedTracks()).thenReturn(recentPlayedTrackList);
         when(spotifyRecentPlayedTrackRepository.findAll()).thenReturn(recentPlayedTrackList);
 
         //When
@@ -79,11 +69,11 @@ public class FetchDataFromDbServiceTestSuite {
     }
 
     @Test
-    public void fetchUserPlaylists() {
+    public void shouldFetchUserPlaylists() {
     }
 
     @Test
-    public void saveSpotifyByDbDataMostFrequentTrack() {
+    public void shouldSaveSpotifyByDbDataMostFrequentTrack() {
         //Given
         List<DbMostFrequentTrackCalc> dbMostFrequentTrackCalcList = new ArrayList<>();
         List<MostFrequentTrack> mostFrequentTracks = new ArrayList<>();
@@ -122,7 +112,7 @@ public class FetchDataFromDbServiceTestSuite {
     }
 
     @Test
-    public void fetchMostFrequentTracks() {
+    public void shouldFetchMostFrequentTracks() {
         //Given
         List<MostFrequentTrack> mostFrequentTracks = new ArrayList<>();
         for(int i = 1; i<=8; i++) {
@@ -146,14 +136,14 @@ public class FetchDataFromDbServiceTestSuite {
     }
 
     @Test
-    public void updateFetchRecommendedPlaylistFromDb() {
+    public void shouldUpdateFetchRecommendedPlaylistFromDb() {
         //Given
         RecommendedPlaylist newRecommendedPlaylist = new RecommendedPlaylist.Builder()
                 .actual(true)
                 .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
                 .playlistTracks(new ArrayList<>())
                 .name(InitialLimitValues.RECOMMENDED_PLAYLIST_NAME).build();
-         when(spotifyClient.getRecommendedTracks()).thenReturn(new ArrayList<>());
+         when(spotifyClient.getRecommendedTracks(5)).thenReturn(new ArrayList<>());
          when(recommendedPlaylistRepository.findAll()).thenReturn(new ArrayList<>());
          when(trackMapper.mapToRecommendedPlaylistTracks(new ArrayList<>(), 5)).thenReturn(new ArrayList<>());
          when(recommendedPlaylistRepository.save(newRecommendedPlaylist)).thenReturn(newRecommendedPlaylist);
@@ -165,5 +155,34 @@ public class FetchDataFromDbServiceTestSuite {
         assertEquals("Tygodniowka", fetchedRecommendedPlaylist.getName());
         assertEquals(0, fetchedRecommendedPlaylist.getNumberOfTracks());
         assertTrue(fetchedRecommendedPlaylist.isActual());
+    }
+
+    @Test
+    public void shouldChangeNumberOfTracks() {
+        List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
+        for(int i = 1; i <= 10; i++) {
+            recommendedPlaylistTracks.add(new RecommendedPlaylistTrack.Builder()
+                    .title("test_title" + i)
+                    .artists("artist"+i)
+                    .stringId("id" + i)
+                    .sample("http://test" + i + ".test")
+                    .build()
+            );
+        }
+        RecommendedPlaylist recommendedPlaylist = new RecommendedPlaylist.Builder()
+                .name("Test_name")
+                .playlistTracks(recommendedPlaylistTracks)
+                .actual(true)
+                .stringId("Test_pl_id").build();
+
+        when(recommendedPlaylistRepository.findByActualTrue()).thenReturn(recommendedPlaylist);
+        when(recommendedPlaylistRepository.save(recommendedPlaylist)).thenReturn(recommendedPlaylist);
+
+        //When
+        RecommendedPlaylist recommendedPlaylistUpdated = fetchDataFromDbService.changeNumberOfTracks(2);
+
+        //Then
+        verify(recommendedPlaylistRepository, times(1)).save(recommendedPlaylist);
+        assertEquals(2,recommendedPlaylistUpdated.getNumberOfTracks());
     }
 }

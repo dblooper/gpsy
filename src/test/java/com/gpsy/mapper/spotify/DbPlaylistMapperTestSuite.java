@@ -21,19 +21,9 @@ public class DbPlaylistMapperTestSuite {
 
     @Autowired
     private DbPlaylistMapper dbPlaylistMapper;
-    @Autowired
-    private TrackMapper trackMapper;
 
     @Test
-    public void mapToPlaylistTrackDtos() {
-    }
-
-    @Test
-    public void mapToUserPlaylistsDto() {
-    }
-
-    @Test
-    public void mapToRecommendedPlaylistDto() {
+    public void mapToRecommendedPlaylistDtoTest() {
         //Given
         List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
         RecommendedPlaylistTrack recommendedPlaylistTrack1 = new RecommendedPlaylistTrack.Builder()
@@ -67,7 +57,7 @@ public class DbPlaylistMapperTestSuite {
     }
 
     @Test
-    public void mapRecommendedPlaylistToUserPlaylist() {
+    public void mapRecommendedPlaylistToUserPlaylistTest() {
         //Given
         List<RecommendedPlaylistTrack> recommendedPlaylistTracks = new ArrayList<>();
         RecommendedPlaylistTrack recommendedPlaylistTrack1 = new RecommendedPlaylistTrack.Builder()

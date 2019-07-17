@@ -131,9 +131,8 @@ public class TrackMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<RecommendedTrack> mapToRecommendedTracks(List<TrackSimplified> recommendedTracks, int numberOfTracks) {
+    public List<RecommendedTrack> mapToRecommendedTracks(List<TrackSimplified> recommendedTracks) {
         return recommendedTracks.stream()
-                .limit(numberOfTracks)
                 .map(track -> new RecommendedTrack.Builder()
                 .stringId(track.getId())
                                 .artists(UniversalMappingMethods.simplifyArtist(track.getArtists()))

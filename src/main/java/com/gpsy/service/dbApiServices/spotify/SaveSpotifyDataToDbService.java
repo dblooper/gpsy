@@ -63,31 +63,25 @@ public class SaveSpotifyDataToDbService {
         }
     }
 
-    public List<RecentPlayedTrack> saveRecentPlayedTracks() {
-        List<RecentPlayedTrack> savedTracks = new ArrayList<>();
+    public void saveRecentPlayedTracks() {
         List<RecentPlayedTrack> storedTracks = spotifyRecentPlayedTrackRepository.findAll();
         Collections.sort(storedTracks, Collections.reverseOrder());
         List<PlayHistory> recentTracks = spotifyClient.getSpotifyRecentPlayedTracks();
 
         if (storedTracks.size() == 0) {
             for (PlayHistory recentTrack : recentTracks) {
-                savedTracks.add(spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(recentTrack)));
+                spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(recentTrack));
             }
-            Collections.sort(savedTracks, Collections.reverseOrder());
-            return savedTracks;
         }
 
         for (PlayHistory spotifyTrack : recentTracks) {
                 if(spotifyTrack.getPlayedAt().after(storedTracks.get(0).getPlayDate())) {
-                    savedTracks.add(spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(spotifyTrack)));
+                    spotifyRecentPlayedTrackRepository.save(trackMapper.mapSpotifyTrackToDbRecentPlayedTrack(spotifyTrack));
                 }
         }
-
-        Collections.sort(savedTracks, Collections.reverseOrder());
-        return savedTracks;
     }
 
-    List<UserPlaylist> saveUserPlaylists() {
+    void saveUserPlaylists() {
         List<UserPlaylist> savedPlaylists = new ArrayList<>();
         List<UserPlaylist> userPlaylists = spotifyUserPlaylistsRepository.findAll();
         List<PlaylistSimplified> spotifyUserPlaylists = spotifyClient.getUserPlaylists();
@@ -114,6 +108,5 @@ public class SaveSpotifyDataToDbService {
                 }
             }
         }
-        return savedPlaylists;
     }
 }

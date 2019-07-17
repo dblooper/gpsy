@@ -23,7 +23,7 @@ public class LibraryMapperTestSuite {
     private LibraryMapper libraryMapper;
 
     @Test
-    public void mapToLibraryDto() {
+    public void mapToLibraryDtoTest() {
         //Given
         List<LyricsInLibrary> lyrics = new ArrayList<>();
         List<Library> libraries = new ArrayList<>();
@@ -46,7 +46,7 @@ public class LibraryMapperTestSuite {
     }
 
     @Test
-    public void mapToLyricsInLibraryDto() {
+    public void mapToLyricsInLibraryDtoTest() {
         //Given
         List<LyricsInLibrary> lyrics = new ArrayList<>();
         for(int i = 1; i < 10; i++) {
@@ -64,11 +64,7 @@ public class LibraryMapperTestSuite {
     }
 
     @Test
-    public void mapToLyricsInLibrary() {
-    }
-
-    @Test
-    public void mapToLibrary() {
+    public void mapToLibraryTest() {
         //Given
         List<LyricsInLibraryDto> lyricsInLibraryDtoList = new ArrayList<>();
         LyricsInLibraryDto lyricsInLibraryDto = new LyricsInLibraryDto("Test_name", "Test_artist", "Test_lyrics");
@@ -83,9 +79,5 @@ public class LibraryMapperTestSuite {
         assertEquals("Test_lyrics", library.getLyrics().get(0).getLyrics());
         assertEquals("Test_name", library.getLyrics().get(0).getTitle());
         assertEquals("Test_artist", library.getLyrics().get(0).getArtists());
-    }
-
-    @Test
-    public void mapToSaveLibrary() {
     }
 }
