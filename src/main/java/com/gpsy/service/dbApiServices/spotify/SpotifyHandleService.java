@@ -94,5 +94,6 @@ public class SpotifyHandleService {
                                     MailMessageConfiguration.SUBJECT,
                                         "A new set of tracks based on your frequent tracks has been saved on your Spotify playlist " + InitialLimitValues.RECOMMENDED_PLAYLIST_NAME + "!\n" +
                                                 "Total quantity of tracks: " + recommendedPlaylistToSave.getRecommendedPlaylistTracks().size()));
+        fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(recommendedPlaylistToSave.getNumberOfTracks());
     }
 }
