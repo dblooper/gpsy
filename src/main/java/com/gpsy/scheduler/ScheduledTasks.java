@@ -18,7 +18,7 @@ public class ScheduledTasks {
     @Autowired
     private SaveSpotifyDataToDbService saveSpotifyDataToDbService;
 
-//    @Scheduled(fixedRate = 60000)
+//    @Scheduled(fixedRate = 6000000)
     @Scheduled(cron = MailMessageConfiguration.SCHEDULING_CRON)
     private void sendNewPlaylistToSpotifyWithEmail() {
         spotifyHandleService.saveRecommendedPlaylistToSpotify();

@@ -121,6 +121,7 @@ public class FetchDataFromDbService {
             } else {
                 RecommendedPlaylist playlistToEdit = recommendedPlaylistRepository.findByActualTrue();
                 playlistToEdit.setActual(false);
+                recommendedPlaylistRepository.save(playlistToEdit);
 
                 return recommendedPlaylistRepository.save(new RecommendedPlaylist.Builder()
                         .stringId(InitialLimitValues.RECOMMENDED_PLAYLIST_ID)
