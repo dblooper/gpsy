@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "lyrics")
+@Table(name = "library")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -42,15 +42,12 @@ public class Library {
 
         Library library = (Library) o;
 
-        if (libraryId != library.libraryId) return false;
-        return libraryName.equals(library.libraryName);
+        return libraryId == library.libraryId;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (libraryId ^ (libraryId >>> 32));
-        result = 31 * result + libraryName.hashCode();
-        return result;
+        return (int) (libraryId ^ (libraryId >>> 32));
     }
 
     public void setLibraryName(String libraryName) {
