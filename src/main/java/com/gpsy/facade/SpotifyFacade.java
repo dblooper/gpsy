@@ -67,6 +67,10 @@ public class SpotifyFacade {
         spotifyHandleService.createPlaylist(spotifyPlaylistMapper.mapToDbUserPlaylist(playlistDto));
     }
 
+    public void sendThePlaylistImmediately() {
+        spotifyHandleService.saveRecommendedPlaylistToSpotify();
+    }
+
     public RecommendedPlaylistDto updateFetchRecommendedPlaylist(@RequestParam int qty) {
         return dbPlaylistMapper.mapToRecommendedPlaylistDto(fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(qty));
     }

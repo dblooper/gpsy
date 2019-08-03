@@ -46,6 +46,7 @@ dependencies {
     implementation 'se.michaelthelin.spotify:spotify-web-api-java:2.1.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
     
+    //Actuator
     compile 'org.springframework.boot:spring-boot-starter-actuator'
 
     //MySQL
@@ -54,9 +55,9 @@ dependencies {
     //h2 do testow
     runtimeOnly 'com.h2database:h2'
     
-    //tomcat_deployment
+//    //tomcat_deployment
 //    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
 
-    //postgresql-forHeroku
+//    //postgresql-forHeroku
 //    implementation 'org.postgresql:postgresql'
 }
