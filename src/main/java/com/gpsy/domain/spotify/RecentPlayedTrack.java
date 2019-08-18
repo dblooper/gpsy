@@ -11,7 +11,7 @@ import java.util.Date;
         query = "SELECT id, track_string_id, title, artists, COUNT(*) AS popularity " +
                 "FROM recent_tracks " +
                 "GROUP BY track_string_id " +
-                "order by popularity desc",
+                "ORDER BY popularity DESC",
         resultClass = DbMostFrequentTrackCalc.class
 )
 
