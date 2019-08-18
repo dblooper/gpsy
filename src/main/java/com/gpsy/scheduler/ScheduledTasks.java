@@ -1,6 +1,6 @@
 package com.gpsy.scheduler;
 
-import com.gpsy.config.MailMessageConfiguration;
+import com.gpsy.config.ConstantsForConfiguration;
 import com.gpsy.service.dbApiServices.spotify.SaveSpotifyDataToDbService;
 import com.gpsy.service.dbApiServices.spotify.SpotifyHandleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,12 @@ public class ScheduledTasks {
     @Autowired
     private SaveSpotifyDataToDbService saveSpotifyDataToDbService;
 
-//    @Scheduled(fixedRate = 6000000)
-    @Scheduled(cron = MailMessageConfiguration.SCHEDULING_CRON)
+    @Scheduled(cron = ConstantsForConfiguration.SCHEDULING_CRON)
     private void sendNewPlaylistToSpotifyWithEmail() {
         spotifyHandleService.saveRecommendedPlaylistToSpotify();
     }
 
-    //save to db recently played tracks every 2,5 h(1 track 3 min, max tracks 50 -> 150min)
-    @Scheduled(fixedRate = 9000000)
+    @Scheduled(fixedRate = ConstantsForConfiguration.SCHEDULED_FETCHING_DATA_FROM_SPOTIFY_API)
     private void saveToDbRecentTracks() {
         saveSpotifyDataToDbService.saveRecentPlayedTracks();
     }

@@ -1,7 +1,7 @@
 package com.gpsy.service.dbApiServices.spotify;
 
 import com.gpsy.config.InitialLimitValues;
-import com.gpsy.config.MailMessageConfiguration;
+import com.gpsy.config.ConstantsForConfiguration;
 import com.gpsy.domain.spotify.PlaylistTrack;
 import com.gpsy.domain.spotify.RecommendedPlaylist;
 import com.gpsy.domain.spotify.RecommendedTrack;
@@ -90,8 +90,8 @@ public class SpotifyHandleService {
                                                             .tracks(tracksToDelete)
                                                             .build());
         spotifyClient.updatePlaylistTracks(dbPlaylistMapper.mapRecommendedPlaylistToUserPlaylist(recommendedPlaylistToSave));
-        emailService.send(new Mail(MailMessageConfiguration.EMAIL_ADDRESS_TO_SEND,
-                                    MailMessageConfiguration.SUBJECT,
+        emailService.send(new Mail(ConstantsForConfiguration.EMAIL_ADDRESS_TO_SEND,
+                                    ConstantsForConfiguration.SUBJECT,
                                         "A new set of tracks based on your frequent tracks has been saved on your Spotify playlist " + InitialLimitValues.RECOMMENDED_PLAYLIST_NAME + "!\n" +
                                                 "Total quantity of tracks: " + recommendedPlaylistToSave.getRecommendedPlaylistTracks().size()));
         fetchDataFromDbService.updateFetchRecommendedPlaylistFromDb(recommendedPlaylistToSave.getNumberOfTracks());

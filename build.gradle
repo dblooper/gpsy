@@ -52,12 +52,12 @@ dependencies {
     //MySQL
     implementation 'mysql:mysql-connector-java:8.0.15'
     
-    //h2 do testow
+    //h2_tests
     runtimeOnly 'com.h2database:h2'
     
-//    //tomcat_deployment
-//    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+    //tomcat_deployment
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
 
-//    //postgresql-forHeroku
+//    //postgresql_heroku
 //    implementation 'org.postgresql:postgresql'
 }
